@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.fragment_test.fragments.FoodManagementFragment;
@@ -24,10 +25,14 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase database;
     private ArrayList<Ingredient> ingredient;
-    private Fragment testFragment, recipeFragment, foodManagementFragment, mainPageTitleFragment;
+    private Fragment curFragment;
     private int curPage = 3;
     private MyAdapter myAdapter;
     FragmentManager supportFragmentManager = this.getSupportFragmentManager();
+
+    private static final int FRIDGE_PAGE=2;
+    private static final int ADD_FOOD_PAGE=3;
+    private static final int RECIPE_PAGE=1;
 
     private Map<String, List<Ingredient>> allIngredient = new HashMap<>();
 
@@ -50,19 +55,13 @@ public class MainActivity extends AppCompatActivity {
         foodManagementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadRefrigerator();
+                loadPage(FRIDGE_PAGE,new FoodManagementFragment());
             }
         });
 
         addFoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ingredient = getMyFood();
-                if (curPage == 3) {
-                    ((TestFragment) testFragment).reFreshUI(ingredient);
-                    return;
-                }
-
                 loadAddFoodUI();
             }
         });
@@ -70,21 +69,45 @@ public class MainActivity extends AppCompatActivity {
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadRecipeUI();
+              loadPage(RECIPE_PAGE,new RecipeFragment());
+            }
+        });
+    }
+
+    public void setBntOnClick(Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
 
     public void initMainPage() {
-        mainPageTitleFragment = new MainPageTitleFragment();
-        foodManagementFragment = new FoodManagementFragment();
+        curFragment = new MainPageTitleFragment();
+
         supportFragmentManager.beginTransaction()
-                .add(R.id.titleContent, mainPageTitleFragment)
+                .add(R.id.titleContent, curFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
+
+        curFragment = new FoodManagementFragment();
+
         supportFragmentManager.beginTransaction()
-                .add(R.id.mainContent, foodManagementFragment)
+                .add(R.id.mainContent, curFragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void loadPage(int curPage,Fragment curFragment) {
+        curPage = curPage;
+
+        this.curFragment = curFragment;
+
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.mainContent, curFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -94,26 +117,25 @@ public class MainActivity extends AppCompatActivity {
         curPage = 2;
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, foodManagementFragment)
+                .replace(R.id.mainContent, curFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
     }
 
     public void loadAddFoodUI() {
-        curPage = 3;
 
         ingredient = getMyFood();
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("food", ingredient);
 
-        testFragment = new TestFragment();
-        testFragment.setArguments(bundle);
+        curFragment = new TestFragment();
+        curFragment.setArguments(bundle);
 
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, testFragment)
+                .replace(R.id.mainContent, curFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -135,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadRecipeUI() {
         curPage = 1;
-        recipeFragment = new RecipeFragment();
+        curFragment = new RecipeFragment();
         supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, recipeFragment)
+                .replace(R.id.mainContent, curFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
