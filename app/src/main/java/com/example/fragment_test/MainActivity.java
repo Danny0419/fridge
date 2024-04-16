@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private MyAdapter myAdapter;
     FragmentManager supportFragmentManager = this.getSupportFragmentManager();
 
-    private static final int FRIDGE_PAGE=2;
-    private static final int ADD_FOOD_PAGE=3;
-    private static final int RECIPE_PAGE=1;
+    private static final int FRIDGE_PAGE = 2;
+    private static final int ADD_FOOD_PAGE = 3;
+    private static final int RECIPE_PAGE = 1;
 
     private Map<String, List<Ingredient>> allIngredient = new HashMap<>();
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         foodManagementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadPage(FRIDGE_PAGE,new FoodManagementFragment());
+                loadPage(FRIDGE_PAGE, new FoodManagementFragment());
             }
         });
 
@@ -69,19 +69,11 @@ public class MainActivity extends AppCompatActivity {
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              loadPage(RECIPE_PAGE,new RecipeFragment());
+                loadPage(RECIPE_PAGE, new RecipeFragment());
             }
         });
     }
 
-    public void setBntOnClick(Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }
 
     public void initMainPage() {
         curFragment = new MainPageTitleFragment();
@@ -101,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void loadPage(int curPage,Fragment curFragment) {
+    public void loadPage(int curPage, Fragment curFragment) {
         curPage = curPage;
 
         this.curFragment = curFragment;
@@ -113,15 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void loadRefrigerator() {
-        curPage = 2;
-
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, curFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    }
 
     public void loadAddFoodUI() {
 
@@ -155,16 +138,6 @@ public class MainActivity extends AppCompatActivity {
         return ingredient;
     }
 
-    public void loadRecipeUI() {
-        curPage = 1;
-        curFragment = new RecipeFragment();
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, curFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-
-    }
 
     public ArrayList<String> getAllKindsOfFood() {
 
