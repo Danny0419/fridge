@@ -16,4 +16,11 @@
     </string-array>
 
     <string name="addReceiptTileText">請將發票條碼放入區域</string>
+
+    <string name="shoppingItemIdTitle">項目</string>
+    <string name="shoppingItemNameTitle">名稱</string>
+    <string name="shoppingItemSortTitle">種類</string>
+    <string name="shoppingItemQuantityTitle">數量</string>
+    <string name="shoppingItemStateTitle">完成</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>

@@ -40,11 +40,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            id = itemView.findViewById(R.id.id);
-            name = itemView.findViewById(R.id.name);
-            sort = itemView.findViewById(R.id.sort);
-            quantity = itemView.findViewById(R.id.quantity);
-            state = itemView.findViewById(R.id.state);
+//            id = itemView.findViewById(R.id.id);
+//            name = itemView.findViewById(R.id.name);
+//            sort = itemView.findViewById(R.id.sort);
+//            quantity = itemView.findViewById(R.id.quantity);
+//            state = itemView.findViewById(R.id.state);
         }
     }
 

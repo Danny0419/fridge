@@ -5,15 +5,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.fragment_test.fragments.FoodManagementFragment;
 import com.example.fragment_test.fragments.RecipeFragment;
+import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.fragments.TestFragment;
 import com.example.fragment_test.pojo.Ingredient;
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         database = openOrCreateDatabase("fridge_sys", Context.MODE_PRIVATE, null);
-        ImageButton addFoodButton = findViewById(R.id.addFoodButton);
+        ImageButton shoppingListButton = findViewById(R.id.shoppingListButton);
         ImageButton recipeButton = findViewById(R.id.recipeButton);
         ImageButton foodManagementButton = findViewById(R.id.foodManagementButton);
 
@@ -59,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addFoodButton.setOnClickListener(new View.OnClickListener() {
+        shoppingListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadAddFoodUI();
+                loadShoppingListUI();
             }
         });
 
@@ -106,22 +107,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadAddFoodUI() {
+    public void loadShoppingListUI() {
 
-        ingredient = getMyFood();
+//        ingredient = getMyFood();
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("food", ingredient);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList("food", ingredient);
+//
+//        curFragment = new TestFragment();
+//        curFragment.setArguments(bundle);
 
-        curFragment = new TestFragment();
-        curFragment.setArguments(bundle);
 
-
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, curFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+//        supportFragmentManager.beginTransaction()
+//                .replace(R.id.mainContent, curFragment)
+//                .setReorderingAllowed(true)
+//                .addToBackStack(null)
+//                .commit();
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this,ShoppingListActivity.class);
+        startActivity(intent);
     }
 
     public ArrayList<Ingredient> getMyFood() {
