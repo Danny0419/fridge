@@ -41,71 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        database = openOrCreateDatabase("fridge_sys", Context.MODE_PRIVATE, null);
-//        ImageButton shoppingListButton = findViewById(R.id.shoppingListButton);
-//        ImageButton recipeButton = findViewById(R.id.recipeButton);
-//        ImageButton foodManagementButton = findViewById(R.id.foodManagementButton);
-
-//        initMainPage();
-
-//        foodManagementButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadPage(FRIDGE_PAGE, new FoodManagementFragment());
-//            }
-//        });
-//
-//        shoppingListButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadShoppingListUI();
-//            }
-//        });
-//
-//        recipeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadPage(RECIPE_PAGE, new RecipeFragment());
-//            }
-//        });
-    }
-
-    public void initMainPage() {
-        curFragment = new MainPageTitleFragment();
-
-        supportFragmentManager.beginTransaction()
-                .add(R.id.titleContent, new MainPageTitleFragment())
-                .add(R.id.mainContent, new FoodManagementFragment())
-                .add(R.id.navBarFrag, new NavBarFragment())
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-
-//        curFragment = new FoodManagementFragment();
-//
-//        supportFragmentManager.beginTransaction()
-//                .add(R.id.mainContent, curFragment)
-//                .setReorderingAllowed(true)
-//                .addToBackStack(null)
-//                .commit();
-    }
-
-    public void loadPage(int curPage, Fragment curFragment) {
-        curPage = curPage;
-
-        this.curFragment = curFragment;
-
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContent, curFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    public void loadShoppingListUI() {
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, ShoppingListActivity.class);
-        startActivity(intent);
     }
 
     public ArrayList<Ingredient> getMyFood() {
@@ -122,9 +57,7 @@ public class MainActivity extends AppCompatActivity {
         return ingredient;
     }
 
-
     public ArrayList<String> getAllKindsOfFood() {
-
         String sql = "select distinct sort from refrigerator";
         Cursor cursor = database.rawQuery(sql, null);
         ArrayList<String> kindsOfFood = new ArrayList<>();
@@ -133,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             String kind = cursor.getString(0);
             kindsOfFood.add(kind);
         }
-
         return kindsOfFood;
     }
 
