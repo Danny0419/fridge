@@ -42,56 +42,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         database = openOrCreateDatabase("fridge_sys", Context.MODE_PRIVATE, null);
-        ImageButton shoppingListButton = findViewById(R.id.shoppingListButton);
-        ImageButton recipeButton = findViewById(R.id.recipeButton);
-        ImageButton foodManagementButton = findViewById(R.id.foodManagementButton);
+//        ImageButton shoppingListButton = findViewById(R.id.shoppingListButton);
+//        ImageButton recipeButton = findViewById(R.id.recipeButton);
+//        ImageButton foodManagementButton = findViewById(R.id.foodManagementButton);
 
-//        String sql = "create table  if not exists food(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,name text,sort text,quantity text,state INTEGER default 0)";
-//        database.execSQL(sql);
-//        sql = "insert into food values(null,'吳郭魚','魚肉類','3尾',0),(null,'吳郭魚','魚肉類','3尾',0),(null,'沙魚','魚肉類','4尾',0),(null,'吳郭魚','魚肉類','3尾',1),(null,'吳郭魚','魚肉類','3尾',1),(null,'吳郭魚','魚肉類','3尾',0),(null,'吳郭魚','魚肉類','3尾',0),(null,'吳郭魚','魚肉類','3尾',0),(null,'吳郭魚','魚肉類','3尾',0),(null,'吳郭魚','魚肉類','3尾',0)";
-//        database.execSQL(sql);
+//        initMainPage();
 
-        initMainPage();
-
-        foodManagementButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadPage(FRIDGE_PAGE, new FoodManagementFragment());
-            }
-        });
-
-        shoppingListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadShoppingListUI();
-            }
-        });
-
-        recipeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadPage(RECIPE_PAGE, new RecipeFragment());
-            }
-        });
+//        foodManagementButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loadPage(FRIDGE_PAGE, new FoodManagementFragment());
+//            }
+//        });
+//
+//        shoppingListButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loadShoppingListUI();
+//            }
+//        });
+//
+//        recipeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loadPage(RECIPE_PAGE, new RecipeFragment());
+//            }
+//        });
     }
-
 
     public void initMainPage() {
         curFragment = new MainPageTitleFragment();
 
         supportFragmentManager.beginTransaction()
-                .add(R.id.titleContent, curFragment)
+                .add(R.id.titleContent, new MainPageTitleFragment())
+                .add(R.id.mainContent, new FoodManagementFragment())
+                .add(R.id.navBarFrag, new NavBarFragment())
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
 
-        curFragment = new FoodManagementFragment();
-
-        supportFragmentManager.beginTransaction()
-                .add(R.id.mainContent, curFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+//        curFragment = new FoodManagementFragment();
+//
+//        supportFragmentManager.beginTransaction()
+//                .add(R.id.mainContent, curFragment)
+//                .setReorderingAllowed(true)
+//                .addToBackStack(null)
+//                .commit();
     }
 
     public void loadPage(int curPage, Fragment curFragment) {
@@ -106,25 +102,9 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-
     public void loadShoppingListUI() {
-
-//        ingredient = getMyFood();
-
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelableArrayList("food", ingredient);
-//
-//        curFragment = new TestFragment();
-//        curFragment.setArguments(bundle);
-
-
-//        supportFragmentManager.beginTransaction()
-//                .replace(R.id.mainContent, curFragment)
-//                .setReorderingAllowed(true)
-//                .addToBackStack(null)
-//                .commit();
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this,ShoppingListActivity.class);
+        intent.setClass(MainActivity.this, ShoppingListActivity.class);
         startActivity(intent);
     }
 
