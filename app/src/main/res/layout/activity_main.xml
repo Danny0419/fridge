@@ -23,12 +23,13 @@
         android:layout_height="0dp"
         android:layout_weight="9" />
 
-    <fragment
-        android:id="@+id/navBarFrag"
-        android:name="com.example.fragment_test.NavBarFragment"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="#ffffff"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_navigation"/>
 
 
 

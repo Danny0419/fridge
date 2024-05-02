@@ -23,4 +23,10 @@
     <string name="shoppingItemQuantityTitle">數量</string>
     <string name="shoppingItemStateTitle">完成</string>
     <string name="title_activity_main2">MainActivity2</string>
+    <string name="navbarTitleForHome">首頁</string>
+    <string name="navbarTitleForManage">管理</string>
+    <string name="navbarTitleForRecipe">食譜</string>
+    <string name="navbarTitleForSchedule">規劃</string>
+    <string name="navbarTitleForScanner">新增</string>
+    <string name="navbarTitleForShoppingList">購入</string>
 </resources>
