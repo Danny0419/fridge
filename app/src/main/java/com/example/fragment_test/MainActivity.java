@@ -1,22 +1,20 @@
 package com.example.fragment_test;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
+import android.view.MenuItem;
 
+import com.example.fragment_test.adapter.MyAdapter;
 import com.example.fragment_test.fragments.FoodManagementFragment;
-import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
-import com.example.fragment_test.fragments.TestFragment;
 import com.example.fragment_test.pojo.Ingredient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
+    private BottomNavigationView bottomNavbar;
     private SQLiteDatabase database;
-    private ArrayList<Ingredient> ingredient;
+    private ArrayList<Ingredient> shoppingList = new ArrayList<>();
     private Fragment curFragment;
     private int curPage = 3;
     private MyAdapter myAdapter;
@@ -41,7 +41,54 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initialize();
+
+        bottomNavbar = findViewById(R.id.bottomNavBar);
+
+        bottomNavbar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int onClickItemId = menuItem.getItemId();
+
+                if (onClickItemId == R.id.home) {
+                    return true;
+                } else if (onClickItemId == R.id.manage) {
+                    loadPage(new FoodManagementFragment());
+                    return true;
+                } else if (onClickItemId == R.id.recipe) {
+
+                    return true;
+                } else if (onClickItemId == R.id.schedule) {
+                    return true;
+                } else if (onClickItemId == R.id.shoppingList) {
+                    shoppingList.add(new Ingredient(0, "吳郭魚", "無" ,"魚類", "2", 0));
+                    loadShoppingListPage();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
+
+    private void initialize(){
+        supportFragmentManager.beginTransaction()
+                .add(R.id.mainContent, new FoodManagementFragment())
+                .commit();
+    }
+
+    private void loadShoppingListPage(){
+        ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
+        shoppingListFragment.setShoppingList(shoppingList);
+        loadPage(shoppingListFragment);
+    }
+
+    private void loadPage(Fragment fragment) {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.mainContent, fragment)
+                .commit();
+    }
+
 
     public ArrayList<Ingredient> getMyFood() {
         Cursor cursor = database.rawQuery("select * from food", null);

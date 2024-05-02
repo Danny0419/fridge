@@ -1,4 +1,4 @@
-package com.example.fragment_test;
+package com.example.fragment_test.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,11 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fragment_test.R;
+import com.example.fragment_test.UpdateData;
 import com.example.fragment_test.pojo.Ingredient;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements UpdateData<Ingredient>{
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements UpdateData<Ingredient> {
     private ArrayList<Ingredient> ingredient;
     private Context context;
 

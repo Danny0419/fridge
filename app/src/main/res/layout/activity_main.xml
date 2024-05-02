@@ -9,21 +9,15 @@
 
 
 
-    <fragment
-        android:id="@+id/titleContent"
-        android:name="com.example.fragment_test.MainPageTitleFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/mainContent"
-        android:name="com.example.fragment_test.fragments.FoodManagementFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

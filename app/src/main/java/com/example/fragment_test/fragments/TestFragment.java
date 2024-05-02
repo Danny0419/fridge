@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fragment_test.MyAdapter;
+import com.example.fragment_test.adapter.MyAdapter;
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Ingredient;
 
