@@ -3,6 +3,8 @@ package com.example.fragment_test.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.adapter.RecipeAdapter;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.pojo.Day;
 import com.example.fragment_test.pojo.Recipe;
@@ -34,7 +37,7 @@ public class RecipeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Map<String,ArrayList<Recipe>> recipes;
+    private ArrayList<Recipe> recipes = new ArrayList<>();
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -65,15 +68,10 @@ public class RecipeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        ArrayList<Recipe> monday = new ArrayList<>();
-        ArrayList<Recipe> tuesday = new ArrayList<>();
         for (int i = 1; i <8; i++) {
-            monday.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
-            tuesday.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
+            recipes.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
+            recipes.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
         }
-        recipes = new HashMap<>();
-        recipes.put(Day.MONDAY.getDay(), monday);
-        recipes.put(Day.TUESDAY.getDay(), tuesday);
 
     }
 
@@ -84,10 +82,11 @@ public class RecipeFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        ListView eachDayListView = view.findViewById(R.id.recipes);
-        eachDayListView.setAdapter(new ScheduleAdapter(inflater,recipes));
-//        ArrayAdapter<LinearLayout> arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.fragment_recipe,R.layout.recipe_item,);
-//        eachDayListView.setAdapter(arrayAdapter);
+        RecyclerView recipesContainer = view.findViewById(R.id.recipesContainer);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        recipesContainer.setLayoutManager(linearLayoutManager);
+        recipesContainer.setAdapter(new RecipeAdapter(recipes));
+
         return view;
     }
 }

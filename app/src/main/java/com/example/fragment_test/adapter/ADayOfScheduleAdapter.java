@@ -21,10 +21,10 @@ public class ADayOfScheduleAdapter extends RecyclerView.Adapter {
         this.recipes = recipes;
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder {
+    class ADayOfScheduleViewHolder extends RecyclerView.ViewHolder {
         public TextView foodImg;
         public TextView foodName;
-        public RecipeViewHolder(@NonNull View itemView) {
+        public ADayOfScheduleViewHolder(@NonNull View itemView) {
             super(itemView);
             foodImg = itemView.findViewById(R.id.foodImg);
             foodName = itemView.findViewById(R.id.foodName);
@@ -33,16 +33,16 @@ public class ADayOfScheduleAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ADayOfScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_food_container, parent, false);
-        return new RecipeViewHolder(view);
+        return new ADayOfScheduleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((RecipeViewHolder)holder).foodImg.setText(recipes.get(position).foodImg);
-        ((RecipeViewHolder)holder).foodName.setText(recipes.get(position).foodName);
+        ((ADayOfScheduleViewHolder)holder).foodImg.setText(recipes.get(position).foodImg);
+        ((ADayOfScheduleViewHolder)holder).foodName.setText(recipes.get(position).foodName);
     }
 
     @Override
