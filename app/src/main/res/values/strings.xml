@@ -29,4 +29,6 @@
     <string name="navbarTitleForSchedule">規劃</string>
     <string name="navbarTitleForScanner">新增</string>
     <string name="navbarTitleForShoppingList">購入</string>
+    <string name="RecipePageTitleForName">料理名稱</string>
+    <string name="RecipeTitleForNeed">所需食材</string>
 </resources>

@@ -12,6 +12,8 @@ import android.view.MenuItem;
 
 import com.example.fragment_test.adapter.MyAdapter;
 import com.example.fragment_test.fragments.FoodManagementFragment;
+import com.example.fragment_test.fragments.RecipeFragment;
+import com.example.fragment_test.fragments.ScheduleFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.pojo.Ingredient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -57,9 +59,10 @@ public class MainActivity extends AppCompatActivity {
                     loadPage(new FoodManagementFragment());
                     return true;
                 } else if (onClickItemId == R.id.recipe) {
-
+                    loadPage(new RecipeFragment());
                     return true;
                 } else if (onClickItemId == R.id.schedule) {
+                    loadPage(new ScheduleFragment());
                     return true;
                 } else if (onClickItemId == R.id.shoppingList) {
                     shoppingList.add(new Ingredient(0, "吳郭魚", "無" ,"魚類", "2", 0));

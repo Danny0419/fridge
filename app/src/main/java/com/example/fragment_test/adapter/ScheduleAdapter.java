@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
@@ -17,9 +16,9 @@ import com.example.fragment_test.pojo.Recipe;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class RecipeDaysAdapter extends BaseAdapter {
+public class ScheduleAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
-    private Day[] days;
+    private Day[] days = Day.values();
     private Map<String, ArrayList<Recipe>> recipes;
 
     class ViewHolder {
@@ -28,12 +27,8 @@ public class RecipeDaysAdapter extends BaseAdapter {
 
     }
 
-    public RecipeDaysAdapter() {
-    }
-
-    public RecipeDaysAdapter(LayoutInflater layoutInflater, Map<String, ArrayList<Recipe>> recipes) {
+    public ScheduleAdapter(LayoutInflater layoutInflater, Map<String, ArrayList<Recipe>> recipes) {
         this.layoutInflater = layoutInflater;
-        this.days = Day.values();
         this.recipes = recipes;
     }
 
@@ -62,11 +57,7 @@ public class RecipeDaysAdapter extends BaseAdapter {
             viewHolder.foodContainer = convertView.findViewById(R.id.foodContainer);
 
             GridLayoutManager gridLayoutManager = new GridLayoutManager(parent.getContext(), 5);
-//            gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
-//            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(convertView.getContext());
-//            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             viewHolder.foodContainer.setLayoutManager(gridLayoutManager);
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -76,7 +67,7 @@ public class RecipeDaysAdapter extends BaseAdapter {
         if (recipe == null){
             recipe = new ArrayList<Recipe>();
         }
-        viewHolder.foodContainer.setAdapter(new RecipeAdapter(recipe));
+        viewHolder.foodContainer.setAdapter(new ADayOfScheduleAdapter(recipe));
         return convertView;
     }
 }

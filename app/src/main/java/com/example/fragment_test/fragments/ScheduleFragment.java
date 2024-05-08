@@ -20,10 +20,13 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RecipeFragment#newInstance} factory method to
+ * Use the {@link ScheduleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecipeFragment extends Fragment {
+public class ScheduleFragment extends Fragment {
+
+    private Map<String, ArrayList<Recipe>> schedule = new HashMap<>();
+    private ListView scheduleContainer;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,9 +37,7 @@ public class RecipeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Map<String,ArrayList<Recipe>> recipes;
-
-    public RecipeFragment() {
+    public ScheduleFragment() {
         // Required empty public constructor
     }
 
@@ -46,11 +47,11 @@ public class RecipeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipeFragment.
+     * @return A new instance of fragment ScheduleFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RecipeFragment newInstance(String param1, String param2) {
-        RecipeFragment fragment = new RecipeFragment();
+    public static ScheduleFragment newInstance(String param1, String param2) {
+        ScheduleFragment fragment = new ScheduleFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,29 +66,29 @@ public class RecipeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
         ArrayList<Recipe> monday = new ArrayList<>();
         ArrayList<Recipe> tuesday = new ArrayList<>();
         for (int i = 1; i <8; i++) {
             monday.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
             tuesday.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
         }
-        recipes = new HashMap<>();
-        recipes.put(Day.MONDAY.getDay(), monday);
-        recipes.put(Day.TUESDAY.getDay(), tuesday);
 
+        schedule.put(Day.MONDAY.getDay(), monday);
+        schedule.put(Day.TUESDAY.getDay(), tuesday);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
-
-        View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        ListView eachDayListView = view.findViewById(R.id.recipes);
-        eachDayListView.setAdapter(new ScheduleAdapter(inflater,recipes));
-//        ArrayAdapter<LinearLayout> arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.fragment_recipe,R.layout.recipe_item,);
-//        eachDayListView.setAdapter(arrayAdapter);
+        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        scheduleContainer = (ListView) view.findViewById(R.id.schedulesContainer);
+        scheduleContainer.setAdapter(new ScheduleAdapter(inflater,schedule));
         return view;
+    }
+
+    public void setSchedule(Map<String, ArrayList<Recipe>> schedule){
+        this.schedule = schedule;
     }
 }
