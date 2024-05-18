@@ -16,11 +16,11 @@ public class ShoppingListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_list);
 
-        ArrayList<Ingredient> shoppingList = new ArrayList<>();
-        shoppingList.add(new Ingredient(0,"你好","無","於","2",1));
-        shoppingList.add(new Ingredient(2,"你好","無","於","5",0));
-        ShoppingListFragment shoppingListFrag = (ShoppingListFragment) getSupportFragmentManager().findFragmentById(R.id.shoppingListFrag);
-        shoppingListFrag.setShoppingList(shoppingList);
+//        ArrayList<Ingredient> shoppingList = new ArrayList<>();
+//        shoppingList.add(new Ingredient(0,"你好","無","於","2",1));
+//        shoppingList.add(new Ingredient(2,"你好","無","於","5",0));
+//        ShoppingListFragment shoppingListFrag = (ShoppingListFragment) getSupportFragmentManager().findFragmentById(R.id.shoppingListFrag);
+//        shoppingListFrag.setShoppingList(shoppingList);
 
     }
 }

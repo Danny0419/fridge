@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -15,7 +17,9 @@ import com.example.fragment_test.fragments.FoodManagementFragment;
 import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ScheduleFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
+import com.example.fragment_test.helper.FridgeHelper;
 import com.example.fragment_test.pojo.Ingredient;
+import com.example.fragment_test.pojo.ShoppingListBean;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -27,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavbar;
     private SQLiteDatabase database;
-    private ArrayList<Ingredient> shoppingList = new ArrayList<>();
     private Fragment curFragment;
     private int curPage = 3;
     private MyAdapter myAdapter;
     FragmentManager supportFragmentManager = this.getSupportFragmentManager();
+    private FridgeHelper fridgeHelper = new FridgeHelper(this);
 
     private static final int FRIDGE_PAGE = 2;
     private static final int ADD_FOOD_PAGE = 3;
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         initialize();
 
         bottomNavbar = findViewById(R.id.bottomNavBar);
-
+        SQLiteDatabase db = fridgeHelper.getReadableDatabase();
         bottomNavbar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -65,8 +69,21 @@ public class MainActivity extends AppCompatActivity {
                     loadPage(new ScheduleFragment());
                     return true;
                 } else if (onClickItemId == R.id.shoppingList) {
-                    shoppingList.add(new Ingredient(0, "吳郭魚", "無" ,"魚類", "2", 0));
-                    loadShoppingListPage();
+                    Cursor query = db.query("shopping_list", new String[] {"id", "name", "category", "quantity"}, null, null, null, null, null);
+                    ArrayList<ShoppingListBean> shopping_list = new ArrayList<>();
+
+                    int id = 1;
+                    String name = "";
+                    String category = "";
+                    int quantity = 0;
+                    while (query.moveToNext()){
+                        name = query.getString(1);
+                        category = query.getString(2);
+                        quantity = query.getInt(3);
+                        shopping_list.add(new ShoppingListBean(id, name, category, quantity));
+                        id++;
+                    }
+                    loadShoppingListPage(shopping_list);
                     return true;
                 }
                 return false;
@@ -80,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void loadShoppingListPage(){
+    private void loadShoppingListPage(ArrayList<ShoppingListBean> shoppingList){
         ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
         shoppingListFragment.setShoppingList(shoppingList);
         loadPage(shoppingListFragment);

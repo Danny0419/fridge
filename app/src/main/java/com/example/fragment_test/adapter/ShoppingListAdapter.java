@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Ingredient;
+import com.example.fragment_test.pojo.ShoppingListBean;
 
 import java.util.ArrayList;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.MyViewHolder> {
 
-     ArrayList<Ingredient> shoppingItems;
+     ArrayList<ShoppingListBean> shoppingItems;
      Context context;
 
 
@@ -36,7 +37,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public ShoppingListAdapter(ArrayList<Ingredient> shoppingItems, Context context) {
+    public ShoppingListAdapter(ArrayList<ShoppingListBean> shoppingItems, Context context) {
         this.shoppingItems = shoppingItems;
         this.context = context;
     }
@@ -50,21 +51,21 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        int id = shoppingItems.get(position).getId();
+        int id = shoppingItems.get(position).id;
         if (id % 2 != 0) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
 
-        holder.shoppingItemId.setText(shoppingItems.get(position).getId().toString());
-        holder.shoppingItemName.setText(shoppingItems.get(position).getName().toString());
-        holder.shoppingItemSort.setText(shoppingItems.get(position).getSort().toString());
-        holder.shoppingItemQuantity.setText(shoppingItems.get(position).getQuantity().toString());
-        Integer state = shoppingItems.get(position).getState();
-        if (1 == state) {
-            holder.shoppingItemState.setChecked(true);
-        }
+        holder.shoppingItemId.setText(Integer.toString(shoppingItems.get(position).id));
+        holder.shoppingItemName.setText(shoppingItems.get(position).name);
+        holder.shoppingItemSort.setText(shoppingItems.get(position).category);
+        holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).quantity));
+//        Integer state = shoppingItems.get(position).getState();
+//        if (1 == state) {
+//            holder.shoppingItemState.setChecked(true);
+//        }
     }
 
 

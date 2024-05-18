@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.pojo.Ingredient;
+import com.example.fragment_test.pojo.ShoppingListBean;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  */
 public class ShoppingListFragment extends Fragment {
 
-    private ArrayList<Ingredient> shoppingList = new ArrayList<>();
+    private ArrayList<ShoppingListBean> shoppingList;
     RecyclerView shoppingListItemContainer;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -83,7 +84,7 @@ public class ShoppingListFragment extends Fragment {
         shoppingListItemContainer.setAdapter(new ShoppingListAdapter(shoppingList,getContext()));
     }
 
-    public void setShoppingList(ArrayList<Ingredient> shoppingList) {
+    public void setShoppingList(ArrayList<ShoppingListBean> shoppingList) {
         this.shoppingList = shoppingList;
     }
 }
