@@ -69,10 +69,10 @@ public class ScheduleFragment extends Fragment {
 
         ArrayList<Recipe> monday = new ArrayList<>();
         ArrayList<Recipe> tuesday = new ArrayList<>();
-        for (int i = 1; i <8; i++) {
-            monday.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
-            tuesday.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
-        }
+//        for (int i = 1; i <8; i++) {
+//            monday.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
+//            tuesday.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
+//        }
 
         schedule.put(Day.MONDAY.getDay(), monday);
         schedule.put(Day.TUESDAY.getDay(), tuesday);

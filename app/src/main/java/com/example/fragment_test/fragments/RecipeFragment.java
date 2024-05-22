@@ -15,6 +15,7 @@ import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeAdapter;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.pojo.Day;
+import com.example.fragment_test.pojo.Ingredient;
 import com.example.fragment_test.pojo.Recipe;
 
 import java.util.ArrayList;
@@ -69,8 +70,13 @@ public class RecipeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         for (int i = 1; i <8; i++) {
-            recipes.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
-            recipes.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
+            ArrayList<Ingredient> ingredients = new ArrayList<>();
+            ingredients.add(new Ingredient("蛋", "蛋照片"+i));
+            ingredients.add(new Ingredient("飯", "飯照片"+i));
+            recipes.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i,ingredients));
+            ingredients = new ArrayList<>();
+            ingredients.add(new Ingredient("蛋", "蛋照片"+i));
+            recipes.add(new Recipe("煎蛋照片"+i,"煎蛋"+i, ingredients) );
         }
 
     }
@@ -85,7 +91,7 @@ public class RecipeFragment extends Fragment {
         RecyclerView recipesContainer = view.findViewById(R.id.recipesContainer);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         recipesContainer.setLayoutManager(linearLayoutManager);
-        recipesContainer.setAdapter(new RecipeAdapter(recipes));
+        recipesContainer.setAdapter(new RecipeAdapter(container.getContext(), recipes));
 
         return view;
     }

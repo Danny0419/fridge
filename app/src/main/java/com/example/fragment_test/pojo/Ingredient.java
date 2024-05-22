@@ -16,6 +16,11 @@ public class Ingredient implements Parcelable {
     public Ingredient() {
     }
 
+    public Ingredient(String name, String img) {
+        this.name = name;
+        this.img = img;
+    }
+
     public Ingredient(Parcel source) {
         this.id = source.readInt();
         this.name = source.readString();

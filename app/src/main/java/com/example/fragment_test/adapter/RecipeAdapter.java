@@ -1,13 +1,16 @@
 package com.example.fragment_test.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fragment_test.MainActivity;
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Recipe;
 
@@ -15,13 +18,15 @@ import java.util.ArrayList;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
+    private Context context;
     private ArrayList<Recipe> recipes;
 
-    public RecipeAdapter(ArrayList<Recipe> recipes) {
+    public RecipeAdapter(Context context, ArrayList<Recipe> recipes) {
         this.recipes = recipes;
+        this.context = context;
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder {
+    static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView ingredientImg, ingredientName;
         private RecyclerView ingredientContainer;
@@ -29,7 +34,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             super(itemView);
             ingredientImg = itemView.findViewById(R.id.ingredientImg);
             ingredientName = itemView.findViewById(R.id.ingredientName);
-//            ingredientContainer = itemView.findViewById(R.id.ingredientContainer);
+            ingredientContainer = itemView.findViewById(R.id.ingredientContainer);
         }
     }
 
@@ -45,6 +50,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Recipe recipe = recipes.get(position);
         holder.ingredientImg.setText(recipe.foodImg);
         holder.ingredientName.setText(recipe.foodName);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.ingredientContainer.setLayoutManager(layoutManager);
+        holder.ingredientContainer.setAdapter(new IngredientAdapter(recipe.ingredients));
     }
 
 

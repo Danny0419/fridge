@@ -15,6 +15,11 @@ import java.util.ArrayList;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
     private ArrayList<Ingredient> ingredients;
+
+    public IngredientAdapter(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
         public TextView ingredientImg;
         public TextView ingredientName;
