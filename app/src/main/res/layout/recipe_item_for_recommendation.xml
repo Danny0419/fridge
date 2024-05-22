@@ -8,20 +8,20 @@
         android:id="@+id/ingredientImg"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="1.25"
         android:gravity="center"/>
     
     <TextView
         android:id="@+id/ingredientName"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="1.25"
         android:gravity="center"/>
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/ingredientContainer"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_weight="3"/>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ingredientContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.5"/>
 
 </LinearLayout>

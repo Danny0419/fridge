@@ -21,35 +21,40 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemIdTitle"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:textAlignment="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemNameTitle"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:textAlignment="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemSortTitle"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:textAlignment="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemQuantityTitle"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:textAlignment="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemStateTitle"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
