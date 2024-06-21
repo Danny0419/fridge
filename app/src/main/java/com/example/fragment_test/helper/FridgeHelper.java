@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 public class FridgeHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "fridge_db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public FridgeHelper(Context context){
         super(context, DB_NAME,null,DB_VERSION);

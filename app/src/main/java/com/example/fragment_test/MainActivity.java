@@ -2,6 +2,7 @@ package com.example.fragment_test;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setSupportActionBar(findViewById(R.id.toolbar_main));
+        getSupportActionBar();
         initialize();
 
         bottomNavbar = findViewById(R.id.bottomNavBar);
@@ -69,14 +72,14 @@ public class MainActivity extends AppCompatActivity {
                     loadPage(new ScheduleFragment());
                     return true;
                 } else if (onClickItemId == R.id.shoppingList) {
-                    Cursor query = db.query("shopping_list", new String[] {"id", "name", "category", "quantity"}, null, null, null, null, null);
+                    Cursor query = db.query("shopping_list", new String[]{"id", "name", "category", "quantity"}, null, null, null, null, null);
                     ArrayList<ShoppingListBean> shopping_list = new ArrayList<>();
 
                     int id = 1;
                     String name = "";
                     String category = "";
                     int quantity = 0;
-                    while (query.moveToNext()){
+                    while (query.moveToNext()) {
                         name = query.getString(1);
                         category = query.getString(2);
                         quantity = query.getInt(3);
@@ -91,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initialize(){
+    private void initialize() {
         supportFragmentManager.beginTransaction()
                 .add(R.id.mainContent, new FoodManagementFragment())
                 .commit();
     }
 
-    private void loadShoppingListPage(ArrayList<ShoppingListBean> shoppingList){
+    private void loadShoppingListPage(ArrayList<ShoppingListBean> shoppingList) {
         ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
         shoppingListFragment.setShoppingList(shoppingList);
         loadPage(shoppingListFragment);
