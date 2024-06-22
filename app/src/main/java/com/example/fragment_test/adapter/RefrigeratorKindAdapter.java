@@ -20,10 +20,8 @@ public class RefrigeratorKindAdapter extends RecyclerView.Adapter{
 
     private List<Ingredient> kindOfIngredient;
 
-    private Context context;
 
-    public RefrigeratorKindAdapter(Context context,List<Ingredient> kindOfIngredient) {
-        this.context = context;
+    public RefrigeratorKindAdapter(List<Ingredient> kindOfIngredient) {
         this.kindOfIngredient = kindOfIngredient;
     }
 

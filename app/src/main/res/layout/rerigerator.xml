@@ -5,12 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".fragments.FoodManagementFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:id="@+id/kinds_of_ingredient_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       >
-    </ListView>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/kinds_of_ingredient_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
 
 </FrameLayout>
