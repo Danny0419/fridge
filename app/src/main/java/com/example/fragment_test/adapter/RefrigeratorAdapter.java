@@ -27,23 +27,21 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     private List<String> kinds;
     private Map<String, List<Ingredient>> ingredientMap;
     private Context context;
-    private ArrayList<String> name;
 
-    public RefrigeratorAdapter(Context context, ArrayList<String> name) {
+    public RefrigeratorAdapter(Context context, Map<String, List<Ingredient>> ingredientMap) {
         this.context = context;
-        this.name = name;
-//        this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
-//        this.ingredientMap = ingredientMap;
+        this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
+        this.ingredientMap = ingredientMap;
     }
 
      static class RefrigeratorViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameOKind;
-//        RecyclerView kindOfIngredientContainer;
+        RecyclerView kindOfIngredientContainer;
         public RefrigeratorViewHolder(@NonNull View itemView) {
             super(itemView);
             nameOKind = itemView.findViewById(R.id.ingredientKindName);
-//            kindOfIngredientContainer = itemView.findViewById(R.id.kindOfIngredientContainer);
+            kindOfIngredientContainer = itemView.findViewById(R.id.kindOfIngredientContainer);
         }
     }
     @NonNull
@@ -55,16 +53,16 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorViewHolder holder, int position) {
-        holder.nameOKind.setText(name.get(position));
-//        List<Ingredient> kindOfIngredient = ingredientMap.get(kinds.get(position));
-//        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
-//        holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
-//        holder.kindOfIngredientContainer.setAdapter(new RefrigeratorKindAdapter(kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
+        holder.nameOKind.setText(kinds.get(position));
+        List<Ingredient> kindOfIngredient = ingredientMap.get(kinds.get(position));
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
+        holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
+        holder.kindOfIngredientContainer.setAdapter(new RefrigeratorKindAdapter(kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
     }
 
     @Override
     public int getItemCount() {
-        return name.size();
+        return kinds.size();
     }
 
 //    @Override
