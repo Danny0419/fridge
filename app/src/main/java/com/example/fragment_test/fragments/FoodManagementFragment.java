@@ -38,6 +38,7 @@ public class FoodManagementFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     TabLayout tabLayout;
+    LinearLayoutManager layoutManager;
     RecyclerView ingredientContainer;
     private Map<String, List<Ingredient>> allIngredient;
 
@@ -87,10 +88,7 @@ public class FoodManagementFragment extends Fragment {
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.addTab(tabLayout.newTab().setText("肉類"));
-        tabLayout.addTab(tabLayout.newTab().setText("魚肉類"));
-        tabLayout.addTab(tabLayout.newTab().setText("豆蛋類"));
-        tabLayout.addTab(tabLayout.newTab().setText("蔬菜類"));
+        initTab();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -110,12 +108,28 @@ public class FoodManagementFragment extends Fragment {
         return view;
     }
 
+    private void initTab(){
+        tabLayout.addTab(tabLayout.newTab().setText("肉類"));
+        tabLayout.addTab(tabLayout.newTab().setText("魚肉類"));
+        tabLayout.addTab(tabLayout.newTab().setText("豆蛋類"));
+        tabLayout.addTab(tabLayout.newTab().setText("蔬菜類"));
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        initRecyclerView();
+        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(),allIngredient));
+        ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(),0,true);
+            }
+        });
+    }
+    private void initRecyclerView(){
+        layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ingredientContainer.setLayoutManager(layoutManager);
-        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(),allIngredient));
     }
 }
