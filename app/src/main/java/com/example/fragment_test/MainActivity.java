@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
                 if (onClickItemId == R.id.home) {
                     return true;
                 } else if (onClickItemId == R.id.manage) {
+                    Cursor query = db.query("refrigerator", new String[]{"name", "category", "quantity"}, null, null, null, null, null);
+
+
                     loadPage(new FoodManagementFragment());
                     return true;
                 } else if (onClickItemId == R.id.recipe) {
