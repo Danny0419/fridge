@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
 import com.example.fragment_test.pojo.Ingredient;
+import com.example.fragment_test.pojo.RefrigeratorIngredient;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class FoodManagementFragment extends Fragment {
     TabLayout tabLayout;
     LinearLayoutManager layoutManager;
     RecyclerView ingredientContainer;
-    private Map<String, List<Ingredient>> allIngredient;
+    private Map<String, List<RefrigeratorIngredient>> allIngredient;
 
     public FoodManagementFragment() {
         // Required empty public constructor
@@ -71,9 +72,9 @@ public class FoodManagementFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        ArrayList<RefrigeratorIngredient> ingredients = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            ingredients.add(new Ingredient(0, "牛排", "牛排照片" + i, getResources().getStringArray(R.array.kinds)[0], "1", 0));
+            ingredients.add(new RefrigeratorIngredient(0, "牛排", "牛排照片" + i, getResources().getStringArray(R.array.kinds)[0], 1, 0,""));
         }
         allIngredient = new HashMap<>();
         allIngredient.put(getResources().getStringArray(R.array.kinds)[0], ingredients);

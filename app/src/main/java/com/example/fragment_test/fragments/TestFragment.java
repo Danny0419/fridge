@@ -78,7 +78,7 @@ public class TestFragment extends Fragment {
         recyclerView = view.findViewById(R.id.addFoodRecycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        ingredient = arguments.getParcelableArrayList("food");
+//        ingredient = arguments.getParcelableArrayList("food");
         myAdapter = new MyAdapter(ingredient, view.getContext());
         recyclerView.setAdapter(myAdapter);
         return view;

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Ingredient;
+import com.example.fragment_test.pojo.RefrigeratorIngredient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +26,10 @@ import java.util.Map;
 public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapter.RefrigeratorViewHolder> {
 
     private List<String> kinds;
-    private Map<String, List<Ingredient>> ingredientMap;
+    private Map<String, List<RefrigeratorIngredient>> ingredientMap;
     private Context context;
 
-    public RefrigeratorAdapter(Context context, Map<String, List<Ingredient>> ingredientMap) {
+    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> ingredientMap) {
         this.context = context;
         this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
         this.ingredientMap = ingredientMap;
@@ -54,8 +55,8 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorViewHolder holder, int position) {
         holder.nameOKind.setText(kinds.get(position));
-        List<Ingredient> kindOfIngredient = ingredientMap.get(kinds.get(position));
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
+        List<RefrigeratorIngredient> kindOfIngredient = ingredientMap.get(kinds.get(position));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
         holder.kindOfIngredientContainer.setAdapter(new RefrigeratorKindAdapter(kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
     }

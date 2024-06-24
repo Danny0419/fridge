@@ -16,17 +16,17 @@ import com.example.fragment_test.pojo.ShoppingListBean;
 
 import java.util.ArrayList;
 
-public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.MyViewHolder> {
+public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
      ArrayList<ShoppingListBean> shoppingItems;
      Context context;
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class ShoppingListViewHolder extends RecyclerView.ViewHolder {
 
         TextView shoppingItemId, shoppingItemName, shoppingItemSort, shoppingItemQuantity;
         CheckBox shoppingItemState;
-        MyViewHolder(View view) {
+        ShoppingListViewHolder(View view) {
             super(view);
             shoppingItemId = view.findViewById(R.id.shoppingItemId);
             shoppingItemName = view.findViewById(R.id.shoppingItemName);
@@ -43,13 +43,13 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ShoppingListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shopping_item, parent, false);
-        return new MyViewHolder(view);
+        return new ShoppingListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShoppingListViewHolder holder, int position) {
         int id = shoppingItems.get(position).id;
         if (id % 2 != 0) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));

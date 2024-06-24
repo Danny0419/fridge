@@ -13,21 +13,15 @@ import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.fragment_test.adapter.MyAdapter;
 import com.example.fragment_test.fragments.FoodManagementFragment;
 import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ScheduleFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.helper.FridgeHelper;
-import com.example.fragment_test.pojo.Ingredient;
 import com.example.fragment_test.pojo.ShoppingListBean;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 if (onClickItemId == R.id.home) {
                     return true;
                 } else if (onClickItemId == R.id.manage) {
-                    Cursor query = db.query("refrigerator", new String[]{"name", "category", "quantity"}, null, null, null, null, null);
+                    Cursor query = db.query("refrigerator", new String[]{"name", "category","expiration","quantity"}, null, null, null, null, null);
 
 
                     loadPage(new FoodManagementFragment());

@@ -11,17 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Ingredient;
+import com.example.fragment_test.pojo.RefrigeratorIngredient;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class RefrigeratorKindAdapter extends RecyclerView.Adapter{
+public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKindAdapter.RefrigeratorKindViewHolder>{
 
-    private List<Ingredient> kindOfIngredient;
+    private List<RefrigeratorIngredient> kindOfIngredient;
 
 
-    public RefrigeratorKindAdapter(List<Ingredient> kindOfIngredient) {
+    public RefrigeratorKindAdapter(List<RefrigeratorIngredient> kindOfIngredient) {
         this.kindOfIngredient = kindOfIngredient;
     }
 
@@ -29,28 +30,34 @@ public class RefrigeratorKindAdapter extends RecyclerView.Adapter{
 
         TextView ingredientImg;
         TextView ingredientName;
+        TextView ingredientExpr;
+        TextView ingredientQuan;
 
 
         public RefrigeratorKindViewHolder(@NonNull View itemView) {
             super(itemView);
             ingredientImg = itemView.findViewById(R.id.ingredientImg);
             ingredientName = itemView.findViewById(R.id.ingredientName);
+            ingredientExpr = itemView.findViewById(R.id.ingredientExpiration);
+            ingredientQuan = itemView.findViewById(R.id.ingredientQuan);
         }
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RefrigeratorKindViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.ingredient_item, parent, false);
-        return new RefrigeratorKindAdapter.RefrigeratorKindViewHolder(view);
+                .inflate(R.layout.refrigerator_item, parent, false);
+        return new RefrigeratorKindViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RefrigeratorKindViewHolder holder, int position) {
         Ingredient ingredient = kindOfIngredient.get(position);
-        ((RefrigeratorKindViewHolder)holder).ingredientImg.setText(ingredient.getImg());
-        ((RefrigeratorKindViewHolder)holder).ingredientName.setText(ingredient.getName());
+        holder.ingredientImg.setText(ingredient.img);
+        holder.ingredientName.setText(ingredient.name);
+        holder.ingredientExpr.setText("保存期限");
+        holder.ingredientQuan.setText(ingredient.quantity.toString());
     }
 
     @Override

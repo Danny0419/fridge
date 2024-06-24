@@ -65,7 +65,8 @@ public class FridgeHelper extends SQLiteOpenHelper {
         FridgeHelper.db = db;
         String sql = "create table if not exists refrigerator (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "l_name VARCHAR(100) NOT NULL, " +
+                "name VARCHAR(100) NOT NULL, " +
+                "img VARCHAR(100) NOT NULL, " +
                 "category VARCHAR(100) NOT NULL, " +
                 "quantity INTEGER NOT NULL, " +
                 "saving_day INTEGER NOT NULL, " +

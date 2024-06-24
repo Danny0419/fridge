@@ -60,21 +60,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Log.e("onBindViewHolder", "正在執行");
-        int id = ingredient.get(position).getId();
+        int id = ingredient.get(position).id;
         if (id % 2 == 0) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
 
-        holder.id.setText(ingredient.get(position).getId().toString());
-        holder.name.setText(ingredient.get(position).getName().toString());
-        holder.sort.setText(ingredient.get(position).getSort().toString());
-        holder.quantity.setText(ingredient.get(position).getQuantity().toString());
-        Integer state = ingredient.get(position).getState();
-        if (1 == state) {
-            holder.state.setChecked(true);
-        }
+        holder.id.setText(Integer.toString(ingredient.get(position).id));
+        holder.name.setText(ingredient.get(position).name);
+        holder.sort.setText(ingredient.get(position).sort);
+        holder.quantity.setText(ingredient.get(position).quantity);
+//        Integer state = ingredient.get(position).status;
+//        if (1 == state) {
+//            holder.state.setChecked(true);
+//        }
     }
 
 
