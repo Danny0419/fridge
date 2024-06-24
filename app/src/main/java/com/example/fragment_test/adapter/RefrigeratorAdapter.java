@@ -26,10 +26,10 @@ import java.util.Map;
 public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapter.RefrigeratorViewHolder> {
 
     private List<String> kinds;
-    private Map<String, List<RefrigeratorIngredient>> ingredientMap;
+    private Map<String, ArrayList<RefrigeratorIngredient>> ingredientMap;
     private Context context;
 
-    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> ingredientMap) {
+    public RefrigeratorAdapter(Context context, Map<String, ArrayList<RefrigeratorIngredient>> ingredientMap) {
         this.context = context;
         this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
         this.ingredientMap = ingredientMap;

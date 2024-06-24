@@ -16,6 +16,8 @@ public class Ingredient {
         this.img = img;
     }
 
+
+
     public Ingredient(Integer id, String name, String img, String sort) {
         this.id = id;
         this.name = name;

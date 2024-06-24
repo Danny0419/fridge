@@ -13,22 +13,27 @@ import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.fragment_test.constant.IngredientCategory;
 import com.example.fragment_test.fragments.FoodManagementFragment;
 import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ScheduleFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.helper.FridgeHelper;
+import com.example.fragment_test.pojo.RefrigeratorIngredient;
+import com.example.fragment_test.pojo.RefrigeratorMap;
 import com.example.fragment_test.pojo.ShoppingListBean;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavbar;
     FragmentManager supportFragmentManager = this.getSupportFragmentManager();
     private FridgeHelper fridgeHelper = new FridgeHelper(this);
-
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(findViewById(R.id.toolbar_main));
         getSupportActionBar();
+        bottomNavbar = findViewById(R.id.bottomNavBar);
+        db = fridgeHelper.getReadableDatabase();
         initialize();
 
-        bottomNavbar = findViewById(R.id.bottomNavBar);
-        SQLiteDatabase db = fridgeHelper.getReadableDatabase();
+
         bottomNavbar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -49,10 +55,20 @@ public class MainActivity extends AppCompatActivity {
                 if (onClickItemId == R.id.home) {
                     return true;
                 } else if (onClickItemId == R.id.manage) {
-                    Cursor query = db.query("refrigerator", new String[]{"name", "category","expiration","quantity"}, null, null, null, null, null);
+                    Cursor query = db.query("refrigerator", new String[]{"id", "name", "img", "category", "quantity", "expiration"}, "expired = 0", null, null, null, null);
 
+                    while (query.moveToNext()) {
+                        int id = query.getInt(1);
+                        String name = query.getString(2);
+                        String img = query.getString(3);
+                        String category = query.getString(4);
+                        int quantity = query.getInt(5);
+                        String expiration = query.getString(6);
+                        RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, category, quantity, 5, expiration);
+                        sortIngredients(refrigeratorIngredient);
+                    }
 
-                    loadPage(new FoodManagementFragment());
+                    loadPage(new FoodManagementFragment(RefrigeratorMap.map));
                     return true;
                 } else if (onClickItemId == R.id.recipe) {
                     loadPage(new RecipeFragment());
@@ -75,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                         shopping_list.add(new ShoppingListBean(id, name, category, quantity));
                         id++;
                     }
+                    query.close();
                     loadShoppingListPage(shopping_list);
                     return true;
                 }
@@ -84,8 +101,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        Cursor query = db.query("refrigerator", new String[]{"id", "name", "img", "category", "quantity", "expiration"}, null, null, null, null, null);
+
+        while (query.moveToNext()) {
+            int id = query.getInt(0);
+            String name = query.getString(1);
+            String img = query.getString(2);
+            String category = query.getString(3);
+            int quantity = query.getInt(4);
+            String expiration = query.getString(5);
+            RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, category, quantity, 5, expiration);
+            sortIngredients(refrigeratorIngredient);
+        }
+        query.close();
         supportFragmentManager.beginTransaction()
-                .add(R.id.mainContent, new FoodManagementFragment())
+                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
                 .commit();
     }
 
@@ -93,6 +123,18 @@ public class MainActivity extends AppCompatActivity {
         ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
         shoppingListFragment.setShoppingList(shoppingList);
         loadPage(shoppingListFragment);
+    }
+
+    private void sortIngredients(RefrigeratorIngredient ingredient) {
+        String name = ingredient.name;
+        if (name.contains("魚"))
+            RefrigeratorMap.map.get(IngredientCategory.FISH.name).add(ingredient);
+        else if (name.contains("肉"))
+            RefrigeratorMap.map.get(IngredientCategory.MEAT.name).add(ingredient);
+        else if (name.contains("蛋"))
+            RefrigeratorMap.map.get(IngredientCategory.BEAN.name).add(ingredient);
+        else if (name.contains("菜"))
+            RefrigeratorMap.map.get(IngredientCategory.VEGETABLE.name).add(ingredient);
     }
 
     private void loadPage(Fragment fragment) {

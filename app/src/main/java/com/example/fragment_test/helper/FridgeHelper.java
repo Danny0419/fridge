@@ -24,26 +24,23 @@ public class FridgeHelper extends SQLiteOpenHelper {
         createShoppingListTab(db);
         createScheduleTab(db);
         createRecipeCollectionTab(db);
-
-        ContentValues values = new ContentValues();
         cTestData("shopping_list", "name", "測試", "category", "測試類", "quantity", 1);
         for (int i = 0; i < 5; i++) {
-            cTestData("refrigerator", "l_name", "牛排", "category", "肉類", "quantity", 2,
-                    "saving_day", 7, "expiration_date", "2024-06-30");
+            cTestData("refrigerator", "name", "牛排", "img", "牛排照片", "category", "肉類", "quantity", 2,
+                    "saving_day", 7, "expiration", "2024-06-30");
         }
         for (int i = 0; i < 4; i++) {
-            cTestData("refrigerator", "l_name", "鱸魚", "category", "魚肉類", "quantity", 2,
-                    "saving_day", 5, "expiration_date", "2024-06-28");
+            cTestData("refrigerator", "name", "鱸魚", "img", "鱸魚照片", "category", "魚肉類", "quantity", 2,
+                    "saving_day", 5, "expiration", "2024-06-28");
         }
         for (int i = 0; i < 6; i++) {
-            cTestData("refrigerator", "l_name", "蛋", "category", "蛋豆類", "quantity", 3,
-                    "saving_day", 7, "expiration_date", "2024-06-30");
+            cTestData("refrigerator", "name", "蛋", "img", "蛋照片", "category", "蛋豆類", "quantity", 3,
+                    "saving_day", 7, "expiration", "2024-06-30");
         }
         for (int i = 0; i < 2; i++) {
-            cTestData("refrigerator", "l_name", "高麗菜", "category", "蔬菜類", "quantity", 2,
-                    "saving_day", 7, "expiration_date", "2024-06-30");
+            cTestData("refrigerator", "name", "高麗菜", "img", "高麗菜照片", "category", "蔬菜類", "quantity", 2,
+                    "saving_day", 7, "expiration", "2024-06-30");
         }
-
     }
 
     @Override
@@ -70,8 +67,8 @@ public class FridgeHelper extends SQLiteOpenHelper {
                 "category VARCHAR(100) NOT NULL, " +
                 "quantity INTEGER NOT NULL, " +
                 "saving_day INTEGER NOT NULL, " +
-                "expiration_date VARCHAR(100) NOT NULL, " +
-                "status INTEGER DEFAULT 0)";
+                "expiration VARCHAR(100) NOT NULL, " +
+                "expired INTEGER DEFAULT 0)";
         db.execSQL(sql);
     }
 
@@ -93,7 +90,7 @@ public class FridgeHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
     }
 
-    private void cTestData(String name, Object... args) {
+    private void cTestData(String tabName, Object... args) {
         ContentValues values = new ContentValues();
         for (int i = 0; i < args.length; i += 2) {
             String attrN = (String) args[i];
@@ -104,6 +101,6 @@ public class FridgeHelper extends SQLiteOpenHelper {
                 values.put(attrN, (Integer) attrV);
             }
         }
-        db.insert(name, null, values);
+        db.insert(tabName, null, values);
     }
 }
