@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -93,10 +94,19 @@ public class FoodManagementFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         initTab();
+        LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()){
+            @Override
+            protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                ingredientContainer.smoothScrollToPosition(tab.getPosition());
+                scroller.setTargetPosition(tab.getPosition());
+                layoutManager.startSmoothScroll(scroller);
+                layoutManager.startSmoothScroll(scroller);
             }
 
             @Override
