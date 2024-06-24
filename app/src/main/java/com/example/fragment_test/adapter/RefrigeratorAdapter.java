@@ -1,20 +1,16 @@
 package com.example.fragment_test.adapter;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.pojo.Ingredient;
 import com.example.fragment_test.pojo.RefrigeratorIngredient;
 
 import java.util.ArrayList;
@@ -26,13 +22,13 @@ import java.util.Map;
 public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapter.RefrigeratorViewHolder> {
 
     private List<String> kinds;
-    private Map<String, ArrayList<RefrigeratorIngredient>> ingredientMap;
+    private Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorMap;
     private Context context;
 
-    public RefrigeratorAdapter(Context context, Map<String, ArrayList<RefrigeratorIngredient>> ingredientMap) {
+    public RefrigeratorAdapter(Context context, Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorMap) {
         this.context = context;
         this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
-        this.ingredientMap = ingredientMap;
+        this.refrigeratorMap = refrigeratorMap;
     }
 
      static class RefrigeratorViewHolder extends RecyclerView.ViewHolder {
@@ -55,7 +51,7 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorViewHolder holder, int position) {
         holder.nameOKind.setText(kinds.get(position));
-        List<RefrigeratorIngredient> kindOfIngredient = ingredientMap.get(kinds.get(position));
+        List<RefrigeratorIngredient> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
         holder.kindOfIngredientContainer.setAdapter(new RefrigeratorKindAdapter(kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));

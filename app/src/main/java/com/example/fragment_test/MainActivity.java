@@ -121,14 +121,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortIngredients(RefrigeratorIngredient ingredient) {
-        String name = ingredient.name;
-        if (name.contains("魚"))
+        String category = ingredient.sort;
+        if (category.contains("魚肉"))
             RefrigeratorMap.map.get(IngredientCategory.FISH.name).add(ingredient);
-        else if (name.contains("肉"))
+        else if (category.contains("肉"))
             RefrigeratorMap.map.get(IngredientCategory.MEAT.name).add(ingredient);
-        else if (name.contains("蛋"))
+        else if (category.contains("蛋豆"))
             RefrigeratorMap.map.get(IngredientCategory.BEAN.name).add(ingredient);
-        else if (name.contains("菜"))
+        else if (category.contains("蔬菜"))
             RefrigeratorMap.map.get(IngredientCategory.VEGETABLE.name).add(ingredient);
     }
 
