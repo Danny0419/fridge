@@ -12,13 +12,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.pojo.ShoppingListBean;
+import com.example.fragment_test.pojo.ShoppingIngredient;
 
 import java.util.ArrayList;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
-     ArrayList<ShoppingListBean> shoppingItems;
+     ArrayList<ShoppingIngredient> shoppingItems;
      Context context;
 
 
@@ -36,7 +36,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public ShoppingListAdapter(ArrayList<ShoppingListBean> shoppingItems, Context context) {
+    public ShoppingListAdapter(ArrayList<ShoppingIngredient> shoppingItems, Context context) {
         this.shoppingItems = shoppingItems;
         this.context = context;
     }
@@ -59,7 +59,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
         holder.shoppingItemId.setText(Integer.toString(shoppingItems.get(position).id));
         holder.shoppingItemName.setText(shoppingItems.get(position).name);
-        holder.shoppingItemSort.setText(shoppingItems.get(position).category);
+        holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
         holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).quantity));
 //        Integer state = shoppingItems.get(position).getState();
 //        if (1 == state) {

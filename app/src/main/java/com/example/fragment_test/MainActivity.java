@@ -18,7 +18,7 @@ import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.helper.FridgeHelper;
 import com.example.fragment_test.pojo.RefrigeratorIngredient;
 import com.example.fragment_test.pojo.RefrigeratorMap;
-import com.example.fragment_test.pojo.ShoppingListBean;
+import com.example.fragment_test.pojo.ShoppingIngredient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
                     Cursor query = db.query("refrigerator", new String[]{"id", "name", "img", "category", "quantity", "expiration"}, "expired = 0", null, null, null, null);
 
                     while (query.moveToNext()) {
-                        int id = query.getInt(1);
-                        String name = query.getString(2);
-                        String img = query.getString(3);
-                        String category = query.getString(4);
-                        int quantity = query.getInt(5);
-                        String expiration = query.getString(6);
+                        int id = query.getInt(0);
+                        String name = query.getString(1);
+                        String img = query.getString(2);
+                        String category = query.getString(3);
+                        int quantity = query.getInt(4);
+                        String expiration = query.getString(5);
                         RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, category, quantity, 5, expiration);
                         sortIngredients(refrigeratorIngredient);
                     }
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (onClickItemId == R.id.shoppingList) {
                     Cursor query = db.query("shopping_list", new String[]{"id", "name", "category", "quantity"}, null, null, null, null, null);
-                    ArrayList<ShoppingListBean> shopping_list = new ArrayList<>();
+                    ArrayList<ShoppingIngredient> shopping_list = new ArrayList<>();
 
                     int id = 1;
                     String name = "";
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                         name = query.getString(1);
                         category = query.getString(2);
                         quantity = query.getInt(3);
-                        shopping_list.add(new ShoppingListBean(id, name, category, quantity));
+                        shopping_list.add(new ShoppingIngredient(id, name, category, quantity));
                         id++;
                     }
                     query.close();
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void loadShoppingListPage(ArrayList<ShoppingListBean> shoppingList) {
+    private void loadShoppingListPage(ArrayList<ShoppingIngredient> shoppingList) {
         ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
         shoppingListFragment.setShoppingList(shoppingList);
         loadPage(shoppingListFragment);

@@ -16,7 +16,12 @@ public class Ingredient {
         this.img = img;
     }
 
-
+    public Ingredient(Integer id, String name, String sort, Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.sort = sort;
+        this.quantity = quantity;
+    }
 
     public Ingredient(Integer id, String name, String img, String sort) {
         this.id = id;
@@ -25,12 +30,20 @@ public class Ingredient {
         this.sort = sort;
     }
 
-    public Ingredient(Integer id, String name, String img, String sort, Integer quantity) {
+    public Ingredient(Integer id, String name, String img, Integer quantity, String sort) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.sort = sort;
         this.quantity = quantity;
+    }
+
+    public Ingredient(Integer id, String name, String img, String sort, Integer savingDay) {
+        this.id = id;
+        this.name = name;
+        this.img = img;
+        this.sort = sort;
+        this.savingDay = savingDay;
     }
 
     public Ingredient(Integer id, String name, String img, String sort, Integer quantity, Integer savingDay) {
