@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 if (onClickItemId == R.id.home) {
                     return true;
                 } else if (onClickItemId == R.id.manage) {
+                    RefrigeratorMap.resetRefrigerator();
                     Cursor query = db.query("refrigerator", new String[]{"id", "name", "img", "category", "quantity", "expiration"}, "expired = 0", null, null, null, null);
 
                     while (query.moveToNext()) {
@@ -113,13 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
                 .commit();
     }
-
-    private void loadShoppingListPage(ArrayList<ShoppingIngredient> shoppingList) {
-        ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
-        shoppingListFragment.setShoppingList(shoppingList);
-        loadPage(shoppingListFragment);
-    }
-
     private void sortIngredients(RefrigeratorIngredient ingredient) {
         String category = ingredient.sort;
         if (category.contains("魚肉"))
@@ -131,7 +125,11 @@ public class MainActivity extends AppCompatActivity {
         else if (category.contains("蔬菜"))
             RefrigeratorMap.map.get(IngredientCategory.VEGETABLE.name).add(ingredient);
     }
-
+    private void loadShoppingListPage(ArrayList<ShoppingIngredient> shoppingList) {
+        ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
+        shoppingListFragment.setShoppingList(shoppingList);
+        loadPage(shoppingListFragment);
+    }
     private void loadPage(Fragment fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.mainContent, fragment)

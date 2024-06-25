@@ -10,18 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
-import com.example.fragment_test.pojo.Ingredient;
 import com.example.fragment_test.pojo.RefrigeratorIngredient;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,7 +84,7 @@ public class FoodManagementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.rerigerator, container, false);
+        View view = inflater.inflate(R.layout.fragment_rerigerator, container, false);
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
