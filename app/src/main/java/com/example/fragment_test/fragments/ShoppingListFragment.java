@@ -1,5 +1,6 @@
 package com.example.fragment_test.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,7 +25,8 @@ import java.util.ArrayList;
 public class ShoppingListFragment extends Fragment {
 
     private ArrayList<ShoppingIngredient> shoppingList;
-    RecyclerView shoppingListItemContainer;
+    private RecyclerView shoppingListItemContainer;
+    private Dialog dialog;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,6 +75,17 @@ public class ShoppingListFragment extends Fragment {
         ;
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         shoppingListItemContainer = view.findViewById(R.id.shoppingListItemContainer);
+        View testButton = view.findViewById(R.id.testButton);
+
+        dialog = new Dialog(getContext());
+        View viewDialog = inflater.inflate(R.layout.shoppinglist_alter_dialog, container, false);
+        dialog.setContentView(viewDialog);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
         return view;
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public enum IngredientCategory {
     MEAT("肉類"), FISH("魚肉類"), BEAN("豆蛋類"), VEGETABLE("蔬菜類");
 
-    public String name;
+    public final String name;
     public final ArrayList<RefrigeratorIngredient> refrigeratorIngredients;
 
     IngredientCategory(String name){

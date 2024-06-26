@@ -22,13 +22,21 @@
     <string name="shoppingItemSortTitle">種類</string>
     <string name="shoppingItemQuantityTitle">數量</string>
     <string name="shoppingItemStateTitle">完成</string>
+    <string name="shoppingListAddItemTitle">新增食材</string>
+    <string name="shoppingListAddItemHintForName">請輸入食材名稱</string>
+    <string name="shoppingListAddItemHintForSort">請輸入食材種類</string>
+    <string name="shoppingListAddItemHintForQuantity">請輸入食材數量</string>
+
     <string name="title_activity_main2">MainActivity2</string>
+
     <string name="navbarTitleForHome">首頁</string>
     <string name="navbarTitleForManage">管理</string>
     <string name="navbarTitleForRecipe">食譜</string>
     <string name="navbarTitleForSchedule">規劃</string>
     <string name="navbarTitleForScanner">新增</string>
     <string name="navbarTitleForShoppingList">購入</string>
+
     <string name="RecipePageTitleForName">料理名稱</string>
     <string name="RecipeTitleForNeed">所需食材</string>
+
 </resources>

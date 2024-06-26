@@ -1,6 +1,5 @@
 package com.example.fragment_test.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Ingredient;
 import com.example.fragment_test.pojo.RefrigeratorIngredient;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKindAdapter.RefrigeratorKindViewHolder>{
 
@@ -47,7 +44,7 @@ public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKi
     @Override
     public RefrigeratorKindViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.refrigerator_item, parent, false);
+                .inflate(R.layout.refrigerator_card_item, parent, false);
         return new RefrigeratorKindViewHolder(view);
     }
 

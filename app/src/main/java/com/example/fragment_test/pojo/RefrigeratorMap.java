@@ -11,17 +11,14 @@ public class RefrigeratorMap {
     public static Map<String, ArrayList<RefrigeratorIngredient>> map = new HashMap<>();
 
     static {
-        map.put(IngredientCategory.MEAT.name, IngredientCategory.MEAT.refrigeratorIngredients);
-        map.put(IngredientCategory.FISH.name, IngredientCategory.FISH.refrigeratorIngredients);
-        map.put(IngredientCategory.BEAN.name, IngredientCategory.BEAN.refrigeratorIngredients);
-        map.put(IngredientCategory.VEGETABLE.name, IngredientCategory.VEGETABLE.refrigeratorIngredients);
+        resetRefrigerator();
     }
 
-    public static void resetRefrigerator(){
-        Collection<ArrayList<RefrigeratorIngredient>> values = map.values();
-        for (ArrayList<RefrigeratorIngredient> value:
-        values){
-            value.clear();
+    public static void resetRefrigerator() {
+        map = new HashMap<>();
+        for (IngredientCategory value :
+                IngredientCategory.values()) {
+            map.put(value.name, new ArrayList<>());
         }
     }
 }

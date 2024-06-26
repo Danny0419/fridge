@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fragment_test.MainActivity;
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.Recipe;
 
@@ -28,31 +27,31 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView ingredientImg, ingredientName;
+        private TextView recipeImg, recipeName;
         private RecyclerView ingredientContainer;
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            ingredientImg = itemView.findViewById(R.id.ingredientImg);
-            ingredientName = itemView.findViewById(R.id.ingredientName);
-            ingredientContainer = itemView.findViewById(R.id.ingredientContainer);
+            recipeImg = itemView.findViewById(R.id.recipeImg);
+            recipeName = itemView.findViewById(R.id.recipeName);
+//            ingredientContainer = itemView.findViewById(R.id.ingredientContainer);
         }
     }
 
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item_for_recommendation, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_card_item, parent,false);
         return new RecipeViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        holder.ingredientImg.setText(recipe.foodImg);
-        holder.ingredientName.setText(recipe.foodName);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        holder.ingredientContainer.setLayoutManager(layoutManager);
-        holder.ingredientContainer.setAdapter(new IngredientAdapter(recipe.ingredients));
+        holder.recipeImg.setText(recipe.foodImg);
+        holder.recipeName.setText(recipe.foodName);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+//        holder.ingredientContainer.setLayoutManager(layoutManager);
+//        holder.ingredientContainer.setAdapter(new IngredientAdapter(recipe.ingredients));
     }
 
 
