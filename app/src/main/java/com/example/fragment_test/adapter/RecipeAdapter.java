@@ -28,12 +28,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView recipeImg, recipeName;
-        private RecyclerView ingredientContainer;
+        private RecyclerView need_ingredients;
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImg = itemView.findViewById(R.id.recipeImg);
             recipeName = itemView.findViewById(R.id.recipeName);
-//            ingredientContainer = itemView.findViewById(R.id.ingredientContainer);
+            need_ingredients = itemView.findViewById(R.id.need_ingredients);
         }
     }
 
@@ -49,9 +49,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Recipe recipe = recipes.get(position);
         holder.recipeImg.setText(recipe.foodImg);
         holder.recipeName.setText(recipe.foodName);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-//        holder.ingredientContainer.setLayoutManager(layoutManager);
-//        holder.ingredientContainer.setAdapter(new IngredientAdapter(recipe.ingredients));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.need_ingredients.setLayoutManager(layoutManager);
+        holder.need_ingredients.setAdapter(new RecipeIngredientAdapter(recipe.ingredients));
     }
 
 

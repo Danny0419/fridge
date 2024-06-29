@@ -17,6 +17,10 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     ArrayList<Ingredient> ingredients;
 
+    public RecipeIngredientAdapter(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public class RecipeIngredientViewHolder extends RecyclerView.ViewHolder {
 
         public TextView ingredientImg;
@@ -32,7 +36,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
     @NonNull
     @Override
     public RecipeIngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_ingredient_card_item, parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_ingredient_card_item, parent, false);
         return new RecipeIngredientViewHolder(view);
     }
 
