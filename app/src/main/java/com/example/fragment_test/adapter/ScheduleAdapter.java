@@ -67,7 +67,7 @@ public class ScheduleAdapter extends BaseAdapter {
         if (recipe == null){
             recipe = new ArrayList<Recipe>();
         }
-        viewHolder.foodContainer.setAdapter(new ADayOfScheduleAdapter(recipe));
+//        viewHolder.foodContainer.setAdapter(new ADayOfScheduleAdapter(recipe));
         return convertView;
     }
 }
