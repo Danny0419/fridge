@@ -26,7 +26,9 @@
     <string name="shoppingListAddItemHintForName">請輸入食材名稱</string>
     <string name="shoppingListAddItemHintForSort">請輸入食材種類</string>
     <string name="shoppingListAddItemHintForQuantity">請輸入食材數量</string>
-
+    <string name="shoppingListAddItemConfirmText">加入</string>
+    <string name="shoppingListAddItemCancelText">取消</string>
+    
     <string name="title_activity_main2">MainActivity2</string>
 
     <string name="navbarTitleForHome">首頁</string>

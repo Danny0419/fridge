@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
@@ -22,11 +24,12 @@ import java.util.ArrayList;
  * Use the {@link ShoppingListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment {
+public class ShoppingListFragment extends Fragment implements View.OnClickListener {
 
     private ArrayList<ShoppingIngredient> shoppingList;
     private RecyclerView shoppingListItemContainer;
     private Dialog dialog;
+    EditText dialogName, dialogSort, dialogQuantity;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,17 +78,22 @@ public class ShoppingListFragment extends Fragment {
         ;
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         shoppingListItemContainer = view.findViewById(R.id.shoppingListItemContainer);
+        View viewDialog = inflater.inflate(R.layout.shoppinglist_alter_dialog, container, false);
         View testButton = view.findViewById(R.id.testButton);
+        Button dialogCancelBtn = viewDialog.findViewById(R.id.cancel_button);
+        Button dialogConfirmBtn = viewDialog.findViewById(R.id.confirm_button);
+        dialogName = viewDialog.findViewById(R.id.name);
+        dialogSort = viewDialog.findViewById(R.id.sort);
+        dialogQuantity = viewDialog.findViewById(R.id.quantity);
+
 
         dialog = new Dialog(getContext());
-        View viewDialog = inflater.inflate(R.layout.shoppinglist_alter_dialog, container, false);
         dialog.setContentView(viewDialog);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
+        dialog.setCancelable(false);
+
+        testButton.setOnClickListener(this);
+        dialogCancelBtn.setOnClickListener(this);
+
         return view;
     }
 
@@ -93,10 +101,30 @@ public class ShoppingListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         shoppingListItemContainer.setLayoutManager(new LinearLayoutManager(getContext()));
-        shoppingListItemContainer.setAdapter(new ShoppingListAdapter(shoppingList,getContext()));
+        shoppingListItemContainer.setAdapter(new ShoppingListAdapter(shoppingList, getContext()));
     }
 
     public void setShoppingList(ArrayList<ShoppingIngredient> shoppingList) {
         this.shoppingList = shoppingList;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int clickedId = v.getId();
+
+        if (clickedId == R.id.testButton) {
+            dialog.show();
+        } else if (clickedId == R.id.cancel_button) {
+            emptyEditViewsContent();
+            dialog.dismiss();
+        } else if (clickedId == R.id.confirm_button) {
+
+        }
+    }
+
+    private void emptyEditViewsContent() {
+        dialogName.setText("");
+        dialogSort.setText("");
+        dialogQuantity.setText("");
     }
 }
