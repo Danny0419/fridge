@@ -8,10 +8,8 @@ public enum IngredientCategory {
     MEAT("肉類"), FISH("魚肉類"), BEAN("豆蛋類"), VEGETABLE("蔬菜類");
 
     public final String name;
-    public final ArrayList<RefrigeratorIngredient> refrigeratorIngredients;
 
     IngredientCategory(String name){
         this.name = name;
-        refrigeratorIngredients = new ArrayList<>();
     }
 }
