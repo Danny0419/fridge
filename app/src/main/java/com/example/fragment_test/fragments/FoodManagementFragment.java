@@ -1,5 +1,6 @@
 package com.example.fragment_test.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -38,6 +39,7 @@ public class FoodManagementFragment extends Fragment {
     LinearLayoutManager layoutManager;
     RecyclerView ingredientContainer;
     private Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients;
+    private Dialog ingredientDetail;
 
     public FoodManagementFragment() {
         // Required empty public constructor
@@ -79,9 +81,10 @@ public class FoodManagementFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_rerigerator, container, false);
-        ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
-        tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
+        ingredientDetail = new Dialog(getContext());
+        ingredientDetail.setContentView(dialogView);
+        initValuable(view);
         initTab();
         LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()) {
             @Override
@@ -108,20 +111,25 @@ public class FoodManagementFragment extends Fragment {
 
             }
         });
+
+        ingredientContainer.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener());
         return view;
     }
-
+    private void initValuable(View view){
+        ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
+        tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+    }
     private void initTab() {
         String[] stringArray = getActivity().getResources().getStringArray(R.array.foodManagementTabLayoutTag);
         for (int i = 0, n = stringArray.length; i < n; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(stringArray[i]));
         }
     }
-
     @Override
     public void onStart() {
         super.onStart();
-        initRecyclerView();
+        setRecyclerView();
         ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients));
         ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -130,8 +138,7 @@ public class FoodManagementFragment extends Fragment {
             }
         });
     }
-
-    private void initRecyclerView() {
+    private void setRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ingredientContainer.setLayoutManager(layoutManager);
