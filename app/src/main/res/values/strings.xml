@@ -41,4 +41,13 @@
     <string name="RecipePageTitleForName">料理名稱</string>
     <string name="RecipeTitleForNeed">所需食材</string>
 
+    <string-array name="foodManagementTabLayoutTag">
+        <item>肉類</item>
+        <item>魚肉類</item>
+        <item>豆蛋類</item>
+        <item>蔬菜類</item>
+        <item>乳品類</item>
+        <item>種子類</item>
+    </string-array>
+
 </resources>

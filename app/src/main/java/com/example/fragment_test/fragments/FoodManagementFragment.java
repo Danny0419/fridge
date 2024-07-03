@@ -43,9 +43,10 @@ public class FoodManagementFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public FoodManagementFragment(Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients){
+    public FoodManagementFragment(Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients) {
         this.refrigeratorIngredients = refrigeratorIngredients;
     }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -71,13 +72,6 @@ public class FoodManagementFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-//        ArrayList<RefrigeratorIngredient> ingredients = new ArrayList<>();
-//        for (int i = 0; i < 8; i++) {
-//            ingredients.add(new RefrigeratorIngredient(0, "牛排", "牛排照片" + i, getResources().getStringArray(R.array.kinds)[0], 1, 0,""));
-//        }
-//        allIngredient = new HashMap<>();
-//        allIngredient.put(getResources().getStringArray(R.array.kinds)[0], ingredients);
-//        allIngredient = (Map)savedInstanceState.get("all ingredient");
     }
 
     @Override
@@ -89,7 +83,7 @@ public class FoodManagementFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         initTab();
-        LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()){
+        LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()) {
             @Override
             protected int getVerticalSnapPreference() {
                 return LinearSmoothScroller.SNAP_TO_START;
@@ -117,26 +111,27 @@ public class FoodManagementFragment extends Fragment {
         return view;
     }
 
-    private void initTab(){
-        tabLayout.addTab(tabLayout.newTab().setText("肉類"));
-        tabLayout.addTab(tabLayout.newTab().setText("魚肉類"));
-        tabLayout.addTab(tabLayout.newTab().setText("豆蛋類"));
-        tabLayout.addTab(tabLayout.newTab().setText("蔬菜類"));
+    private void initTab() {
+        String[] stringArray = getActivity().getResources().getStringArray(R.array.foodManagementTabLayoutTag);
+        for (int i = 0, n = stringArray.length; i < n; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(stringArray[i]));
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
         initRecyclerView();
-        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(),refrigeratorIngredients));
+        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients));
         ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(),0,true);
+                tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
             }
         });
     }
-    private void initRecyclerView(){
+
+    private void initRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ingredientContainer.setLayoutManager(layoutManager);
