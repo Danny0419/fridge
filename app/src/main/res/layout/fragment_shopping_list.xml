@@ -30,7 +30,8 @@
                 android:layout_weight="1"
                 android:text="@string/shoppingItemIdTitle"
                 android:textSize="25dp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:fontFamily="@font/bold"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -38,7 +39,8 @@
                 android:layout_weight="1"
                 android:text="@string/shoppingItemNameTitle"
                 android:textSize="25dp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:fontFamily="@font/bold"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -46,7 +48,8 @@
                 android:layout_weight="1"
                 android:text="@string/shoppingItemSortTitle"
                 android:textSize="25dp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:fontFamily="@font/bold"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -54,7 +57,8 @@
                 android:layout_weight="1"
                 android:text="@string/shoppingItemQuantityTitle"
                 android:textSize="25dp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:fontFamily="@font/bold"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -62,7 +66,8 @@
                 android:layout_weight="1"
                 android:text="@string/shoppingItemStateTitle"
                 android:textSize="25dp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:fontFamily="@font/bold"/>
 
         </LinearLayout>
 
