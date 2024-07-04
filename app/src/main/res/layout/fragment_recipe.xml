@@ -17,7 +17,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:background="@color/red">
+            android:background="@color/dark_pink">
 
             <TextView
                 android:layout_width="0dp"
