@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/dark_pink">
+            android:background="@color/dar">
 
             <TextView
                 android:layout_width="0dp"
