@@ -79,7 +79,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         shoppingListItemContainer = view.findViewById(R.id.shoppingListItemContainer);
         View viewDialog = inflater.inflate(R.layout.shoppinglist_alter_dialog, container, false);
-        View testButton = view.findViewById(R.id.testButton);
+        View testButton = view.findViewById(R.id.addNewShoppingListItemButton);
         Button dialogCancelBtn = viewDialog.findViewById(R.id.cancel_button);
         Button dialogConfirmBtn = viewDialog.findViewById(R.id.confirm_button);
         dialogName = viewDialog.findViewById(R.id.name);
@@ -112,7 +112,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         int clickedId = v.getId();
 
-        if (clickedId == R.id.testButton) {
+        if (clickedId == R.id.addNewShoppingListItemButton) {
             dialog.show();
         } else if (clickedId == R.id.cancel_button) {
             emptyEditViewsContent();
