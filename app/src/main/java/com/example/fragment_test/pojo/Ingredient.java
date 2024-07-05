@@ -1,19 +1,25 @@
 package com.example.fragment_test.pojo;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "refrigerator")
 public class Ingredient {
+    @PrimaryKey
     public Integer id;
+    @ColumnInfo
     public String name;
-    public String img;
+    @ColumnInfo
     public String sort;
+    @ColumnInfo
     public Integer quantity;
-    public Integer savingDay;
 
     public Ingredient() {
     }
 
-    public Ingredient(String name, String img) {
+    public Ingredient(String name) {
         this.name = name;
-        this.img = img;
     }
 
     public Ingredient(Integer id, String name, String sort, Integer quantity) {
@@ -26,32 +32,19 @@ public class Ingredient {
     public Ingredient(Integer id, String name, String img, String sort) {
         this.id = id;
         this.name = name;
-        this.img = img;
         this.sort = sort;
     }
 
-    public Ingredient(Integer id, String name, String img, Integer quantity, String sort) {
+    public Ingredient(Integer id, String name, Integer quantity, String sort) {
         this.id = id;
         this.name = name;
-        this.img = img;
         this.sort = sort;
         this.quantity = quantity;
     }
 
-    public Ingredient(Integer id, String name, String img, String sort, Integer savingDay) {
+    public Ingredient(Integer id, String name, String sort) {
         this.id = id;
         this.name = name;
-        this.img = img;
         this.sort = sort;
-        this.savingDay = savingDay;
-    }
-
-    public Ingredient(Integer id, String name, String img, String sort, Integer quantity, Integer savingDay) {
-        this.id = id;
-        this.name = name;
-        this.img = img;
-        this.sort = sort;
-        this.quantity = quantity;
-        this.savingDay = savingDay;
     }
 }

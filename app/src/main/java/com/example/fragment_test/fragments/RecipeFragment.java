@@ -71,11 +71,11 @@ public class RecipeFragment extends Fragment {
         }
         for (int i = 1; i <8; i++) {
             ArrayList<Ingredient> ingredients = new ArrayList<>();
-            ingredients.add(new Ingredient("蛋", "蛋照片"+i));
-            ingredients.add(new Ingredient("飯", "飯照片"+i));
+            ingredients.add(new Ingredient("蛋"));
+            ingredients.add(new Ingredient("飯"));
             recipes.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i,ingredients));
             ingredients = new ArrayList<>();
-            ingredients.add(new Ingredient("蛋", "蛋照片"+i));
+            ingredients.add(new Ingredient("蛋"));
             recipes.add(new Recipe("煎蛋照片"+i,"煎蛋"+i, ingredients) );
         }
 

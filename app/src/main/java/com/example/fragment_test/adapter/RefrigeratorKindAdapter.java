@@ -1,5 +1,6 @@
 package com.example.fragment_test.adapter;
 
+import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import java.util.List;
 public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKindAdapter.RefrigeratorKindViewHolder>{
 
     private List<RefrigeratorIngredient> kindOfIngredient;
+    private Dialog ingredientDetail;
 
 
-    public RefrigeratorKindAdapter(List<RefrigeratorIngredient> kindOfIngredient) {
+    public RefrigeratorKindAdapter(List<RefrigeratorIngredient> kindOfIngredient, Dialog ingredientDetail) {
         this.kindOfIngredient = kindOfIngredient;
+        this.ingredientDetail = ingredientDetail;
     }
 
     class RefrigeratorKindViewHolder extends RecyclerView.ViewHolder {
@@ -50,11 +53,17 @@ public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKi
 
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorKindViewHolder holder, int position) {
-        Ingredient ingredient = kindOfIngredient.get(position);
+        RefrigeratorIngredient ingredient = kindOfIngredient.get(position);
         holder.ingredientImg.setText(ingredient.img);
         holder.ingredientName.setText(ingredient.name);
         holder.ingredientExpr.setText("保存期限");
         holder.ingredientQuan.setText(ingredient.quantity.toString());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    ingredientDetail.show();
+            }
+        });
     }
 
     @Override

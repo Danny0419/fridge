@@ -115,22 +115,25 @@ public class FoodManagementFragment extends Fragment {
         ingredientContainer.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener());
         return view;
     }
-    private void initValuable(View view){
+
+    private void initValuable(View view) {
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
+
     private void initTab() {
         String[] stringArray = getActivity().getResources().getStringArray(R.array.foodManagementTabLayoutTag);
         for (int i = 0, n = stringArray.length; i < n; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(stringArray[i]));
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
         setRecyclerView();
-        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients));
+        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients, ingredientDetail));
         ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -138,6 +141,7 @@ public class FoodManagementFragment extends Fragment {
             }
         });
     }
+
     private void setRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

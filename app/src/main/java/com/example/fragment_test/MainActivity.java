@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         String category = query.getString(3);
                         int quantity = query.getInt(4);
                         String expiration = query.getString(5);
-                        RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, category, quantity, 5, expiration);
+                        RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, quantity, category, 5, expiration);
                         sortIngredients(refrigeratorIngredient);
                     }
 
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             String category = query.getString(3);
             int quantity = query.getInt(4);
             String expiration = query.getString(5);
-            RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, category, quantity, 5, expiration);
+            RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, quantity, category, 5, expiration);
             sortIngredients(refrigeratorIngredient);
         }
         query.close();

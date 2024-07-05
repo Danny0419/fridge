@@ -23,8 +23,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -43,6 +43,11 @@ android {
 }
 
 dependencies {
+
+    //ROOM      (遇到了大概是版本的問題，換了新版本就沒問題了)
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("com.google.android.material:material:1.7.0")
     implementation("com.google.android.material:material:1.2.0-alpha05")
     implementation("com.google.android.material:material:1.1.0-alpha10") //底部導覽模組
