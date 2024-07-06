@@ -57,7 +57,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));
         }
 
-        holder.shoppingItemId.setText(Integer.toString(shoppingItems.get(position).id));
+        holder.shoppingItemId.setText(Integer.toString(shoppingItems.get(position).id)+".");
         holder.shoppingItemName.setText(shoppingItems.get(position).name);
         holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
         holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).quantity));

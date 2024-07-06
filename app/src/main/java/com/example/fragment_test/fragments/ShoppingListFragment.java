@@ -3,6 +3,8 @@ package com.example.fragment_test.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.fragment_test.ConvertSize;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.pojo.ShoppingIngredient;
+import com.example.fragment_test.ConvertSize;
 
 import java.util.ArrayList;
 
@@ -86,7 +90,6 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         dialogSort = viewDialog.findViewById(R.id.sort);
         dialogQuantity = viewDialog.findViewById(R.id.quantity);
 
-
         dialog = new Dialog(getContext());
         dialog.setContentView(viewDialog);
         dialog.setCancelable(false);
@@ -126,5 +129,15 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         dialogName.setText("");
         dialogSort.setText("");
         dialogQuantity.setText("");
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Button addNewShoppingListItemButton=view.findViewById(R.id.addNewShoppingListItemButton);
+        ConvertSize convertSize=new ConvertSize();
+//        convertSize.adjustViewSizeAndPosition(addNewShoppingListItemButton, 80, 80, 0, 0, 25, 23);
+//        convertSize.adjustViewSizeAndPosition(addNewShoppingListItemButton, 500, 500, 0, 99999990, 25, 23);
     }
 }

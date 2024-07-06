@@ -20,16 +20,17 @@
 <!--            android:text="測試跳出視窗"/>-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="73dp"
             android:orientation="horizontal"
-            android:background="@color/dark_pink">
+            android:background="@color/dark_pink"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemIdTitle"
-                android:textSize="25dp"
+                android:textSize="24dp"
                 android:textAlignment="center"
                 android:fontFamily="@font/bold"/>
 
@@ -38,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemNameTitle"
-                android:textSize="25dp"
+                android:textSize="24dp"
                 android:textAlignment="center"
                 android:fontFamily="@font/bold"/>
 
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemSortTitle"
-                android:textSize="25dp"
+                android:textSize="24dp"
                 android:textAlignment="center"
                 android:fontFamily="@font/bold"/>
 
@@ -56,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemQuantityTitle"
-                android:textSize="25dp"
+                android:textSize="24dp"
                 android:textAlignment="center"
                 android:fontFamily="@font/bold"/>
 
@@ -65,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/shoppingItemStateTitle"
-                android:textSize="25dp"
+                android:textSize="24dp"
                 android:textAlignment="center"
                 android:fontFamily="@font/bold"/>
 
@@ -74,7 +75,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shoppingListItemContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,13 +85,13 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addNewShoppingListItemButton"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-            android:layout_width="334dp"
-            android:layout_height="334dp"
-            android:layout_margin="16dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="25dp"
             android:backgroundTint="@color/dark_pink"
             android:text="十"
             android:textColor="@color/white"
-            android:textSize="45dp"
+            android:textSize="38dp"
             android:textStyle="bold"
             android:theme="@style/Theme.Material3.Dark.BottomSheetDialog"
             app:cornerRadius="360dp"

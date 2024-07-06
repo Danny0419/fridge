@@ -3,12 +3,11 @@ package com.example.fragment_test;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class ConcertSize {
+public class ConvertSize {
     /**
      * Covert dp to px
      * @param dp
@@ -84,7 +83,5 @@ public class ConcertSize {
         } else if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams) {
             setConstraintSizeAndPosition(view, (int) width, (int) height, (int) marginLeft, (int) marginTop, (int) marginRight, (int) marginEnd);
         }
-
-
     }
 }
