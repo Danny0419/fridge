@@ -9,6 +9,7 @@ import androidx.room.Room;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.fragment_test.DAO.RefrigeratorDAO;
@@ -65,10 +66,11 @@ public class MainActivity extends AppCompatActivity {
                 if (onClickItemId == R.id.home) {
                     return true;
                 } else if (onClickItemId == R.id.manage) {
+                    RefrigeratorMap.resetRefrigerator();
                     Maybe.fromCallable(new Callable<List<RefrigeratorIngredient>>() {
                                 @Override
                                 public List<RefrigeratorIngredient> call() throws Exception {
-                                    return refrigeratorDAO.query();
+                                    return refrigeratorDAO.getAllRefrigeratorIngredients();
                                 }
                             })
                             .subscribeOn(Schedulers.io())
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    loadPage(new FoodManagementFragment(RefrigeratorMap.map));
+                                    Log.e("subscribe",e.getMessage());
                                 }
 
                                 @Override
@@ -94,25 +96,6 @@ public class MainActivity extends AppCompatActivity {
                                     loadPage(new FoodManagementFragment(RefrigeratorMap.map));
                                 }
                             });
-//                    List<RefrigeratorIngredient> query = refrigeratorDAO.query();
-//                    RefrigeratorMap.resetRefrigerator();
-//                    Cursor query = db.query("refrigerator", new String[]{"id", "name", "img", "category", "quantity", "expiration"}, "expired = 0", null, null, null, null);
-//
-//                    while (query.moveToNext()) {
-//                        int id = query.getInt(0);
-//                        String name = query.getString(1);
-//                        String img = query.getString(2);
-//                        String category = query.getString(3);
-//                        int quantity = query.getInt(4);
-//                        String expiration = query.getString(5);
-//                        RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(id, name, img, quantity, category, 5, expiration);
-//                        sortIngredients(refrigeratorIngredient);
-//                    }
-//                    for (RefrigeratorIngredient value :
-//                            query) {
-//                        sortIngredients(value);
-//                    }
-
                     return true;
                 } else if (onClickItemId == R.id.recipe) {
                     loadPage(new RecipeFragment());
@@ -148,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
         Maybe.fromCallable(new Callable<List<RefrigeratorIngredient>>() {
                     @Override
                     public List<RefrigeratorIngredient> call() throws Exception {
-                        return refrigeratorDAO.query();
+                        refrigeratorDAO.addIngredients();
+                        return null;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -156,11 +140,11 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredient>>() {
                     @Override
                     public void onSuccess(List<RefrigeratorIngredient> refrigeratorIngredients) {
-                        List<RefrigeratorIngredient> query = refrigeratorIngredients;
-                        for (RefrigeratorIngredient value :
-                                query) {
-                            sortIngredients(value);
-                        }
+//                        List<RefrigeratorIngredient> query = refrigeratorIngredients;
+//                        for (RefrigeratorIngredient value :
+//                                query) {
+//                            sortIngredients(value);
+//                        }
                         supportFragmentManager.beginTransaction()
                                 .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
                                 .commit();

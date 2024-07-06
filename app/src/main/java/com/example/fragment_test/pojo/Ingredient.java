@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
 public class Ingredient {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public Integer id;
     @ColumnInfo
     public String name;
@@ -45,5 +45,11 @@ public class Ingredient {
         this.id = id;
         this.name = name;
         this.sort = sort;
+    }
+
+    public Ingredient(String name, String sort, Integer quantity) {
+        this.name = name;
+        this.sort = sort;
+        this.quantity = quantity;
     }
 }
