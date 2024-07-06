@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.pojo.RefrigeratorIngredient;
+import com.example.fragment_test.pojo.RefrigeratorMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +55,7 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorViewHolder holder, int position) {
         holder.nameOKind.setText(kinds.get(position));
-        List<RefrigeratorIngredient> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
+        List<RefrigeratorIngredient> kindOfIngredient = RefrigeratorMap.map.get(kinds.get(position));
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
         holder.kindOfIngredientContainer.setAdapter(new RefrigeratorKindAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()), ingredientDetail));

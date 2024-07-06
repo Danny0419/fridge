@@ -1,10 +1,9 @@
 package com.example.fragment_test.pojo;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
+
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "refrigerator")
 public class Ingredient {
     @PrimaryKey
     public Integer id;

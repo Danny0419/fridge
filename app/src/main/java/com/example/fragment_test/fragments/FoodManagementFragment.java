@@ -147,4 +147,8 @@ public class FoodManagementFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ingredientContainer.setLayoutManager(layoutManager);
     }
+
+    public void setRefrigeratorIngredients(Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients) {
+        this.refrigeratorIngredients = refrigeratorIngredients;
+    }
 }
