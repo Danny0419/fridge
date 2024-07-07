@@ -1,15 +1,13 @@
-package com.example.fragment_test.DAO;
+package com.example.fragment_test.database;
 
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.fragment_test.pojo.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 import java.util.List;
 
 import io.reactivex.Maybe;
-import io.reactivex.Single;
 
 @Dao
 public interface RefrigeratorDAO {

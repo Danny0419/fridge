@@ -1,4 +1,4 @@
-package com.example.fragment_test.pojo;
+package com.example.fragment_test.entity;
 
 public class ScheduleItem {
     public int id;

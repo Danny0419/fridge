@@ -11,8 +11,8 @@ import android.widget.ListView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
-import com.example.fragment_test.pojo.Day;
-import com.example.fragment_test.pojo.Recipe;
+import com.example.fragment_test.entity.Day;
+import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;

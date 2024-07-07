@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.pojo.Day;
-import com.example.fragment_test.pojo.Recipe;
+import com.example.fragment_test.entity.Day;
+import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
 import java.util.Map;

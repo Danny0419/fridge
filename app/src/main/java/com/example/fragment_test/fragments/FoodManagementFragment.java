@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +17,13 @@ import android.view.ViewGroup;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
-import com.example.fragment_test.pojo.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.viewModel.FoodManagementModelFactory;
+import com.example.fragment_test.viewModel.FoodManagementViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +46,7 @@ public class FoodManagementFragment extends Fragment {
     RecyclerView ingredientContainer;
     private Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients;
     private Dialog ingredientDetail;
+    private FoodManagementViewModel viewModel;
 
     public FoodManagementFragment() {
         // Required empty public constructor
@@ -74,6 +81,8 @@ public class FoodManagementFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        this.viewModel = new ViewModelProvider(this, new FoodManagementModelFactory(getContext())).get(FoodManagementViewModel.class);
+        this.viewModel.loadRefrigeratorIngredients();
     }
 
     @Override
@@ -86,6 +95,20 @@ public class FoodManagementFragment extends Fragment {
         ingredientDetail.setContentView(dialogView);
         initValuable(view);
         initTab();
+
+        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, ArrayList<RefrigeratorIngredient>>>() {
+            @Override
+            public void onChanged(Map<String, ArrayList<RefrigeratorIngredient>> stringArrayListMap) {
+                setRecyclerView();
+                ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), stringArrayListMap, ingredientDetail));
+                ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
+                    }
+                });
+            }
+        });
         LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()) {
             @Override
             protected int getVerticalSnapPreference() {
@@ -132,14 +155,14 @@ public class FoodManagementFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        setRecyclerView();
-        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients, ingredientDetail));
-        ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
-            }
-        });
+//        setRecyclerView();
+//        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients, ingredientDetail));
+//        ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
+//            }
+//        });
     }
 
     private void setRecyclerView() {

@@ -6,8 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.fragment_test.DAO.RefrigeratorDAO;
-import com.example.fragment_test.pojo.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 @Database(entities = {RefrigeratorIngredient.class}, version = 1)
 public abstract class FridgeDatabase extends RoomDatabase {

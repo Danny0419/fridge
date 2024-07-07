@@ -9,18 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeAdapter;
-import com.example.fragment_test.adapter.ScheduleAdapter;
-import com.example.fragment_test.pojo.Day;
-import com.example.fragment_test.pojo.Ingredient;
-import com.example.fragment_test.pojo.Recipe;
+import com.example.fragment_test.entity.Ingredient;
+import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.

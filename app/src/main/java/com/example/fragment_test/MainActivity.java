@@ -4,15 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.fragment_test.DAO.RefrigeratorDAO;
+import com.example.fragment_test.database.RefrigeratorDAO;
 import com.example.fragment_test.constant.IngredientCategory;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.fragments.FoodManagementFragment;
@@ -20,9 +18,9 @@ import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ScheduleFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.helper.FridgeHelper;
-import com.example.fragment_test.pojo.RefrigeratorIngredient;
-import com.example.fragment_test.pojo.RefrigeratorMap;
-import com.example.fragment_test.pojo.ShoppingIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorMap;
+import com.example.fragment_test.entity.ShoppingIngredient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Maybe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -66,36 +63,37 @@ public class MainActivity extends AppCompatActivity {
                 if (onClickItemId == R.id.home) {
                     return true;
                 } else if (onClickItemId == R.id.manage) {
-                    RefrigeratorMap.resetRefrigerator();
-                    Maybe.fromCallable(new Callable<List<RefrigeratorIngredient>>() {
-                                @Override
-                                public List<RefrigeratorIngredient> call() throws Exception {
-                                    return refrigeratorDAO.getAllRefrigeratorIngredients();
-                                }
-                            })
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredient>>() {
-                                @Override
-                                public void onSuccess(List<RefrigeratorIngredient> refrigeratorIngredients) {
-                                    List<RefrigeratorIngredient> query = refrigeratorIngredients;
-                                    for (RefrigeratorIngredient value :
-                                            query) {
-                                        sortIngredients(value);
-                                    }
-                                    loadPage(new FoodManagementFragment(RefrigeratorMap.map));
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    Log.e("subscribe",e.getMessage());
-                                }
-
-                                @Override
-                                public void onComplete() {
-                                    loadPage(new FoodManagementFragment(RefrigeratorMap.map));
-                                }
-                            });
+                    loadPage(new FoodManagementFragment());
+//                    RefrigeratorMap.resetRefrigerator();
+//                    Maybe.fromCallable(new Callable<List<RefrigeratorIngredient>>() {
+//                                @Override
+//                                public List<RefrigeratorIngredient> call() throws Exception {
+//                                    return refrigeratorDAO.getAllRefrigeratorIngredients();
+//                                }
+//                            })
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredient>>() {
+//                                @Override
+//                                public void onSuccess(List<RefrigeratorIngredient> refrigeratorIngredients) {
+//                                    List<RefrigeratorIngredient> query = refrigeratorIngredients;
+//                                    for (RefrigeratorIngredient value :
+//                                            query) {
+//                                        sortIngredients(value);
+//                                    }
+//                                    loadPage(new FoodManagementFragment(RefrigeratorMap.map));
+//                                }
+//
+//                                @Override
+//                                public void onError(Throwable e) {
+//                                    Log.e("subscribe",e.getMessage());
+//                                }
+//
+//                                @Override
+//                                public void onComplete() {
+//                                    loadPage(new FoodManagementFragment(RefrigeratorMap.map));
+//                                }
+//                            });
                     return true;
                 } else if (onClickItemId == R.id.recipe) {
                     loadPage(new RecipeFragment());
@@ -128,42 +126,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        Maybe.fromCallable(new Callable<List<RefrigeratorIngredient>>() {
-                    @Override
-                    public List<RefrigeratorIngredient> call() throws Exception {
-                        refrigeratorDAO.addIngredients();
-                        return null;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredient>>() {
-                    @Override
-                    public void onSuccess(List<RefrigeratorIngredient> refrigeratorIngredients) {
-//                        List<RefrigeratorIngredient> query = refrigeratorIngredients;
-//                        for (RefrigeratorIngredient value :
-//                                query) {
-//                            sortIngredients(value);
-//                        }
-                        supportFragmentManager.beginTransaction()
-                                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
-                                .commit();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        supportFragmentManager.beginTransaction()
-                                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
-                                .commit();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        supportFragmentManager.beginTransaction()
-                                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
-                                .commit();
-                    }
-                });
+        loadPage(new FoodManagementFragment());
+//        Maybe.fromCallable(new Callable<List<RefrigeratorIngredient>>() {
+//                    @Override
+//                    public List<RefrigeratorIngredient> call() throws Exception {
+//                        refrigeratorDAO.addIngredients();
+//                        return null;
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredient>>() {
+//                    @Override
+//                    public void onSuccess(List<RefrigeratorIngredient> refrigeratorIngredients) {
+////                        List<RefrigeratorIngredient> query = refrigeratorIngredients;
+////                        for (RefrigeratorIngredient value :
+////                                query) {
+////                            sortIngredients(value);
+////                        }
+//                        supportFragmentManager.beginTransaction()
+//                                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
+//                                .commit();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        supportFragmentManager.beginTransaction()
+//                                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
+//                                .commit();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        supportFragmentManager.beginTransaction()
+//                                .add(R.id.mainContent, new FoodManagementFragment(RefrigeratorMap.map))
+//                                .commit();
+//                    }
+//                });
 //        Cursor query = db.query("refrigerator", new String[]{"id", "name", "img", "category", "quantity", "expiration"}, null, null, null, null, null);
 
 //        for (RefrigeratorIngredient value :

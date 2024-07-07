@@ -1,9 +1,8 @@
-package com.example.fragment_test.pojo;
+package com.example.fragment_test.entity;
 
 import com.example.fragment_test.constant.IngredientCategory;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

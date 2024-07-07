@@ -15,7 +15,7 @@ import android.widget.EditText;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
-import com.example.fragment_test.pojo.ShoppingIngredient;
+import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.ArrayList;
 

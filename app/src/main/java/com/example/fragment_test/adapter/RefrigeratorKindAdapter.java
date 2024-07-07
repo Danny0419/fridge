@@ -10,8 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.pojo.Ingredient;
-import com.example.fragment_test.pojo.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.fragment_test.pojo;
+package com.example.fragment_test.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

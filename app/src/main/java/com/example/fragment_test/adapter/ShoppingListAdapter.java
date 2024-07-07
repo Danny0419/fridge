@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.pojo.ShoppingIngredient;
+import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,4 @@
-package com.example.fragment_test.pojo;
-
-import android.graphics.drawable.Drawable;
+package com.example.fragment_test.entity;
 
 import java.util.ArrayList;
 

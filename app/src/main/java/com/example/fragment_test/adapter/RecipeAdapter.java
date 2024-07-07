@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.pojo.Recipe;
+import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
 

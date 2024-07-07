@@ -1,12 +1,9 @@
-package com.example.fragment_test.pojo;
+package com.example.fragment_test.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
-import java.sql.Date;
 
 @Entity(tableName = "refrigerator")
 public class RefrigeratorIngredient extends Ingredient {
