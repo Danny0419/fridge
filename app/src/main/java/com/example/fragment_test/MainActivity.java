@@ -7,30 +7,19 @@ import androidx.fragment.app.FragmentManager;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.fragment_test.database.RefrigeratorDAO;
-import com.example.fragment_test.constant.IngredientCategory;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.fragments.FoodManagementFragment;
 import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ScheduleFragment;
 import com.example.fragment_test.fragments.ShoppingListFragment;
 import com.example.fragment_test.helper.FridgeHelper;
-import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.RefrigeratorMap;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import io.reactivex.Maybe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableMaybeObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -181,18 +170,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        query.close();
 
-    }
-
-    private void sortIngredients(RefrigeratorIngredient ingredient) {
-        String category = ingredient.sort;
-        if (category.contains("魚肉"))
-            RefrigeratorMap.map.get(IngredientCategory.FISH.name).add(ingredient);
-        else if (category.contains("肉"))
-            RefrigeratorMap.map.get(IngredientCategory.MEAT.name).add(ingredient);
-        else if (category.contains("蛋豆"))
-            RefrigeratorMap.map.get(IngredientCategory.BEAN.name).add(ingredient);
-        else if (category.contains("蔬菜"))
-            RefrigeratorMap.map.get(IngredientCategory.VEGETABLE.name).add(ingredient);
     }
 
     private void loadShoppingListPage(ArrayList<ShoppingIngredient> shoppingList) {
