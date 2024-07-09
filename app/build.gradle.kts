@@ -34,6 +34,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     packaging {
         resources {
@@ -44,7 +45,9 @@ android {
 
 dependencies {
 
-//ROOM      (遇到了大概是版本的問題，換了新版本就沒問題了)
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
+    //ROOM      (遇到了大概是版本的問題，換了新版本就沒問題了)
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")

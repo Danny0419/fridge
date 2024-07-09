@@ -132,7 +132,7 @@ public class FoodManagementFragment extends Fragment {
     }
 
     private View initialize(LayoutInflater inflater, ViewGroup container){
-        View view = inflater.inflate(R.layout.fragment_rerigerator, container, false);
+        View view = inflater.inflate(R.layout.fragment_refrigerator, container, false);
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
 
         View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
