@@ -1,7 +1,10 @@
 package com.example.fragment_test.viewModel;
 
+import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -23,13 +26,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class FoodManagementViewModel extends ViewModel {
+public class FoodManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<Map<String, ArrayList<RefrigeratorIngredient>>> refrigeratorIngredients = new MutableLiveData<>();
     private final FoodManagementRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    public FoodManagementViewModel(Context context) {
-        this.repository = new FoodManagementRepository(context);
+    public FoodManagementViewModel(@NonNull Application application) {
+        super(application);
+        this.repository = new FoodManagementRepository(getApplication());
     }
 
     public void loadRefrigeratorIngredients() {

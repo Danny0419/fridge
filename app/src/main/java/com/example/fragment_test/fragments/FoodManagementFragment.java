@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,12 +17,10 @@ import android.view.ViewGroup;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.viewModel.FoodManagementModelFactory;
 import com.example.fragment_test.viewModel.FoodManagementViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,7 +78,7 @@ public class FoodManagementFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        this.viewModel = new ViewModelProvider(this, new FoodManagementModelFactory(getContext())).get(FoodManagementViewModel.class);
+        this.viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(FoodManagementViewModel.class);
         this.viewModel.loadRefrigeratorIngredients();
     }
 
@@ -89,12 +86,7 @@ public class FoodManagementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_rerigerator, container, false);
-        View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
-        ingredientDetail = new Dialog(getContext());
-        ingredientDetail.setContentView(dialogView);
-        initValuable(view);
-        initTab();
+        View view = initialize(inflater, container);
 
         viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, ArrayList<RefrigeratorIngredient>>>() {
             @Override
@@ -139,13 +131,23 @@ public class FoodManagementFragment extends Fragment {
         return view;
     }
 
-    private void initValuable(View view) {
+    private View initialize(LayoutInflater inflater, ViewGroup container){
+        View view = inflater.inflate(R.layout.fragment_rerigerator, container, false);
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
-        tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
+        ingredientDetail = new Dialog(getContext());
+        ingredientDetail.setContentView(dialogView);
+
+        initTab(view);
+        return view;
     }
 
-    private void initTab() {
+
+    private void initTab(View view) {
+        tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         String[] stringArray = getActivity().getResources().getStringArray(R.array.foodManagementTabLayoutTag);
         for (int i = 0, n = stringArray.length; i < n; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(stringArray[i]));

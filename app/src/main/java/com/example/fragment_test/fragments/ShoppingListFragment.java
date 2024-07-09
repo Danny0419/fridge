@@ -3,6 +3,8 @@ package com.example.fragment_test.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.fragment_test.ConvertSize;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.entity.ShoppingIngredient;
