@@ -10,9 +10,11 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="TextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textAlignment="center"
-        android:fontFamily="@font/regular"/>
+        android:fontFamily="@font/regular"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
 
     <TextView
         android:id="@+id/shoppingItemName"
@@ -20,39 +22,47 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="TextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textAlignment="center"
-        android:fontFamily="@font/regular"/>
+        android:fontFamily="@font/regular"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
     <TextView
         android:id="@+id/shoppingItemSort"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="TextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textAlignment="center"
-        android:fontFamily="@font/regular"/>
+        android:fontFamily="@font/regular"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
     <TextView
         android:id="@+id/shoppingItemQuantity"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="TextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textAlignment="center"
-        android:fontFamily="@font/regular"/>
+        android:fontFamily="@font/regular"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp">
         <CheckBox
             android:id="@+id/shoppingItemState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textAlignment="center" />
     </LinearLayout>
 </LinearLayout>
