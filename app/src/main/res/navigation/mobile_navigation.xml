@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_refrigerator"
-        android:name="com.example.fragment_test.fragments.FoodManagementFragment"
+        android:name="com.example.fragment_test.ui.refrigerator.FoodManagementFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_refrigerator" />
 
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/navigation_shopping_list"
-        android:name="com.example.fragment_test.fragments.ShoppingListFragment"
+        android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_shopping_list" />
 </navigation>

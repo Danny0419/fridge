@@ -1,4 +1,4 @@
-package com.example.fragment_test.viewModel;
+package com.example.fragment_test.ui.refrigerator;
 
 import android.app.Application;
 import android.content.Context;

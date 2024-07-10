@@ -11,10 +11,10 @@ import android.view.MenuItem;
 
 import com.example.fragment_test.database.RefrigeratorDAO;
 import com.example.fragment_test.database.FridgeDatabase;
-import com.example.fragment_test.fragments.FoodManagementFragment;
+import com.example.fragment_test.ui.refrigerator.FoodManagementFragment;
 import com.example.fragment_test.fragments.RecipeFragment;
 import com.example.fragment_test.fragments.ScheduleFragment;
-import com.example.fragment_test.fragments.ShoppingListFragment;
+import com.example.fragment_test.ui.shopping_list.ShoppingListFragmentOld;
 import com.example.fragment_test.helper.FridgeHelper;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadShoppingListPage(ArrayList<ShoppingIngredient> shoppingList) {
-        ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
+        ShoppingListFragmentOld shoppingListFragment = new ShoppingListFragmentOld();
         shoppingListFragment.setShoppingList(shoppingList);
         loadPage(shoppingListFragment);
     }

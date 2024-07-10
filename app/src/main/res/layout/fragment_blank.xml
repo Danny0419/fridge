@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.shopping_list.ShoppingListFragmentOld">
+    tools:context=".ui.shopping_list.ShoppingListFragment">
 
-
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,61 +14,61 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="73dp"
-            android:orientation="horizontal"
             android:background="@color/dark_pink"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bold"
                 android:text="@string/shoppingItemIdTitle"
-                android:textSize="24dp"
                 android:textAlignment="center"
-                android:fontFamily="@font/bold"/>
+                android:textSize="24dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bold"
                 android:text="@string/shoppingItemNameTitle"
-                android:textSize="24dp"
                 android:textAlignment="center"
-                android:fontFamily="@font/bold"/>
+                android:textSize="24dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bold"
                 android:text="@string/shoppingItemSortTitle"
-                android:textSize="24dp"
                 android:textAlignment="center"
-                android:fontFamily="@font/bold"/>
+                android:textSize="24dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bold"
                 android:text="@string/shoppingItemQuantityTitle"
-                android:textSize="24dp"
                 android:textAlignment="center"
-                android:fontFamily="@font/bold"/>
+                android:textSize="24dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bold"
                 android:text="@string/shoppingItemStateTitle"
-                android:textSize="24dp"
                 android:textAlignment="center"
-                android:fontFamily="@font/bold"/>
+                android:textSize="24dp" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shoppingListItemRecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +78,9 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addNewShoppingListItemButton"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
+            app:cornerRadius="360dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="25dp"
@@ -88,12 +89,8 @@
             android:textColor="@color/white"
             android:textSize="38dp"
             android:textStyle="bold"
-            android:theme="@style/Theme.Material3.Dark.BottomSheetDialog"
-            app:cornerRadius="360dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:theme="@style/Theme.Material3.Dark.BottomSheetDialog" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>

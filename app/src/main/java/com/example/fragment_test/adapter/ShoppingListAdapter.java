@@ -15,10 +15,11 @@ import com.example.fragment_test.R;
 import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
-     ArrayList<ShoppingIngredient> shoppingItems;
+     List<ShoppingIngredient> shoppingItems;
      Context context;
 
 
@@ -36,7 +37,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public ShoppingListAdapter(ArrayList<ShoppingIngredient> shoppingItems, Context context) {
+    public ShoppingListAdapter(List<ShoppingIngredient> shoppingItems, Context context) {
         this.shoppingItems = shoppingItems;
         this.context = context;
     }

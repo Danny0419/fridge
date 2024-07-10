@@ -1,10 +1,8 @@
-package com.example.fragment_test.fragments;
+package com.example.fragment_test.ui.shopping_list;
 
 import android.app.Dialog;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.fragment_test.ConvertSize;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.entity.ShoppingIngredient;
@@ -24,13 +21,13 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ShoppingListFragment#newInstance} factory method to
+ * Use the {@link ShoppingListFragmentOld#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment implements View.OnClickListener {
+public class ShoppingListFragmentOld extends Fragment implements View.OnClickListener {
 
     private ArrayList<ShoppingIngredient> shoppingList;
-    private RecyclerView shoppingListItemContainer;
+    private RecyclerView shoppingListItemRecyclerview;
     private Dialog dialog;
     EditText dialogName, dialogSort, dialogQuantity;
 
@@ -43,7 +40,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     private String mParam1;
     private String mParam2;
 
-    public ShoppingListFragment() {
+    public ShoppingListFragmentOld() {
         // Required empty public constructor
     }
 
@@ -56,8 +53,8 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
      * @return A new instance of fragment ShoopingListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ShoppingListFragment newInstance(String param1, String param2) {
-        ShoppingListFragment fragment = new ShoppingListFragment();
+    public static ShoppingListFragmentOld newInstance(String param1, String param2) {
+        ShoppingListFragmentOld fragment = new ShoppingListFragmentOld();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,7 +77,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         ;
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
-        shoppingListItemContainer = view.findViewById(R.id.shoppingListItemContainer);
+        shoppingListItemRecyclerview = view.findViewById(R.id.shoppingListItemRecyclerview);
         View viewDialog = inflater.inflate(R.layout.shoppinglist_alter_dialog, container, false);
         View testButton = view.findViewById(R.id.addNewShoppingListItemButton);
         Button dialogCancelBtn = viewDialog.findViewById(R.id.cancel_button);
@@ -103,8 +100,8 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-        shoppingListItemContainer.setLayoutManager(new LinearLayoutManager(getContext()));
-        shoppingListItemContainer.setAdapter(new ShoppingListAdapter(shoppingList, getContext()));
+        shoppingListItemRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        shoppingListItemRecyclerview.setAdapter(new ShoppingListAdapter(shoppingList, getContext()));
     }
 
     public void setShoppingList(ArrayList<ShoppingIngredient> shoppingList) {

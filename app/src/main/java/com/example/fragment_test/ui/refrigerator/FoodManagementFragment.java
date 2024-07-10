@@ -1,4 +1,4 @@
-package com.example.fragment_test.fragments;
+package com.example.fragment_test.ui.refrigerator;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.viewModel.FoodManagementViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -91,7 +90,9 @@ public class FoodManagementFragment extends Fragment {
         viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, ArrayList<RefrigeratorIngredient>>>() {
             @Override
             public void onChanged(Map<String, ArrayList<RefrigeratorIngredient>> stringArrayListMap) {
-                setRecyclerView();
+                layoutManager = new LinearLayoutManager(getContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                ingredientContainer.setLayoutManager(layoutManager);
                 ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), stringArrayListMap, ingredientDetail));
                 ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                     @Override
@@ -157,14 +158,6 @@ public class FoodManagementFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        setRecyclerView();
-//        ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorIngredients, ingredientDetail));
-//        ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
-//            }
-//        });
     }
 
     private void setRecyclerView() {
