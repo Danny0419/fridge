@@ -12,13 +12,13 @@ import io.reactivex.Maybe;
 @Dao
 public interface RefrigeratorDAO {
     @Query("""
-            SELECT id, name, img, sort, quantity, savingDay, expiration  FROM refrigerator
+            SELECT id, name, img, sort, quantity, saving_day, expiration  FROM refrigerator
             WHERE expired = 0;
             """)
     List<RefrigeratorIngredient> getAllRefrigeratorIngredients();
 
     @Query("""
-            INSERT INTO refrigerator (name, img, sort, quantity, savingDay, expiration) values ('牛排', '牛排照片', '肉類', '2', '7', '2024-06-30')
+            INSERT INTO refrigerator (name, img, sort, quantity, saving_day, expiration) values ('牛排', '牛排照片', '肉類', '2', '7', '2024-06-30')
             """)
     void addIngredients();
 }

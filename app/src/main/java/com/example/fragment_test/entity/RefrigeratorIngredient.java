@@ -10,7 +10,7 @@ public class RefrigeratorIngredient extends Ingredient {
     @ColumnInfo
     @NonNull
     public String img;
-    @ColumnInfo
+    @ColumnInfo(name = "saving_day")
     @NonNull
     public Integer savingDay;
     @ColumnInfo

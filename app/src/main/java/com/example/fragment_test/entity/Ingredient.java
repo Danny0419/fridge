@@ -1,5 +1,6 @@
 package com.example.fragment_test.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 
 import androidx.room.PrimaryKey;
@@ -8,8 +9,10 @@ public class Ingredient {
     @PrimaryKey(autoGenerate = true)
     public Integer id;
     @ColumnInfo
+    @NonNull
     public String name;
     @ColumnInfo
+    @NonNull
     public String sort;
     @ColumnInfo
     public Integer quantity;
