@@ -1,12 +1,19 @@
-package com.example.fragment_test.fragments;
+package com.example.fragment_test.ui.recipe;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -88,6 +95,19 @@ public class RecipeFragment extends Fragment {
         recipesContainer.setLayoutManager(linearLayoutManager);
         recipesContainer.setAdapter(new RecipeAdapter(container.getContext(), recipes));
 
+        FragmentActivity fragmentActivity = requireActivity();
+        fragmentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.recipe_toolbar, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
         return view;
     }
+
 }

@@ -28,13 +28,13 @@
 
     <fragment
         android:id="@+id/navigation_recipe"
-        android:name="com.example.fragment_test.fragments.RecipeFragment"
+        android:name="com.example.fragment_test.ui.recipe.RecipeFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_recipe" />
 
     <fragment
         android:id="@+id/navigation_schedule"
-        android:name="com.example.fragment_test.fragments.ScheduleFragment"
+        android:name="com.example.fragment_test.ui.schedule.ScheduleFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_schedule" />
 

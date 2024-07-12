@@ -15,8 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nav_host_fragment_activity_main2"
-        app:menu="@menu/toolbar_menu"/>
+        app:layout_constraintBottom_toTopOf="@id/nav_host_fragment_activity_main2" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"

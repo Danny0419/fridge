@@ -1,4 +1,4 @@
-package com.example.fragment_test.fragments;
+package com.example.fragment_test.ui.schedule;
 
 import android.os.Bundle;
 
