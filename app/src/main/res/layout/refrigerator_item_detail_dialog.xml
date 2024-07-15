@@ -15,35 +15,45 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_below="@id/sort"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/dark_pink">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="數量"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:fontFamily="@font/bold"
+            android:textSize="24dp"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="登入日期"
-            android:gravity="center"/>
+            android:text="登入\n日期"
+            android:gravity="center"
+            android:fontFamily="@font/bold"
+            android:textSize="24dp"
+            android:ellipsize="none"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="保存期限"
-            android:gravity="center"/>
+            android:text="保存\n期限"
+            android:gravity="center"
+            android:fontFamily="@font/bold"
+            android:textSize="24dp"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="剩餘天數"
-            android:gravity="center"/>
+            android:text="剩餘\n天數"
+            android:gravity="center"
+            android:fontFamily="@font/bold"
+            android:textSize="24dp"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -61,7 +71,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/sun_bar">
 
             <TextView
                 android:id="@+id/totalAmount"

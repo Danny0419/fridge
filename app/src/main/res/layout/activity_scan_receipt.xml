@@ -19,7 +19,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="24dp"
+            android:fontFamily="@font/regular"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.camera.view.PreviewView
         android:id="@+id/camara"
@@ -29,23 +31,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="80dp"
         android:layout_weight="1">
 
         <Button
             android:id="@+id/goBackBnt"
-            android:text="返回"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/arrow_left_circle"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginLeft="39dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/captureBnt"
-            android:text="拍照"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_16"
+            android:layout_width="77.5dp"
+            android:layout_height="77.5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,9 +56,10 @@
 
         <Button
             android:id="@+id/albumBnt"
-            android:text="相簿"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/photo"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginRight="39dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
