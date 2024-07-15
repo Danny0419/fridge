@@ -9,7 +9,13 @@
         android:id="@+id/eachDayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="monday" />
+        android:text="mon"
+        android:textSize="24dp"
+        android:background="@drawable/text_under_line"
+        android:fontFamily="@font/bold"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        />
 
 
         <androidx.recyclerview.widget.RecyclerView

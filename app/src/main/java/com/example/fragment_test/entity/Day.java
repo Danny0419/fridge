@@ -3,8 +3,8 @@ package com.example.fragment_test.entity;
 import java.util.ArrayList;
 
 public enum Day {
-    MONDAY("Monday"), TUESDAY("Tuesday"), WEDNESDAY("Wednesday"), THURSDAY("Thursday"),
-    FRIDAY("Friday"),SATURDAY("Saturday"),SUNDAY("Sunday");
+    MONDAY("MON"), TUESDAY("TUE"), WEDNESDAY("WED"), THURSDAY("THU"),
+    FRIDAY("FRI"),SATURDAY("SAT"),SUNDAY("SUN");
     private String day;
     private ArrayList<Ingredient> ingredient;
 

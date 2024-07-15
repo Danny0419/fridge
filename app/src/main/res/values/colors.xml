@@ -5,6 +5,7 @@
     <color name="red">#F18080</color>
     <color name="pink">#FFF3F3</color>
     <color name="dark_pink">#F2ACAC</color>
-    <color name="toolBarGary">#FAF6F6</color>
+    <color name="toolBarGary">#80D9D9D9</color>
+    <color name="navBarGary">#FAF6F6</color>
     <color name="blue">#9CC5E2</color>
 </resources>

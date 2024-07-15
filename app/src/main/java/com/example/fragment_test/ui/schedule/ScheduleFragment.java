@@ -1,5 +1,6 @@
 package com.example.fragment_test.ui.schedule;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.entity.Day;
 import com.example.fragment_test.entity.Recipe;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +89,12 @@ public class ScheduleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         scheduleContainer = (ListView) view.findViewById(R.id.schedulesContainer);
         scheduleContainer.setAdapter(new ScheduleAdapter(inflater,schedule));
+
+//        // 失敗的底線
+//        View viewRecipeItem = inflater.inflate(R.layout.recipe_item, container, false);
+//        TextView eachDayText=viewRecipeItem.findViewById(R.id.eachDayText);
+//        eachDayText.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+
         return view;
     }
 
