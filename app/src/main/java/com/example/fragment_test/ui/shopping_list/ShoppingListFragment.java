@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -43,6 +44,12 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
         View view = initialize(inflater, container);
         mViewModel = new ShoppingLIstViewModel(getActivity().getApplication());
+
+        // 應急用調整彈跳視窗大小
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1270;
+        dialog.getWindow().setAttributes(layoutParams);
 
         mViewModel.loadShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
             @Override

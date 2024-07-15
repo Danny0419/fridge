@@ -5,24 +5,60 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:fontFamily="@font/bold"
+        android:id="@+id/titleName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/shoppingListAddItemTitle"/>
+        android:textSize="24dp"
+        android:text="食材名稱："/>
 
     <EditText
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/regular"
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/shoppingListAddItemHintForName"/>
 
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:fontFamily="@font/bold"
+        android:id="@+id/titleSort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="食材種類："/>
+
     <EditText
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/regular"
         android:id="@+id/sort"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/shoppingListAddItemHintForSort"/>
 
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:fontFamily="@font/bold"
+        android:id="@+id/titleQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="食材數量："/>
+
     <EditText
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/regular"
         android:id="@+id/quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,16 +71,24 @@
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
-            android:text="@string/shoppingListAddItemCancelText"/>
+            android:text="@string/shoppingListAddItemCancelText"
+            android:backgroundTint="@color/blue"
+            android:fontFamily="@font/regular"
+            android:textSize="24dp"
+            android:layout_marginLeft="25dp"/>
 
         <Button
             android:id="@+id/confirm_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
-            android:text="@string/shoppingListAddItemConfirmText"/>
+            android:text="@string/shoppingListAddItemConfirmText"
+            android:backgroundTint="@color/blue"
+            android:fontFamily="@font/regular"
+            android:textSize="24dp"
+            android:layout_marginRight="25dp"/>
     </LinearLayout>
 
 
