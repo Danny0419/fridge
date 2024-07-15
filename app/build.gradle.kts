@@ -48,8 +48,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
+    implementation("androidx.camera:camera-lifecycle:1.3.4")
     //ROOM      (遇到了大概是版本的問題，換了新版本就沒問題了)
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -60,7 +59,6 @@ dependencies {
     implementation("com.google.android.material:material:1.7.0")
     implementation("com.google.android.material:material:1.2.0-alpha05")
     implementation("com.google.android.material:material:1.1.0-alpha10") //底部導覽模組
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.0")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
@@ -72,7 +70,7 @@ dependencies {
     var camerax_version = "1.1.0-beta01"
     implementation("androidx.camera:camera-core:${camerax_version}")
     implementation("androidx.camera:camera-camera2:${camerax_version}")
-    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+//    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
     implementation("androidx.camera:camera-video:${camerax_version}")
     implementation("androidx.camera:camera-view:${camerax_version}")
     implementation("androidx.camera:camera-extensions:${camerax_version}")

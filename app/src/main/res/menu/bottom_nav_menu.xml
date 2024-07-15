@@ -3,27 +3,27 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:icon="@drawable/home"
+        android:title="首頁"/>
 
     <item
         android:id="@+id/navigation_refrigerator"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_food_management" />
+        android:icon="@drawable/fridge"
+        android:title="管理" />
 
     <item
         android:id="@+id/navigation_recipe"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_recipe" />
+        android:icon="@drawable/recipe"
+        android:title="食譜" />
 
     <item
         android:id="@+id/navigation_schedule"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_schedule" />
+        android:icon="@drawable/calendar"
+        android:title="規劃" />
 
     <item
         android:id="@+id/navigation_shopping_list"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_shopping_list" />
+        android:icon="@drawable/shoppinglist"
+        android:title="購入" />
 
 </menu>

@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/RecipeTitleForNeed"
+                android:text="所需食材123"
                 android:gravity="center"/>
         </LinearLayout>
 

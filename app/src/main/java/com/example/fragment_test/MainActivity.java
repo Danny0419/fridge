@@ -14,7 +14,6 @@ import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.ui.refrigerator.FoodManagementFragment;
 import com.example.fragment_test.ui.recipe.RecipeFragment;
 import com.example.fragment_test.ui.schedule.ScheduleFragment;
-import com.example.fragment_test.ui.shopping_list.ShoppingListFragmentOld;
 import com.example.fragment_test.helper.FridgeHelper;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -173,9 +172,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadShoppingListPage(ArrayList<ShoppingIngredient> shoppingList) {
-        ShoppingListFragmentOld shoppingListFragment = new ShoppingListFragmentOld();
-        shoppingListFragment.setShoppingList(shoppingList);
-        loadPage(shoppingListFragment);
+//        ShoppingListFragmentOld shoppingListFragment = new ShoppingListFragmentOld();
+//        shoppingListFragment.setShoppingList(shoppingList);
+//        loadPage(shoppingListFragment);
     }
 
     private void loadPage(Fragment fragment) {
