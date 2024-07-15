@@ -24,14 +24,18 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/RecipePageTitleForName"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:fontFamily="@font/bold"
+                android:textSize="24dp"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="所需食材123"
-                android:gravity="center"/>
+                android:text="所需食材"
+                android:gravity="center"
+                android:fontFamily="@font/bold"
+                android:textSize="24dp"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
