@@ -13,7 +13,7 @@ public class RefrigeratorIngredientsMap extends HashMap<String, ArrayList<Refrig
             this.put(value.name, new ArrayList<>());
         }
     }
-    public void resetRefrigerator() {
+    private void resetRefrigerator() {
         for (IngredientCategory value :
                 IngredientCategory.values()) {
             this.replace(value.name, new ArrayList<>());

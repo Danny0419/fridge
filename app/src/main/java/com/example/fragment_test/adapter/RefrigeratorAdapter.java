@@ -23,11 +23,11 @@ import java.util.Map;
 public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapter.RefrigeratorViewHolder> {
 
     private List<String> kinds;
-    private Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorMap;
+    private Map<String, List<RefrigeratorIngredient>> refrigeratorMap;
     private Context context;
     private Dialog ingredientDetail;
 
-    public RefrigeratorAdapter(Context context, Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorMap, Dialog ingredientDetail) {
+    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> refrigeratorMap, Dialog ingredientDetail) {
         this.context = context;
         this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
         this.refrigeratorMap = refrigeratorMap;

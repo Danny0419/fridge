@@ -33,4 +33,6 @@ public class RefrigeratorIngredient extends Ingredient {
         this.savingDay = savingDay;
         this.expiration = expiration;
     }
+
+
 }

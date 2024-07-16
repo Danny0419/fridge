@@ -26,7 +26,7 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class FoodManagementViewModel extends AndroidViewModel {
-    private final MutableLiveData<Map<String, ArrayList<RefrigeratorIngredient>>> refrigeratorIngredients = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, List<RefrigeratorIngredient>>> refrigeratorIngredients = new MutableLiveData<>();
     private final FoodManagementRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -36,21 +36,19 @@ public class FoodManagementViewModel extends AndroidViewModel {
     }
 
     public void loadRefrigeratorIngredients() {
-        disposable.add(Maybe.fromCallable(new Callable<Map<String, ArrayList<RefrigeratorIngredient>>>() {
-                    @Override
-                    public Map<String, ArrayList<RefrigeratorIngredient>> call() throws Exception {
-                        return repository.getAllIngredients();
-                    }
-                }).subscribeOn(Schedulers.io())
+
+        disposable.add(Maybe.fromCallable(repository::getAllIngredients)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableMaybeObserver<Map<String, ArrayList<RefrigeratorIngredient>>>() {
+                .subscribeWith(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredient>>>() {
                     @Override
-                    public void onSuccess(Map<String, ArrayList<RefrigeratorIngredient>> ingredients) {
+                    public void onSuccess(Map<String, List<RefrigeratorIngredient>> ingredients) {
                         refrigeratorIngredients.setValue(ingredients);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+
                     }
 
                     @Override
@@ -60,7 +58,7 @@ public class FoodManagementViewModel extends AndroidViewModel {
                 }));
     }
 
-    public MutableLiveData<Map<String, ArrayList<RefrigeratorIngredient>>> getRefrigeratorIngredients() {
+    public MutableLiveData<Map<String, List<RefrigeratorIngredient>>> getRefrigeratorIngredients() {
         return refrigeratorIngredients;
     }
 

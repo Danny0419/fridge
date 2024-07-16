@@ -20,6 +20,7 @@ import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,13 +88,13 @@ public class FoodManagementFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = initialize(inflater, container);
 
-        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, ArrayList<RefrigeratorIngredient>>>() {
+        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, List<RefrigeratorIngredient>>>() {
             @Override
-            public void onChanged(Map<String, ArrayList<RefrigeratorIngredient>> stringArrayListMap) {
+            public void onChanged(Map<String, List<RefrigeratorIngredient>> refrigeratorMap) {
                 layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 ingredientContainer.setLayoutManager(layoutManager);
-                ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), stringArrayListMap, ingredientDetail));
+                ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorMap, ingredientDetail));
                 ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                     @Override
                     public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {

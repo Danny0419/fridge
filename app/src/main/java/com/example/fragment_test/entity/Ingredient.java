@@ -55,4 +55,9 @@ public class Ingredient {
         this.sort = sort;
         this.quantity = quantity;
     }
+
+    @NonNull
+    public String getSort() {
+        return sort;
+    }
 }
