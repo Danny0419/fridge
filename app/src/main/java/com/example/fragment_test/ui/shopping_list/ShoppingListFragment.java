@@ -69,7 +69,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     }
 
     private View initialize(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fragment_blank, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         shoppingListItemRecycleView = view.findViewById(R.id.shoppingListItemRecyclerview);
         layoutManager = new LinearLayoutManager(getContext());
 
