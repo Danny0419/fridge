@@ -40,9 +40,10 @@ public class MainActivity2 extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_refrigerator, R.id.navigation_recipe, R.id.navigation_schedule, R.id.navigation_shopping_list, R.id.navigation_camera)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main2);
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        Toolbar toolbar = binding.toolbarMain;
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        setSupportActionBar(toolbar);
     }
 
 }
