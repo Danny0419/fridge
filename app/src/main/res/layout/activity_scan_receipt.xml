@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScanReceiptActivity"
+    tools:context=".ui.scanner.ScanReceiptActivity"
     android:orientation="vertical">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,11 +23,13 @@
             android:textSize="24dp"
             android:fontFamily="@font/regular"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.camera.view.PreviewView
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/camara"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"/>
+        android:layout_weight="7"
+        app:zxing_scanner_layout="@layout/custom_barcode_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="android.hardware.camera.any" /> <!-- 拍照权限 -->
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- 网络 -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 读写本地存储 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 自动对焦 -->
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScanReceiptActivity"
+            android:name=".ui.scanner.ScanReceiptActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -40,4 +40,7 @@
         </activity>
     </application>
 
+    <queries>
+        <package android:name="com.google.zxing.client.android" />
+    </queries>
 </manifest>

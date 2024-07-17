@@ -7,7 +7,7 @@
 
     <activity
         android:id="@+id/navigation_camera"
-        android:name="com.example.fragment_test.ScanReceiptActivity"
+        android:name="com.example.fragment_test.ui.scanner.ScanReceiptActivity"
         android:label="Camera"
         tools:layout="@layout/activity_scan_receipt"/>
     <fragment

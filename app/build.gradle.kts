@@ -45,10 +45,13 @@ android {
 
 dependencies {
 
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.camera:camera-lifecycle:1.3.4")
+    implementation("androidx.camera:camera-view:1.3.4")
     //ROOM      (遇到了大概是版本的問題，換了新版本就沒問題了)
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -67,13 +70,13 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    var camerax_version = "1.1.0-beta01"
-    implementation("androidx.camera:camera-core:${camerax_version}")
-    implementation("androidx.camera:camera-camera2:${camerax_version}")
+//    var camerax_version = "1.1.0-beta01"
+//    implementation("androidx.camera:camera-core:${camerax_version}")
+//    implementation("androidx.camera:camera-camera2:${camerax_version}")
 //    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
-    implementation("androidx.camera:camera-video:${camerax_version}")
-    implementation("androidx.camera:camera-view:${camerax_version}")
-    implementation("androidx.camera:camera-extensions:${camerax_version}")
+//    implementation("androidx.camera:camera-video:${camerax_version}")
+//    implementation("androidx.camera:camera-view:${camerax_version}")
+//    implementation("androidx.camera:camera-extensions:${camerax_version}")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
