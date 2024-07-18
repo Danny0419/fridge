@@ -51,14 +51,13 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ShoppingListViewHolder holder, int position) {
-        int id = shoppingItems.get(position).id;
-        if (id % 2 != 0) {
+        if (position % 2 != 0) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));
         }
 
-        holder.shoppingItemId.setText(Integer.toString(shoppingItems.get(position).id)+".");
+        holder.shoppingItemId.setText(Integer.toString(position));
         holder.shoppingItemName.setText(shoppingItems.get(position).name);
         holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
         holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).quantity));

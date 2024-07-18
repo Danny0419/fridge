@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         mViewModel.loadShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
             @Override
             public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
+                layoutManager = new LinearLayoutManager(getContext());
                 shoppingListItemRecycleView.setLayoutManager(layoutManager);
                 shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
             }
@@ -89,6 +91,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         dialog.setCancelable(false);
 
         dialogCancelBtn.setOnClickListener(this);
+        dialogConfirmBtn.setOnClickListener(this);
         return view;
     }
 
@@ -99,16 +102,31 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         if (clickedId == R.id.addNewShoppingListItemButton) {
             dialog.show();
         } else if (clickedId == R.id.cancel_button) {
-            emptyEditViewsContent();
-            dialog.dismiss();
+            initialEditViewsContent();
         } else if (clickedId == R.id.confirm_button) {
+            String name = dialogName.getText().toString();
+            String sort = dialogSort.getText().toString();
+            String quantity = dialogQuantity.getText().toString();
+            ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
 
+
+            mViewModel.addShoppingItem(ingredient)
+                    .observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
+                        @Override
+                        public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
+                            shoppingListItemRecycleView.setLayoutManager(layoutManager);
+                            shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
+                        }
+                    });
+
+            initialEditViewsContent();
         }
     }
 
-    private void emptyEditViewsContent() {
+    private void initialEditViewsContent() {
         dialogName.setText("");
         dialogSort.setText("");
         dialogQuantity.setText("");
+        dialog.dismiss();
     }
 }

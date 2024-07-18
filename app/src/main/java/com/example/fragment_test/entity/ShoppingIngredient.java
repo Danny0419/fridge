@@ -6,19 +6,18 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 
 @Entity(tableName = "shopping_list")
-public class ShoppingIngredient extends Ingredient{
+public class ShoppingIngredient extends Ingredient {
 
     @ColumnInfo(defaultValue = "0")
     public Integer status;
 
-    public ShoppingIngredient() {
-    }
-
     public ShoppingIngredient(String name, String sort, Integer quantity) {
         super(name, sort, quantity);
     }
+
     @Ignore
-    public ShoppingIngredient(Integer id, String name, String sort, Integer quantity) {
-        super(id, name, sort, quantity);
+    public ShoppingIngredient(String name, String sort, Integer quantity, Integer status) {
+        super(name, sort, quantity);
+        this.status = status;
     }
 }
