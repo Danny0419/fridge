@@ -24,7 +24,7 @@ public class Ingredient {
         this.name = name;
     }
 
-    public Ingredient(Integer id, String name, String sort, Integer quantity) {
+    public Ingredient(Integer id, @NonNull String name, @NonNull String sort, Integer quantity) {
         this.id = id;
         this.name = name;
         this.sort = sort;

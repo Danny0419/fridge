@@ -17,14 +17,16 @@ public class RefrigeratorIngredient extends Ingredient {
     @NonNull
     public String expiration;
     @ColumnInfo(defaultValue = "0")
+    @NonNull
     public Integer expired;
 
     @Ignore
-    public RefrigeratorIngredient(String name, String sort, Integer quantity, @NonNull String img, @NonNull Integer savingDay, @NonNull String expiration) {
+    public RefrigeratorIngredient(String name, String sort, Integer quantity, @NonNull String img, @NonNull Integer savingDay, @NonNull String expiration, Integer expired) {
         super(name, sort, quantity);
         this.img = img;
         this.savingDay = savingDay;
         this.expiration = expiration;
+        this.expired = expired;
     }
 
     public RefrigeratorIngredient(Integer id, String name, String img, Integer quantity, String sort, Integer savingDay, String expiration) {

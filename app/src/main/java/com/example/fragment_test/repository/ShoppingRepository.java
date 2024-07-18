@@ -16,7 +16,7 @@ public class ShoppingRepository {
         shoppingDAO = FridgeDatabase.getInstance(context).shoppingDAO();
     }
 
-    public Optional<List<ShoppingIngredient>> getAllIngredients() {
-        return Optional.ofNullable(shoppingDAO.getAllShoppingIngredients());
+    public List<ShoppingIngredient> getAllIngredients() {
+        return shoppingDAO.getAllShoppingIngredients();
     }
 }

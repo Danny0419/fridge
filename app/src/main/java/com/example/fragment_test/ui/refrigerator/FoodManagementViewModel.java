@@ -1,38 +1,32 @@
 package com.example.fragment_test.ui.refrigerator;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 //import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.repository.FoodManagementRepository;
+import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class FoodManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<Map<String, List<RefrigeratorIngredient>>> refrigeratorIngredients = new MutableLiveData<>();
-    private final FoodManagementRepository repository;
+    private final RefrigeratorIngredientRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
 
     public FoodManagementViewModel(@NonNull Application application) {
         super(application);
-        this.repository = new FoodManagementRepository(getApplication());
+        this.repository = RefrigeratorIngredientRepository.getInstance(getApplication());
     }
 
     public void loadRefrigeratorIngredients() {
