@@ -22,7 +22,6 @@ import io.reactivex.schedulers.Schedulers;
 public class FoodManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<Map<String, List<RefrigeratorIngredient>>> refrigeratorIngredients = new MutableLiveData<>();
     private final RefrigeratorIngredientRepository repository;
-    private CompositeDisposable disposable = new CompositeDisposable();
 
     public FoodManagementViewModel(@NonNull Application application) {
         super(application);
@@ -31,10 +30,10 @@ public class FoodManagementViewModel extends AndroidViewModel {
 
     public void loadRefrigeratorIngredients() {
 
-        disposable.add(Maybe.fromCallable(repository::getAllIngredients)
+        Maybe.fromCallable(repository::getAllIngredients)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredient>>>() {
+                .subscribe(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredient>>>() {
                     @Override
                     public void onSuccess(Map<String, List<RefrigeratorIngredient>> ingredients) {
                         refrigeratorIngredients.setValue(ingredients);
@@ -49,16 +48,10 @@ public class FoodManagementViewModel extends AndroidViewModel {
                     public void onComplete() {
 
                     }
-                }));
+                });
     }
 
     public MutableLiveData<Map<String, List<RefrigeratorIngredient>>> getRefrigeratorIngredients() {
         return refrigeratorIngredients;
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.clear();
     }
 }
