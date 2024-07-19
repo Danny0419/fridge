@@ -12,27 +12,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
+import com.example.fragment_test.databinding.FragmentShoppingListBinding;
+import com.example.fragment_test.databinding.ShoppinglistAlterDialogBinding;
 import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.List;
 
 public class ShoppingListFragment extends Fragment implements View.OnClickListener {
 
+    private FragmentShoppingListBinding binding;
+    private ShoppinglistAlterDialogBinding dialogBinding;
     private ShoppingLIstViewModel mViewModel;
     private RecyclerView shoppingListItemRecycleView;
-    private EditText dialogName;
-    private EditText dialogSort;
-    private EditText dialogQuantity;
     private Dialog dialog;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -43,6 +44,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View view = initialize(inflater, container);
         mViewModel = new ShoppingLIstViewModel(getActivity().getApplication());
 
@@ -71,28 +73,27 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     }
 
     private View initialize(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
-        shoppingListItemRecycleView = view.findViewById(R.id.shoppingListItemRecyclerview);
+
+        binding = FragmentShoppingListBinding.inflate(inflater, container, false);
+        shoppingListItemRecycleView = binding.shoppingListItemRecyclerview;
         layoutManager = new LinearLayoutManager(getContext());
 
-        Button addItemButton = view.findViewById(R.id.addNewShoppingListItemButton);
+        Button addItemButton = binding.addNewShoppingListItemButton;
         addItemButton.setOnClickListener(this);
 
-        View viewDialog = inflater.inflate(R.layout.shoppinglist_alter_dialog, container, false);
-        Button dialogCancelBtn = viewDialog.findViewById(R.id.cancel_button);
-        Button dialogConfirmBtn = viewDialog.findViewById(R.id.confirm_button);
-        dialogName = viewDialog.findViewById(R.id.name);
-        dialogSort = viewDialog.findViewById(R.id.sort);
-        dialogQuantity = viewDialog.findViewById(R.id.quantity);
+
+        dialogBinding = ShoppinglistAlterDialogBinding.inflate(inflater, container, false);
+        Button dialogCancelBtn = dialogBinding.cancelButton;
+        Button dialogConfirmBtn = dialogBinding.confirmButton;
 
 
         dialog = new Dialog(getContext());
-        dialog.setContentView(viewDialog);
+        dialog.setContentView(dialogBinding.getRoot());
         dialog.setCancelable(false);
 
         dialogCancelBtn.setOnClickListener(this);
         dialogConfirmBtn.setOnClickListener(this);
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -100,13 +101,15 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         int clickedId = v.getId();
 
         if (clickedId == R.id.addNewShoppingListItemButton) {
+            initialSpinner(dialogBinding.nameSpinner, R.array.ingredients_name_array);
+            initialSpinner(dialogBinding.sortSpinner, R.array.ingredients_sort_array);
             dialog.show();
         } else if (clickedId == R.id.cancel_button) {
             initialEditViewsContent();
         } else if (clickedId == R.id.confirm_button) {
-            String name = dialogName.getText().toString();
-            String sort = dialogSort.getText().toString();
-            String quantity = dialogQuantity.getText().toString();
+            String name = dialogBinding.name.getText().toString();
+            String sort = dialogBinding.sort.getText().toString();
+            String quantity = dialogBinding.quantity.getText().toString();
             ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
 
 
@@ -123,10 +126,23 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    private void initialSpinner(Spinner spinner, int textArrayResId) {
+        // Create an ArrayAdapter using the string array and a default spinner layout.
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getContext(),
+                textArrayResId,
+                android.R.layout.simple_spinner_item
+        );
+        // Specify the layout to use when the list of choices appears.
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner.
+        spinner.setAdapter(adapter);
+    }
+
     private void initialEditViewsContent() {
-        dialogName.setText("");
-        dialogSort.setText("");
-        dialogQuantity.setText("");
+        dialogBinding.name.setText("");
+        dialogBinding.sort.setText("");
+        dialogBinding.quantity.setText("");
         dialog.dismiss();
     }
 }

@@ -56,5 +56,20 @@
     <string name="title_recipe">Recipes</string>
     <string name="title_schedule">Schedule</string>
     <string name="title_shopping_list">ShoppingList</string>
+    
+    <string-array name="ingredients_name_array">
+        <item>牛小排</item>
+        <item>豬五花</item>
+        <item>高麗菜</item>
+        <item>花椰菜</item>
+        <item>韭菜</item>
+    </string-array>
+
+    <string-array name="ingredients_sort_array">
+        <item>肉類</item>
+        <item>蔬菜類</item>
+        <item>蛋豆類</item>
+        <item>花椰菜</item>
+    </string-array>
 
 </resources>
