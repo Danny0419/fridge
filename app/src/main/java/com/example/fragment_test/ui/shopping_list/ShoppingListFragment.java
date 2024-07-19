@@ -104,14 +104,16 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             initialSpinner(dialogBinding.nameSpinner, R.array.ingredients_name_array);
             initialSpinner(dialogBinding.sortSpinner, R.array.ingredients_sort_array);
             dialog.show();
+
         } else if (clickedId == R.id.cancel_button) {
-            initialEditViewsContent();
+            dialogBinding.quantity.setText("");
+            dialog.dismiss();
+
         } else if (clickedId == R.id.confirm_button) {
-            String name = dialogBinding.name.getText().toString();
-            String sort = dialogBinding.sort.getText().toString();
+            String name = dialogBinding.nameSpinner.getSelectedItem().toString();
+            String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
             String quantity = dialogBinding.quantity.getText().toString();
             ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
-
 
             mViewModel.addShoppingItem(ingredient)
                     .observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
@@ -122,7 +124,8 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                         }
                     });
 
-            initialEditViewsContent();
+            dialogBinding.quantity.setText("");
+            dialog.dismiss();
         }
     }
 
@@ -137,12 +140,5 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner.
         spinner.setAdapter(adapter);
-    }
-
-    private void initialEditViewsContent() {
-        dialogBinding.name.setText("");
-        dialogBinding.sort.setText("");
-        dialogBinding.quantity.setText("");
-        dialog.dismiss();
     }
 }
