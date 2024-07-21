@@ -85,7 +85,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="82dp"
+            android:layout_marginBottom="25dp"
             android:backgroundTint="@color/dark_pink"
             android:text="十"
             android:textColor="@color/white"
