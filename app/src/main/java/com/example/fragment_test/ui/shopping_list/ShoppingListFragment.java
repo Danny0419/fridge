@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
@@ -110,23 +111,29 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             dialog.dismiss();
 
         } else if (clickedId == R.id.confirm_button) {
-            String name = dialogBinding.nameSpinner.getSelectedItem().toString();
-            String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
-            String quantity = dialogBinding.quantity.getText().toString();
-            ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
 
-            mViewModel.addShoppingItem(ingredient)
-                    .observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
-                        @Override
-                        public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
-                            shoppingListItemRecycleView.setLayoutManager(layoutManager);
-                            shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
-                        }
-                    });
+            try {
+                String name = dialogBinding.nameSpinner.getSelectedItem().toString();
+                String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
+                String quantity = dialogBinding.quantity.getText().toString();
+                ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
 
-            dialogBinding.quantity.setText("");
-            dialog.dismiss();
+                mViewModel.addShoppingItem(ingredient)
+                        .observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
+                            @Override
+                            public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
+                                shoppingListItemRecycleView.setLayoutManager(layoutManager);
+                                shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
+                            }
+                        });
+
+                dialogBinding.quantity.setText("");
+                dialog.dismiss();
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "請輸入數量", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     private void initialSpinner(Spinner spinner, int textArrayResId) {
