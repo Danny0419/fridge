@@ -3,19 +3,29 @@ package com.example.fragment_test.ui.refrigerator;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
+import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.android.material.tabs.TabLayout;
 
@@ -130,6 +140,9 @@ public class FoodManagementFragment extends Fragment {
         });
 
         ingredientContainer.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener());
+
+        addToolbar();
+
         return view;
     }
 
@@ -169,5 +182,26 @@ public class FoodManagementFragment extends Fragment {
 
     public void setRefrigeratorIngredients(Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients) {
         this.refrigeratorIngredients = refrigeratorIngredients;
+    }
+
+    //toolbar
+    private void addToolbar() {
+        FragmentActivity fragmentActivity = requireActivity();
+        fragmentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.toolbar_menu, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                if (itemId == R.id.scan) {
+                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+                }
+                return true;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
     }
 }
