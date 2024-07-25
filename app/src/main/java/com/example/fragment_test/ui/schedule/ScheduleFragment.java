@@ -3,9 +3,18 @@ package com.example.fragment_test.ui.schedule;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -95,10 +104,36 @@ public class ScheduleFragment extends Fragment {
 //        TextView eachDayText=viewRecipeItem.findViewById(R.id.eachDayText);
 //        eachDayText.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
+        addToolbar();
+
         return view;
     }
 
     public void setSchedule(Map<String, ArrayList<Recipe>> schedule){
         this.schedule = schedule;
+    }
+
+    //toolbar
+    private void addToolbar() {
+        FragmentActivity fragmentActivity = requireActivity();
+        fragmentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.schedule_toolbar, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                if (itemId == R.id.foodMenu) {
+//                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+                }
+                if (itemId == R.id.editdate) {
+//                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+                }
+                return true;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
     }
 }
