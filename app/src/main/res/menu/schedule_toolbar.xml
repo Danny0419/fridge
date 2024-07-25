@@ -3,8 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/foodMenu"
+        android:title="foodMenu"
+        android:icon="@drawable/menu"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/editdate"
-        android:title="editdate"
+        android:title="editDate"
         android:icon="@drawable/edit"
         app:showAsAction="always"
         />

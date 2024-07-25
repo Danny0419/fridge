@@ -49,13 +49,13 @@
         <item>乳品類</item>
         <item>種子類</item>
     </string-array>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">愛呷料</string>
+    <string name="title_dashboard">愛呷料</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_food_management">Refrigerator</string>
     <string name="title_recipe">Recipes</string>
     <string name="title_schedule">Schedule</string>
-    <string name="title_shopping_list">ShoppingList</string>
+    <string name="title_shopping_list">__</string>
     
     <string-array name="ingredients_name_array">
         <item>牛小排</item>
