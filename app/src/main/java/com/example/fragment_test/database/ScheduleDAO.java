@@ -3,6 +3,7 @@ package com.example.fragment_test.database;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.fragment_test.entity.Schedule;
 
@@ -26,4 +27,10 @@ public interface ScheduleDAO {
     where status = 0
     """)
     List<Schedule> getSchedules();
+
+    @Query("""
+            update schedule set status = 1
+            where id = :id
+            """)
+    void updateSchedule(int id);
 }

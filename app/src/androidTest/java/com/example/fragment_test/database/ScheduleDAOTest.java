@@ -73,7 +73,18 @@ public class ScheduleDAOTest extends TestCase {
     }
 
     @Test
-    public void updateScheduleStatus(){
-        insertAScheduleReturnRowIdOne();
+    public void updateScheduleStatusToOne(){
+        List<Schedule> schedules = List.of(
+                new Schedule(0, 5, "2024-7-25", 0),
+                new Schedule(0, 5, "2024-7-25", 1),
+                new Schedule(0, 5, "2024-7-25", 1),
+                new Schedule(0, 5, "2024-7-25", 0),
+                new Schedule(0, 5, "2024-7-25", 1)
+        );
+        schedules.forEach((schedule) -> scheduleDAO.insertSchedule(schedule));
+        scheduleDAO.updateSchedule(1);
+
+        List<Schedule> schedules1 = scheduleDAO.getSchedules();
+        assertEquals(1, schedules1.size());
     }
 }
