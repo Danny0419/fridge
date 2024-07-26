@@ -52,7 +52,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         // 應急用調整彈跳視窗大小
         WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
         layoutParams.width = 1000;
-        layoutParams.height = 1270;
+        layoutParams.height = 1155;
         dialog.getWindow().setAttributes(layoutParams);
 
         mViewModel.loadShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
