@@ -42,15 +42,6 @@ public class RecipeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        for (int i = 1; i < 8; i++) {
-            ArrayList<Ingredient> ingredients = new ArrayList<>();
-            ingredients.add(new Ingredient("蛋"));
-            ingredients.add(new Ingredient("飯"));
-            recipes.add(new Recipe("蛋炒飯照片" + i, "蛋炒飯" + i, ingredients));
-            ingredients = new ArrayList<>();
-            ingredients.add(new Ingredient("蛋"));
-            recipes.add(new Recipe("煎蛋照片" + i, "煎蛋" + i, ingredients));
-        }
     }
 
     @Override
@@ -59,11 +50,6 @@ public class RecipeFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         binding = FragmentRecipeBinding.inflate(inflater);
-
-        RecyclerView recipesContainer = binding.recipesContainer;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recipesContainer.setLayoutManager(linearLayoutManager);
-        recipesContainer.setAdapter(new RecipeAdapter(container.getContext(), recipes));
 
         FragmentActivity fragmentActivity = requireActivity();
         fragmentActivity.addMenuProvider(new MenuProvider() {

@@ -71,15 +71,6 @@ public class RecipeFragmentOld extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        for (int i = 1; i <8; i++) {
-            ArrayList<Ingredient> ingredients = new ArrayList<>();
-            ingredients.add(new Ingredient("蛋"));
-            ingredients.add(new Ingredient("飯"));
-            recipes.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i,ingredients));
-            ingredients = new ArrayList<>();
-            ingredients.add(new Ingredient("蛋"));
-            recipes.add(new Recipe("煎蛋照片"+i,"煎蛋"+i, ingredients) );
-        }
 
     }
 
