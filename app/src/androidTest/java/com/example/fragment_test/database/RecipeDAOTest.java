@@ -39,7 +39,7 @@ public class RecipeDAOTest extends TestCase {
 
     @Test
     public void insertOneRecipeRowIdShouldEqualOne() {
-        Recipe recipe = new Recipe(0, "荷包蛋","荷包蛋照片", 1, 1);
+        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片",0, 1, 1);
         long l = recipeDAO.insertRecipe(recipe);
         assertEquals(1, l);
     }
@@ -48,12 +48,12 @@ public class RecipeDAOTest extends TestCase {
     public void getSidEqualOneRecipesSizeShouldEqualThree() {
 
         List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 1)
+                new Recipe(0, "荷包蛋", "荷包蛋照片",2, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
         );
         recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
-        List<Recipe> recipesList = recipeDAO.getRecipeById(1);
+        List<Recipe> recipesList = recipeDAO.getRecipeByScheduleId(1);
         assertEquals(3, recipesList.size());
 
     }
@@ -62,13 +62,28 @@ public class RecipeDAOTest extends TestCase {
     public void getSidEqualOneRecipesSizeShouldEqualTwo() {
 
         List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 2),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 1)
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 1,0 , 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 2),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
         );
         recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
-        List<Recipe> recipesList = recipeDAO.getRecipeById(1);
+        List<Recipe> recipesList = recipeDAO.getRecipeByScheduleId(1);
         assertEquals(2, recipesList.size());
+
+    }
+
+    @Test
+    public void updateRecipeStatusToOne() {
+        List<Recipe> recipes = List.of(
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0,  1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0 , 2),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
+        );
+
+        recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
+        recipeDAO.updateRecipeStatus(1);
+        List<Recipe> recipeByScheduleId = recipeDAO.getRecipeByScheduleId(1);
+        assertEquals(1, recipeByScheduleId.size());
 
     }
 }

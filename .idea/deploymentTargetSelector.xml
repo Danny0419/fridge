@@ -13,19 +13,10 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="insertAScheduleReturnRowIdOne()">
+      <SelectionState runConfigName="RecipeDAOTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ScheduleDAOTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="getFirstScheduleShouldIdShouldEqualOne()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="getAllNotFinishedSchedule()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="updateScheduleStatusToOne()">
+      <SelectionState runConfigName="insertFourStepsWithRecipeIdOneQueryListSizeShouldEqualFour()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

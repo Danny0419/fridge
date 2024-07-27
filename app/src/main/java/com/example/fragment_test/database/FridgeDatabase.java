@@ -10,8 +10,10 @@ import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ShoppingIngredient;
+import com.example.fragment_test.entity.Step;
 
-@Database(entities = {RefrigeratorIngredient.class, ShoppingIngredient.class, Schedule.class, Recipe.class}, version = 1)
+@Database(entities = {RefrigeratorIngredient.class, ShoppingIngredient.class,
+        Schedule.class, Recipe.class, Step.class}, version = 1)
 public abstract class FridgeDatabase extends RoomDatabase {
     public static final String DB_NAME = "fridge.db";
     private static volatile FridgeDatabase instance;
@@ -32,4 +34,6 @@ public abstract class FridgeDatabase extends RoomDatabase {
     public abstract ScheduleDAO scheduleDAO();
 
     public abstract RecipeDAO recipeDAO();
+
+    public abstract StepDAO stepDAO();
 }
