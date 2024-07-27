@@ -1,5 +1,7 @@
 package com.example.fragment_test.ui.shopping_list;
 
+import static com.example.fragment_test.setListBackground.setListBackgroundColor;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -78,6 +80,9 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         binding = FragmentShoppingListBinding.inflate(inflater, container, false);
         shoppingListItemRecycleView = binding.shoppingListItemRecyclerview;
         layoutManager = new LinearLayoutManager(getContext());
+
+        //設定奇偶行數背景顏色
+        setListBackgroundColor(shoppingListItemRecycleView,requireContext());
 
         Button addItemButton = binding.addNewShoppingListItemButton;
         addItemButton.setOnClickListener(this);

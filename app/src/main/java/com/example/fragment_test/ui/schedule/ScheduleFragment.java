@@ -1,9 +1,14 @@
 package com.example.fragment_test.ui.schedule;
 
+import static com.example.fragment_test.setListBackground.setListBackgroundColor;
+
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -17,10 +22,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.adapter.MyAdapter;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.entity.Day;
 import com.example.fragment_test.entity.Recipe;
@@ -91,6 +98,7 @@ public class ScheduleFragment extends Fragment {
         schedule.put(Day.TUESDAY.getDay(), tuesday);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,6 +106,13 @@ public class ScheduleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         scheduleContainer = (ListView) view.findViewById(R.id.schedulesContainer);
         scheduleContainer.setAdapter(new ScheduleAdapter(inflater,schedule));
+
+        //去除邊框(分隔線為透明色、高度為0)
+        scheduleContainer.setDivider(null);
+        scheduleContainer.setDividerHeight(0);
+
+        //設定奇偶行數背景顏色
+        setListBackgroundColor(scheduleContainer,requireContext());
 
 //        // 失敗的底線
 //        View viewRecipeItem = inflater.inflate(R.layout.recipe_item, container, false);

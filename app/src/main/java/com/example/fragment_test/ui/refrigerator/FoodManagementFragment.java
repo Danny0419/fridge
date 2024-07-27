@@ -1,5 +1,7 @@
 package com.example.fragment_test.ui.refrigerator;
 
+import static com.example.fragment_test.setListBackground.setListBackgroundColor;
+
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -149,6 +151,9 @@ public class FoodManagementFragment extends Fragment {
     private View initialize(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_refrigerator, container, false);
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
+
+        //設定奇偶行數背景顏色
+        setListBackgroundColor(ingredientContainer,requireContext());
 
         View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
         ingredientDetail = new Dialog(getContext());
