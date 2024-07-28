@@ -13,9 +13,11 @@ import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -53,5 +55,22 @@ public class FoodManagementViewModel extends AndroidViewModel {
 
     public MutableLiveData<Map<String, List<RefrigeratorIngredient>>> getRefrigeratorIngredients() {
         return refrigeratorIngredients;
+    }
+
+    public void addRefrigeratorIngredients(List<RefrigeratorIngredient> ingredients) {
+        Completable.fromAction(() -> repository.addRefrigeratorIngredients(ingredients))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 }

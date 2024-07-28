@@ -29,6 +29,10 @@ public class RefrigeratorIngredientRepository {
         return refrigeratorIngredientRepository;
     }
 
+    public long[] addRefrigeratorIngredients(List<RefrigeratorIngredient> ingredients) {
+        return refrigeratorIngredientDAO.insertIngredients(ingredients);
+    }
+
     public Map<String, List<RefrigeratorIngredient>> getAllIngredients() {
         List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
         return sortIngredients(list);
