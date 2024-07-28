@@ -12,6 +12,7 @@
         <item>蔬菜類</item>
         <item>乳品類</item>
         <item>水果類</item>
+        <item>全榖雜糧類</item>
         <item>堅果種子類</item>
     </string-array>
 
@@ -47,7 +48,9 @@
         <item>豆蛋類</item>
         <item>蔬菜類</item>
         <item>乳品類</item>
-        <item>種子類</item>
+        <item>水果類</item>
+        <item>全榖雜糧類</item>
+        <item>堅果種子類</item>
     </string-array>
     <string name="title_home">愛呷料</string>
     <string name="title_dashboard">愛呷料</string>

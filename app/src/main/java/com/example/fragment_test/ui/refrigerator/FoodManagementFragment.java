@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -113,6 +114,9 @@ public class FoodManagementFragment extends Fragment {
                         tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
                     }
                 });
+
+                //設定奇偶行數背景顏色
+                setListBackgroundColor(ingredientContainer,requireContext());
             }
         });
         LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()) {
@@ -151,9 +155,6 @@ public class FoodManagementFragment extends Fragment {
     private View initialize(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_refrigerator, container, false);
         ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
-
-        //設定奇偶行數背景顏色
-        setListBackgroundColor(ingredientContainer,requireContext());
 
         View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
         ingredientDetail = new Dialog(getContext());
