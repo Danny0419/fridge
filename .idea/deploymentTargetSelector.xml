@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-07-17T06:48:56.799410800Z">
+        <DropdownSelection timestamp="2024-07-30T02:45:33.433262Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Android\.android\avd\Pixel_8_Pro_API_31.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/danny0419/.android/avd/Pixel_8_API_35.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -20,6 +20,9 @@
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="insertNewAIngredientToRefrigerator()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="updateShoppingListStatus()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

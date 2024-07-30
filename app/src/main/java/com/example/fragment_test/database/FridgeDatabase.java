@@ -27,6 +27,10 @@ public abstract class FridgeDatabase extends RoomDatabase {
     private static FridgeDatabase create(final Context context){
         return Room.databaseBuilder(context,FridgeDatabase.class,DB_NAME).build();
     }
+
+    public void close(){
+        super.close();
+    }
     public abstract RefrigeratorIngredientDAO refrigeratorDAO();
 
     public abstract ShoppingDAO shoppingDAO();

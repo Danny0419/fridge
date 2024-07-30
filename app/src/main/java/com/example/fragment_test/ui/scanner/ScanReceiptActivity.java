@@ -29,7 +29,9 @@ public class ScanReceiptActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
-            Log.i("QR CODE SCANNER","scan a qr code");
+            String contents = scanResult.getContents();
+            if (contents != null)
+                Log.i("QR CODE SCANNER", contents);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -60,4 +60,17 @@ public class Ingredient {
     public String getSort() {
         return sort;
     }
+
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Ingredient setQuantity(int quantity) {
+        return this;
+    }
 }
