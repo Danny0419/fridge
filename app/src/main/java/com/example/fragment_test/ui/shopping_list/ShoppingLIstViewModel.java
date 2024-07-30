@@ -30,7 +30,7 @@ public class ShoppingLIstViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
 
     public MutableLiveData<List<ShoppingIngredient>> loadShoppingList() {
-        Maybe.fromCallable(() -> Optional.ofNullable(repository.getNotExpiredShoppingList())
+        Maybe.fromCallable(() -> Optional.ofNullable(repository.getShoppingList())
                         .orElse(new ArrayList<>())
                 ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

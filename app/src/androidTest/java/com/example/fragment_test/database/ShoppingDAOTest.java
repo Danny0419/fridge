@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
 @RunWith(AndroidJUnit4.class)
 public class ShoppingDAOTest extends TestCase {
 
@@ -40,5 +42,19 @@ public class ShoppingDAOTest extends TestCase {
         long i = shoppingDAO.insertShoppingIngredient(shoppingIngredient);
         assertEquals(1, i);
 
+    }
+
+    @Test
+    public void updateShoppingListStatus(){
+        List<ShoppingIngredient> shoppingIngredients = List.of(
+                new ShoppingIngredient("牛排", "肉類", 1, 0),
+                new ShoppingIngredient("牛肉卷", "肉類", 1, 0)
+        );
+
+        shoppingIngredients.forEach(shoppingIngredient -> shoppingDAO.insertShoppingIngredient(shoppingIngredient));
+
+        shoppingDAO.deleteShoppingList();
+        List<ShoppingIngredient> allShoppingIngredients = shoppingDAO.getAllShoppingIngredients();
+        assertEquals(0, allShoppingIngredients.size());
     }
 }

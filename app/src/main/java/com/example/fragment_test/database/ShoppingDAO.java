@@ -18,4 +18,9 @@ public interface ShoppingDAO {
 
     @Insert
     long insertShoppingIngredient(ShoppingIngredient shoppingIngredient);
+
+    @Query("""
+            DELETE FROM shopping_list
+            """)
+    void deleteShoppingList();
 }
