@@ -20,7 +20,14 @@ public interface ShoppingDAO {
     long insertShoppingIngredient(ShoppingIngredient shoppingIngredient);
 
     @Query("""
-            DELETE FROM shopping_list
+            UPDATE shopping_list SET status = 1
+            WHERE name = :name
             """)
-    void deleteShoppingList();
+    void updateItemStatusName(String name);
+
+    @Query("""
+            UPDATE shopping_list SET quantity = :quantity
+            WHERE name = :name
+            """)
+    void updateItemQuantityByName(String name, int quantity);
 }

@@ -53,8 +53,8 @@ public class ShoppingDAOTest extends TestCase {
 
         shoppingIngredients.forEach(shoppingIngredient -> shoppingDAO.insertShoppingIngredient(shoppingIngredient));
 
-        shoppingDAO.deleteShoppingList();
+        shoppingDAO.updateItemStatusName("牛排");
         List<ShoppingIngredient> allShoppingIngredients = shoppingDAO.getAllShoppingIngredients();
-        assertEquals(0, allShoppingIngredients.size());
+        assertEquals(1, allShoppingIngredients.size());
     }
 }
