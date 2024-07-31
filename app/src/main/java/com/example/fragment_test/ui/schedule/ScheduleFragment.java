@@ -1,14 +1,11 @@
 package com.example.fragment_test.ui.schedule;
 
-import static com.example.fragment_test.setListBackground.setListBackgroundColor;
+import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -22,17 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.adapter.MyAdapter;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.entity.Day;
 import com.example.fragment_test.entity.Recipe;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;

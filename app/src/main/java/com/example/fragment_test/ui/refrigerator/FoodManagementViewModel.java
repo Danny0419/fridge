@@ -16,7 +16,6 @@ import java.util.Map;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -58,7 +57,7 @@ public class FoodManagementViewModel extends AndroidViewModel {
     }
 
     public void addRefrigeratorIngredients(List<RefrigeratorIngredient> ingredients) {
-        Completable.fromAction(() -> repository.addRefrigeratorIngredients(ingredients))
+        Completable.fromAction(() -> repository.buyIngredients(ingredients))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {

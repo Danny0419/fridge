@@ -1,4 +1,4 @@
-package com.example.fragment_test;
+package com.example.fragment_test.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

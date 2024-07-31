@@ -1,6 +1,6 @@
 package com.example.fragment_test.ui.shopping_list;
 
-import static com.example.fragment_test.setListBackground.setListBackgroundColor;
+import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;

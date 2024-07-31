@@ -1,12 +1,11 @@
 package com.example.fragment_test.ui.refrigerator;
 
-import static com.example.fragment_test.setListBackground.setListBackgroundColor;
+import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
 
 import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -28,7 +27,6 @@ import android.view.ViewGroup;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
-import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.android.material.tabs.TabLayout;
 

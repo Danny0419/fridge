@@ -1,12 +1,12 @@
-package com.example.fragment_test;
-
-import static androidx.core.content.ContentProviderCompat.requireContext;
+package com.example.fragment_test.utils;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.fragment_test.R;
 
 public class setListBackground {
     //設定奇偶行數背景顏色
