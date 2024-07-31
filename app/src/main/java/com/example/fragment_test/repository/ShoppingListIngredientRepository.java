@@ -39,6 +39,6 @@ public class ShoppingListIngredientRepository {
 
     public void check(Map<String, Ingredient> finished, Map<String, Ingredient> unfinished) {
         finished.forEach((key, value) -> shoppingDAO.updateItemStatusName(key));
-        unfinished.forEach((key, value) -> shoppingDAO.updateItemQuantityByName(key, value.quantity));
+        unfinished.forEach((key, value) -> shoppingDAO.updateItemQuantityByName(value.name, value.quantity));
     }
 }

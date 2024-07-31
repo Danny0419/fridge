@@ -28,7 +28,6 @@ public class Ingredient {
         this.id = id;
         this.name = name;
         this.sort = sort;
-        this.quantity = quantity;
     }
 
     public Ingredient(Integer id, String name, String img, String sort) {
@@ -66,11 +65,12 @@ public class Ingredient {
         return name;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
     public Ingredient setQuantity(int quantity) {
+        this.quantity = quantity;
         return this;
     }
 }

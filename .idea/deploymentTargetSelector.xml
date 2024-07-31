@@ -13,16 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="RecipeDAOTest">
+      <SelectionState runConfigName="buyThreeSteakAndOneBeefRollShoppingListSizeShouldEqualFourAndBeefRollItemQuantityShouldEqualOne()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="insertFourStepsWithRecipeIdOneQueryListSizeShouldEqualFour()">
+      <SelectionState runConfigName="ShoppingDAOTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="insertNewAIngredientToRefrigerator()">
+      <SelectionState runConfigName="RefrigeratorIngredientRepositoryTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="updateShoppingListStatus()">
+      <SelectionState runConfigName="buyThreeSteakShoppingListSizeShouldEqualFour()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="buyThreeSteakAndTwoBeefRollAndOneCabbageShoppingListSizeShouldEqualThree()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

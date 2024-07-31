@@ -37,13 +37,15 @@ public class RefrigeratorIngredientRepository {
     public long[] addRefrigeratorIngredients(List<RefrigeratorIngredient> ingredients) {
         long[] result = refrigeratorIngredientDAO.insertIngredients(ingredients);
 
-        List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
+        ingredients.forEach(ingredient -> ingredient.setQuantity(-ingredient.quantity));
         List<Ingredient> match = new LinkedList<>(ingredients);
+
+        List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
         match.addAll(shoppingList);
 
         Map<String, Ingredient> collect = match.stream()
                 .collect(Collectors.toMap(Ingredient::getName, a -> a,
-                        (o1, o2) -> o1.setQuantity(o1.quantity - o2.quantity)));
+                        (o1, o2) -> o1.setQuantity(o1.quantity + o2.quantity)));
 
         Map<String, Ingredient> finished = collect.entrySet()
                 .stream()
