@@ -5,4 +5,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/toolBarGary"
     android:theme="@style/Theme.AppCompat.Light"
-    app:menu="@menu/toolbar_menu" />
+    app:menu="@menu/home_toolbar" />

@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/test"
+        android:icon="@drawable/ic_test"
+        android:title="test"
+        app:showAsAction="always"/>
+
+
+    <item
         android:id="@+id/scan"
         android:icon="@drawable/addcircle"
         android:title="scan"

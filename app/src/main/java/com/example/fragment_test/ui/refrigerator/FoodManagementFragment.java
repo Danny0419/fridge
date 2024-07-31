@@ -194,7 +194,7 @@ public class FoodManagementFragment extends Fragment {
         fragmentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.toolbar_menu, menu);
+                menuInflater.inflate(R.menu.home_toolbar, menu);
             }
 
             @Override
