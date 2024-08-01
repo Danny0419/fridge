@@ -2,6 +2,7 @@ package com.example.fragment_test.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -17,7 +18,7 @@ public interface ShoppingDAO {
             """)
     List<ShoppingIngredient> getAllShoppingIngredients();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertShoppingIngredient(ShoppingIngredient shoppingIngredient);
 
     @Query("""

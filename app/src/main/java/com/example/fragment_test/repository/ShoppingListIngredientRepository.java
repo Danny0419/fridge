@@ -9,6 +9,8 @@ import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ShoppingListIngredientRepository {
 
@@ -29,6 +31,20 @@ public class ShoppingListIngredientRepository {
     }
 
     public List<ShoppingIngredient> addShoppingItem(ShoppingIngredient ingredient) {
+        List<ShoppingIngredient> curShoppingList = shoppingDAO.getAllShoppingIngredients();
+
+        if (!curShoppingList.isEmpty()) {
+            List<String> collect = curShoppingList.stream()
+                    .map(shoppingIngredient -> shoppingIngredient.name + shoppingIngredient.sort)
+                    .toList();
+            int i = collect.indexOf(ingredient.name + ingredient.sort);
+            if (i > -1) {
+                ShoppingIngredient shoppingIngredient = curShoppingList.get(i);
+                ingredient.id = shoppingIngredient.id;
+                ingredient.quantity = ingredient.quantity + shoppingIngredient.quantity;
+            }
+        }
+
         shoppingDAO.insertShoppingIngredient(ingredient);
         return shoppingDAO.getAllShoppingIngredients();
     }
