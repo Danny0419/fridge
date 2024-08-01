@@ -34,24 +34,37 @@ public class RefrigeratorIngredientRepository {
         return refrigeratorIngredientRepository;
     }
 
-    public long[] buyIngredients(List<RefrigeratorIngredient> ingredients) {
-        long[] result = refrigeratorIngredientDAO.insertIngredients(ingredients);
+    public void buyIngredients(List<RefrigeratorIngredient> ingredients) {
+
+        List<RefrigeratorIngredient> curRefrigeratorIng = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
+
+        List<RefrigeratorIngredient> collapseFriAndBuy = new LinkedList<>(curRefrigeratorIng);
+        collapseFriAndBuy.addAll(ingredients);
+
+
+        Map<String, RefrigeratorIngredient> sameSortAndEx = collapseFriAndBuy.stream()
+                .collect(Collectors.toMap(this::fetchGroupKey, o -> o, (o1, o2) -> (RefrigeratorIngredient) o1.setQuantity(o1.quantity + o2.quantity)));
+
+        sameSortAndEx.forEach((key, value) -> refrigeratorIngredientDAO.insertIngredient(value));
 
         ingredients.forEach(ingredient -> ingredient.setQuantity(-ingredient.quantity));
 
         List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
 
-        List<Ingredient> collapse = new LinkedList<>(ingredients);
-        collapse.addAll(shoppingList);
+        List<Ingredient> collapse2 = new LinkedList<>(ingredients);
+        collapse2.addAll(shoppingList);
 
-        Map<String, Ingredient> collect = computeSameIngredients(collapse);
+        Map<String, Ingredient> collect = computeSameIngredients(collapse2);
 
         Map<String, Ingredient> finished = sortIngredientsIntoFinished(collect);
 
         Map<String, Ingredient> unfinished = sortIngredientsIntoUnfinished(collect);
 
         shoppingListIngredientRepository.check(finished, unfinished);
-        return result;
+    }
+
+    private String fetchGroupKey(RefrigeratorIngredient ingredient){
+        return ingredient.name +"#"+ ingredient.expiration;
     }
 
     private @NonNull Map<String, Ingredient> sortIngredientsIntoUnfinished(Map<String, Ingredient> collect) {

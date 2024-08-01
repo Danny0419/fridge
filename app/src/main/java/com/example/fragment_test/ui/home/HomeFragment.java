@@ -58,17 +58,23 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                NavController navController = Navigation.findNavController(getActivity(),
+                        R.id.nav_host_fragment_activity_main2);
                 if (itemId == R.id.scan) {
                     navController.navigate(R.id.action_navigation_home_to_navigation_camera);
                 } else if (itemId == R.id.test) {
                     FoodManagementViewModel foodManagementViewModel = new FoodManagementViewModel(getActivity().getApplication());
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛小排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛小排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0)
+                            new RefrigeratorIngredient("牛排", "肉類", 3,
+                                    "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛排", "肉類", 3,
+                                    "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛小排", "肉類", 3,
+                                    "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛小排", "肉類", 3,
+                                    "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛排", "肉類", 3,
+                                    "牛排照片", 5, "2024-07-31", 0)
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }
