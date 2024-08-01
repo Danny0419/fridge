@@ -20,6 +20,11 @@ import androidx.navigation.Navigation;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
+import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -47,7 +52,7 @@ public class HomeFragment extends Fragment {
         fragmentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.toolbar_menu, menu);
+                menuInflater.inflate(R.menu.home_toolbar, menu);
             }
 
             @Override
@@ -56,6 +61,16 @@ public class HomeFragment extends Fragment {
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
                 if (itemId == R.id.scan) {
                     navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+                } else if (itemId == R.id.test) {
+                    FoodManagementViewModel foodManagementViewModel = new FoodManagementViewModel(getActivity().getApplication());
+                    List<RefrigeratorIngredient> ingredients = List.of(
+                            new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛小排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛小排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0),
+                            new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, "2024-07-31", 0)
+                    );
+                    foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }
                 return true;
             }
