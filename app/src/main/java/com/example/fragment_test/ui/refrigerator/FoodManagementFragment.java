@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
@@ -157,6 +158,12 @@ public class FoodManagementFragment extends Fragment {
         View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
         ingredientDetail = new Dialog(getContext());
         ingredientDetail.setContentView(dialogView);
+
+        // 應急用調整彈跳視窗大小
+        WindowManager.LayoutParams layoutParams = ingredientDetail.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1250;
+        ingredientDetail.getWindow().setAttributes(layoutParams);
 
         initTab(view);
         return view;
