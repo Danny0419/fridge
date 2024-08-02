@@ -4,6 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/titleSort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/bold"
+        android:text="食材種類："
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/sortSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/bold" />
 
     <TextView
         android:id="@+id/titleName"
@@ -24,26 +42,6 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/regular"/>
-
-
-    <TextView
-        android:id="@+id/titleSort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/bold"
-        android:text="食材種類："
-        android:textSize="24dp" />
-
-    <Spinner
-        android:id="@+id/sortSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="25dp"
-        android:fontFamily="@font/bold" />
 
     <!--    <Spinner-->
     <!--        android:id="@+id/quantitySpinner"-->
