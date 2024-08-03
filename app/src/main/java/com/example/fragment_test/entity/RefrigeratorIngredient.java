@@ -24,7 +24,7 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer expired;
 
     @Ignore
-    public RefrigeratorIngredient(@NonNull String name, Integer quantity, @NonNull String img, @NonNull String sort, @NonNull Integer savingDay, @NonNull String expiration, @NonNull Integer expired) {
+    public RefrigeratorIngredient(@NonNull String name, @NonNull String sort, Integer quantity, @NonNull String img, @NonNull Integer savingDay, @NonNull String expiration, @NonNull Integer expired) {
         super(name, quantity);
         this.img = img;
         this.sort = sort;

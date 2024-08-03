@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 public class Ingredient {
     @PrimaryKey(autoGenerate = true)
-    public Integer id;
+    public int id;
     @ColumnInfo
     @NonNull
     public String name;

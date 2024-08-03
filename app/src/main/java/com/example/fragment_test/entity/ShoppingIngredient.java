@@ -20,7 +20,7 @@ public class ShoppingIngredient extends Ingredient {
         this.sort = sort;
     }
 
-    public ShoppingIngredient(@NonNull String name, Integer quantity, @NonNull String sort, Integer status) {
+    public ShoppingIngredient(@NonNull String name, @NonNull String sort, Integer quantity, Integer status) {
         super(name, quantity);
         this.sort = sort;
         this.status = status;

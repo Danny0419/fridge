@@ -7,13 +7,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.example.fragment_test.entity.Step;
 
 @Database(entities = {RefrigeratorIngredient.class, ShoppingIngredient.class,
-        Schedule.class, Recipe.class, Step.class}, version = 1)
+        Schedule.class, Recipe.class, Step.class, RecipeIngredient.class}, version = 1)
 public abstract class FridgeDatabase extends RoomDatabase {
     public static final String DB_NAME = "fridge.db";
     private static volatile FridgeDatabase instance;
@@ -40,4 +41,6 @@ public abstract class FridgeDatabase extends RoomDatabase {
     public abstract RecipeDAO recipeDAO();
 
     public abstract StepDAO stepDAO();
+
+    public abstract RecipeIngredientDAO recipeIngredientDAO();
 }

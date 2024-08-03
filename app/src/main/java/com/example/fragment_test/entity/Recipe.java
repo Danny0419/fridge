@@ -21,12 +21,12 @@ public class Recipe {
     @ColumnInfo
     public int status;
     @ColumnInfo(name = "s_id")
-    public int sId;
+    public Integer sId;
 
     @Ignore
     public List<RefrigeratorIngredient> ingredients;
 
-    public Recipe(int id, String name, String img, int serving, int status, int sId) {
+    public Recipe(int id, String name, String img, int serving, int status, Integer sId) {
         this.id = id;
         this.name = name;
         this.img = img;

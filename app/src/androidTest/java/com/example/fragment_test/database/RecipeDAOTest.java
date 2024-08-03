@@ -53,7 +53,7 @@ public class RecipeDAOTest extends TestCase {
                 new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
         );
         recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
-        List<Recipe> recipesList = recipeDAO.getRecipeByScheduleId(1);
+        List<Recipe> recipesList = recipeDAO.queryRecipeByScheduleId(1);
         assertEquals(3, recipesList.size());
 
     }
@@ -67,7 +67,7 @@ public class RecipeDAOTest extends TestCase {
                 new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
         );
         recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
-        List<Recipe> recipesList = recipeDAO.getRecipeByScheduleId(1);
+        List<Recipe> recipesList = recipeDAO.queryRecipeByScheduleId(1);
         assertEquals(2, recipesList.size());
 
     }
@@ -82,7 +82,7 @@ public class RecipeDAOTest extends TestCase {
 
         recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
         recipeDAO.updateRecipeStatus(1);
-        List<Recipe> recipeByScheduleId = recipeDAO.getRecipeByScheduleId(1);
+        List<Recipe> recipeByScheduleId = recipeDAO.queryRecipeByScheduleId(1);
         assertEquals(1, recipeByScheduleId.size());
 
     }

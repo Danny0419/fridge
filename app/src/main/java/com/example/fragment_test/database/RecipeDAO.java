@@ -18,8 +18,14 @@ public interface RecipeDAO {
             from recipe
             where s_id = :sId AND status = 0
             """)
-    List<Recipe> getRecipeByScheduleId(int sId);
+    List<Recipe> queryRecipeByScheduleId(Integer sId);
 
+    @Query("""
+            SELECT id, name, img, serving, status, s_id
+            FROM recipe
+            WHERE id = :id
+            """)
+    Recipe queryRecipeById(Integer id);
     @Query("""
             UPDATE recipe set status = 1
             WHERE id = :id
