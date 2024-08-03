@@ -10,6 +10,9 @@ public class RefrigeratorIngredient extends Ingredient {
     @ColumnInfo
     @NonNull
     public String img;
+    @ColumnInfo
+    @NonNull
+    public String sort;
     @ColumnInfo(name = "saving_day")
     @NonNull
     public Integer savingDay;
@@ -21,20 +24,25 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer expired;
 
     @Ignore
-    public RefrigeratorIngredient(String name, String sort, Integer quantity, @NonNull String img, @NonNull Integer savingDay, @NonNull String expiration, Integer expired) {
-        super(name, sort, quantity);
+    public RefrigeratorIngredient(@NonNull String name, Integer quantity, @NonNull String img, @NonNull String sort, @NonNull Integer savingDay, @NonNull String expiration, @NonNull Integer expired) {
+        super(name, quantity);
         this.img = img;
+        this.sort = sort;
         this.savingDay = savingDay;
         this.expiration = expiration;
         this.expired = expired;
     }
 
-    public RefrigeratorIngredient(Integer id, String name, String img, Integer quantity, String sort, Integer savingDay, String expiration) {
-        super(id, name, sort, quantity);
+    public RefrigeratorIngredient(Integer id, @NonNull String name, Integer quantity, @NonNull String img, @NonNull String sort, @NonNull Integer savingDay, @NonNull String expiration) {
+        super(id, name, quantity);
         this.img = img;
+        this.sort = sort;
         this.savingDay = savingDay;
         this.expiration = expiration;
     }
 
-
+    @NonNull
+    public String getSort() {
+        return sort;
+    }
 }

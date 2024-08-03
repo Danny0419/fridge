@@ -121,7 +121,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 String name = dialogBinding.nameSpinner.getSelectedItem().toString();
                 String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
                 String quantity = dialogBinding.quantity.getText().toString();
-                ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
+                ShoppingIngredient ingredient = new ShoppingIngredient(name, Integer.parseInt(quantity), sort, 0);
 
                 mViewModel.addShoppingItem(ingredient)
                         .observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {

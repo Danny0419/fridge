@@ -3,7 +3,10 @@ package com.example.fragment_test.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import java.util.List;
 
 @Entity(tableName = "recipe", foreignKeys = @ForeignKey(entity = Schedule.class, parentColumns = "id", childColumns = "s_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
 public class Recipe {
@@ -20,6 +23,9 @@ public class Recipe {
     @ColumnInfo(name = "s_id")
     public int sId;
 
+    @Ignore
+    public List<RefrigeratorIngredient> ingredients;
+
     public Recipe(int id, String name, String img, int serving, int status, int sId) {
         this.id = id;
         this.name = name;
@@ -28,4 +34,6 @@ public class Recipe {
         this.status = status;
         this.sId = sId;
     }
+
+
 }

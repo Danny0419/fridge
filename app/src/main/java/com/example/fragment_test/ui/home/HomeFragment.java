@@ -65,15 +65,15 @@ public class HomeFragment extends Fragment {
                 } else if (itemId == R.id.test) {
                     FoodManagementViewModel foodManagementViewModel = new FoodManagementViewModel(getActivity().getApplication());
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient("牛排", "肉類", 3,
+                            new RefrigeratorIngredient("牛排", 3, "肉類",
                                     "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛排", "肉類", 3,
+                            new RefrigeratorIngredient("牛排", 3, "肉類",
                                     "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛小排", "肉類", 3,
+                            new RefrigeratorIngredient("牛小排", 3, "肉類",
                                     "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛小排", "肉類", 3,
+                            new RefrigeratorIngredient("牛小排", 3, "肉類",
                                     "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛排", "肉類", 3,
+                            new RefrigeratorIngredient("牛排", 3, "肉類",
                                     "牛排照片", 5, "2024-07-31", 0)
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);

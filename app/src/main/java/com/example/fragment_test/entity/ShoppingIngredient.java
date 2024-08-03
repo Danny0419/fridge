@@ -8,16 +8,21 @@ import androidx.room.Ignore;
 @Entity(tableName = "shopping_list")
 public class ShoppingIngredient extends Ingredient {
 
+    @ColumnInfo
+    @NonNull
+    public String sort;
     @ColumnInfo(defaultValue = "0")
     public Integer status;
 
-    public ShoppingIngredient(String name, String sort, Integer quantity) {
-        super(name, sort, quantity);
+    @Ignore
+    public ShoppingIngredient(@NonNull String name, Integer quantity, @NonNull String sort) {
+        super(name, quantity);
+        this.sort = sort;
     }
 
-    @Ignore
-    public ShoppingIngredient(String name, String sort, Integer quantity, Integer status) {
-        super(name, sort, quantity);
+    public ShoppingIngredient(@NonNull String name, Integer quantity, @NonNull String sort, Integer status) {
+        super(name, quantity);
+        this.sort = sort;
         this.status = status;
     }
 }
