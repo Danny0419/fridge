@@ -14,13 +14,14 @@ import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private Context context;
-    private ArrayList<Recipe> recipes;
+    private List<Recipe> recipes;
 
-    public RecipeAdapter(Context context, ArrayList<Recipe> recipes) {
+    public RecipeAdapter(Context context, List<Recipe> recipes) {
         this.recipes = recipes;
         this.context = context;
     }
@@ -28,12 +29,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView recipeImg, recipeName;
-        private RecyclerView need_ingredients;
+        private RecyclerView needs;
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImg = itemView.findViewById(R.id.recipeImg);
             recipeName = itemView.findViewById(R.id.recipeName);
-            need_ingredients = itemView.findViewById(R.id.need_ingredients);
+            needs = itemView.findViewById(R.id.need_ingredients);
         }
     }
 
@@ -50,8 +51,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeImg.setText(recipe.img);
         holder.recipeName.setText(recipe.name);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        holder.need_ingredients.setLayoutManager(layoutManager);
-//        holder.need_ingredients.setAdapter(new RecipeIngredientAdapter(recipe.ingredients));
+        holder.needs.setLayoutManager(layoutManager);
+        holder.needs.setAdapter(new RecipeIngredientAdapter(recipe.ingredients));
     }
 
 

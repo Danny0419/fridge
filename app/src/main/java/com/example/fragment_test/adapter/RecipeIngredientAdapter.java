@@ -10,14 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Ingredient;
+import com.example.fragment_test.entity.RecipeIngredient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientAdapter.RecipeIngredientViewHolder> {
 
-    ArrayList<Ingredient> ingredients;
+    List<RecipeIngredient> ingredients;
 
-    public RecipeIngredientAdapter(ArrayList<Ingredient> ingredients) {
+    public RecipeIngredientAdapter(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -42,7 +44,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientViewHolder holder, int position) {
-//        holder.ingredientImg.setText(ingredients.get(position).img);
+        holder.ingredientImg.setText(ingredients.get(position).img);
         holder.ingredientName.setText(ingredients.get(position).name);
     }
 

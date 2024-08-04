@@ -3,6 +3,7 @@ package com.example.fragment_test.ui.recipe;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -25,17 +26,16 @@ import android.view.ViewGroup;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeAdapter;
 import com.example.fragment_test.databinding.FragmentRecipeBinding;
-import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.Recipe;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeFragment extends Fragment {
 
     private FragmentRecipeBinding binding;
     private RecipeViewModel mViewModel;
-    private ArrayList<Recipe> recipes = new ArrayList<>();
-    private boolean iscollectionSelected=false;
+    private RecyclerView recipeRecyclerView;
+    private boolean isCollectionSelected = false;
 
     public static RecipeFragment newInstance() {
         return new RecipeFragment();
@@ -44,15 +44,16 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(RecipeViewModel.class);
+        mViewModel.loadRecommendRecipes();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        mViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         binding = FragmentRecipeBinding.inflate(inflater);
+        recipeRecyclerView = binding.recipeRecyclerView;
 
         FragmentActivity fragmentActivity = requireActivity();
         fragmentActivity.addMenuProvider(new MenuProvider() {
@@ -75,19 +76,29 @@ public class RecipeFragment extends Fragment {
                 //收藏
                 else if (itemId == R.id.collection) {
                     //如果已經點選過，變回為填滿
-                    if (iscollectionSelected){
+                    if (isCollectionSelected) {
                         menuItem.setIcon(R.drawable.bookmark);
                     }
                     //若未被點選過，變成填滿
                     else {
                         menuItem.setIcon(R.drawable.bookmark__filled);
                     }
-                    iscollectionSelected = !iscollectionSelected; // 更新狀態
+                    isCollectionSelected = !isCollectionSelected; // 更新狀態
                 }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
 
+        mViewModel.getRecipes()
+                .observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
+                    @Override
+                    public void onChanged(List<Recipe> recipes) {
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                        recipeRecyclerView.setLayoutManager(linearLayoutManager);
+                        recipeRecyclerView.setAdapter(new RecipeAdapter(getContext(), recipes));
+                    }
+                });
         return binding.getRoot();
     }
 }

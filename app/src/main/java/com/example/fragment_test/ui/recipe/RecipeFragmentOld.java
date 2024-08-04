@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeAdapter;
-import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class RecipeFragmentOld extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        RecyclerView recipesContainer = view.findViewById(R.id.recipesContainer);
+        RecyclerView recipesContainer = view.findViewById(R.id.recipeRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         recipesContainer.setLayoutManager(linearLayoutManager);
         recipesContainer.setAdapter(new RecipeAdapter(container.getContext(), recipes));
