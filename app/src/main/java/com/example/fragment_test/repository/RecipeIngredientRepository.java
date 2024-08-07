@@ -23,18 +23,4 @@ public class RecipeIngredientRepository {
         }
         return recipeIngredientRepository;
     }
-
-    public long saveRecipeIngredient(List<RecipeIngredient> ingredients) {
-        AtomicInteger successful = new AtomicInteger();
-        ingredients.forEach(ingredient -> {
-            if (recipeIngredientDAO.insertRecipeIngredient(ingredient) != 0) {
-                successful.getAndIncrement();
-            }
-        });
-        return successful.longValue();
-    }
-
-    public List<RecipeIngredient> getRecipeNeedsIngredients(Recipe recipe) {
-        return recipeIngredientDAO.queryRecipeIngredientsByRId(recipe.id);
-    }
 }
