@@ -7,7 +7,6 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity(tableName = "recipe", foreignKeys = @ForeignKey(entity = Schedule.class, parentColumns = "id", childColumns = "s_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
@@ -22,29 +21,32 @@ public class Recipe {
     public int serving;
     @ColumnInfo
     public int status;
+    @ColumnInfo
+    public int collected;
     @ColumnInfo(name = "s_id")
     public Integer sId;
 
     @Ignore
-    public List<RecipeIngredient> ingredients = new ArrayList<>();
+    public List<RecipeIngredient> ingredients;
 
-    public Recipe(int id, String name, String img, int serving, int status, Integer sId) {
+    public Recipe(int id, String name, String img, int serving, int status, int collected, Integer sId) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
         this.status = status;
+        this.collected = collected;
         this.sId = sId;
         this.ingredients = new ArrayList<>();
     }
 
-    @Ignore
-    public Recipe(int id, String name, String img, int serving, int status, Integer sId, List<RecipeIngredient> ingredients) {
+    public Recipe(int id, String name, String img, int serving, int status, int collected, Integer sId, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
         this.status = status;
+        this.collected = collected;
         this.sId = sId;
         this.ingredients = ingredients;
     }
