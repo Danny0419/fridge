@@ -35,17 +35,21 @@ public class Recipe {
         this.serving = serving;
         this.status = status;
         this.sId = sId;
+        this.ingredients = new ArrayList<>();
     }
 
-    public Recipe(int id, String name, String img, int serving, int status, Integer sId, RecipeIngredient ...ingredients) {
+    @Ignore
+    public Recipe(int id, String name, String img, int serving, int status, Integer sId, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
         this.status = status;
         this.sId = sId;
-        this.ingredients.addAll(Arrays.asList(ingredients));
+        this.ingredients = ingredients;
     }
 
-
+    public void setIngredients(List<RecipeIngredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 }

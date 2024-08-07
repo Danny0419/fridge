@@ -5,12 +5,10 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.repository.RecipeRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

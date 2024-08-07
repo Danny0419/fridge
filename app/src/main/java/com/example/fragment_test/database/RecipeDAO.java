@@ -2,6 +2,7 @@ package com.example.fragment_test.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.fragment_test.entity.Recipe;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface RecipeDAO {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertRecipe(Recipe recipe);
 
     @Query("""
