@@ -41,6 +41,10 @@ public class RecipeRepository {
     }
 
     public void collectRecipe(Recipe recipe) {
-
+        Recipe queryRecipeByName = recipeDAO.queryRecipeByName(recipe.name);
+        if (queryRecipeByName != null) {
+            recipe.id = queryRecipeByName.id;
+        }
+        recipeDAO.insertRecipe(recipe);
     }
 }
