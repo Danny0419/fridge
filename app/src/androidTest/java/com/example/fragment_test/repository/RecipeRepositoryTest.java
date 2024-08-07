@@ -28,6 +28,21 @@ public class RecipeRepositoryTest extends TestCase {
     public RecipeDAO recipeDAO;
 
     @Test
+    public void showRecipeCollectionRecipeListShouldEqualFour() {
+        List<Recipe> recipes = List.of(
+                new Recipe(0, "卡拉雞腿堡", "卡拉雞腿堡照片", 1, 0, 1, null),
+                new Recipe(0, "荷包蛋", "卡拉雞腿堡照片", 1, 0, 1, null),
+                new Recipe(0, "番茄炒蛋", "卡拉雞腿堡照片", 1, 0, 1, null),
+                new Recipe(0, "清蒸鱸魚", "卡拉雞腿堡照片", 1, 0, 1, null)
+        );
+        recipes.forEach(recipe -> recipeRepository.collectRecipe(recipe));
+
+        List<Recipe> collection = recipeRepository.showRecipeCollection();
+
+        assertEquals(4, collection.size());
+    }
+
+    @Test
     public void collectOneRecipeRecipeTabAlreadyExist() {
         Recipe recipe = new Recipe(0, "卡拉雞腿堡", "卡拉雞腿堡照片", 1, 0, 0, null);
         recipeDAO.insertRecipe(recipe);

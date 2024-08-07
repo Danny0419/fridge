@@ -47,4 +47,8 @@ public class RecipeRepository {
         }
         recipeDAO.insertRecipe(recipe);
     }
+
+    public List<Recipe> showRecipeCollection() {
+        return recipeDAO.queryRecipeByIsCollected();
+    }
 }

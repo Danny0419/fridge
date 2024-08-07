@@ -41,4 +41,10 @@ public interface RecipeDAO {
             """)
     void updateRecipeStatus(int id);
 
+    @Query( """
+            SELECT id, name, img, serving, status, collected, s_id
+            FROM recipe
+            WHERE collected = 1
+            """)
+    List<Recipe> queryRecipeByIsCollected();
 }
