@@ -22,6 +22,66 @@ public class RecipeDAOTest extends TestCase {
     public FridgeDatabase database;
     public RecipeDAO recipeDAO;
 
+    @Test
+    public void queryNameIs荷包蛋Recipe(){
+        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片", 0, 1, 0, null);
+        recipeDAO.insertRecipe(recipe);
+
+        Recipe recipe1 = recipeDAO.queryRecipeByName("荷包蛋");
+        assertEquals("荷包蛋", recipe1.name);
+    }
+
+
+    @Test
+    public void insertOneRecipeRowIdShouldEqualOne() {
+        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片", 0, 1, 0, 1);
+        long l = recipeDAO.insertRecipe(recipe);
+        assertEquals(1, l);
+    }
+
+    @Test
+    public void getSidEqualOneRecipesSizeShouldEqualThree() {
+
+        List<Recipe> recipes = List.of(
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 0, 1)
+        );
+        recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
+        List<Recipe> recipesList = recipeDAO.queryRecipeByScheduleId(1);
+        assertEquals(3, recipesList.size());
+
+    }
+
+    @Test
+    public void getSidEqualOneRecipesSizeShouldEqualTwo() {
+
+        List<Recipe> recipes = List.of(
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 0, 2),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 0, 1)
+        );
+        recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
+        List<Recipe> recipesList = recipeDAO.queryRecipeByScheduleId(1);
+        assertEquals(2, recipesList.size());
+
+    }
+
+    @Test
+    public void updateRecipeStatusToOne() {
+        List<Recipe> recipes = List.of(
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 0, 2),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 0, 1)
+        );
+
+        recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
+        recipeDAO.updateRecipeStatus(1);
+        List<Recipe> recipeByScheduleId = recipeDAO.queryRecipeByScheduleId(1);
+        assertEquals(1, recipeByScheduleId.size());
+
+    }
+
     @Before
     public void setUp() {
         database = Room.inMemoryDatabaseBuilder(
@@ -35,55 +95,5 @@ public class RecipeDAOTest extends TestCase {
     @After
     public void tearDown() throws Exception {
         database.close();
-    }
-
-    @Test
-    public void insertOneRecipeRowIdShouldEqualOne() {
-        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片",0, 1, 1);
-        long l = recipeDAO.insertRecipe(recipe);
-        assertEquals(1, l);
-    }
-
-    @Test
-    public void getSidEqualOneRecipesSizeShouldEqualThree() {
-
-        List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片",2, 0, 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
-        );
-        recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
-        List<Recipe> recipesList = recipeDAO.queryRecipeByScheduleId(1);
-        assertEquals(3, recipesList.size());
-
-    }
-
-    @Test
-    public void getSidEqualOneRecipesSizeShouldEqualTwo() {
-
-        List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 1,0 , 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0, 2),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
-        );
-        recipes.forEach((recipe -> recipeDAO.insertRecipe(recipe)));
-        List<Recipe> recipesList = recipeDAO.queryRecipeByScheduleId(1);
-        assertEquals(2, recipesList.size());
-
-    }
-
-    @Test
-    public void updateRecipeStatusToOne() {
-        List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0,  1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0 , 2),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
-        );
-
-        recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
-        recipeDAO.updateRecipeStatus(1);
-        List<Recipe> recipeByScheduleId = recipeDAO.queryRecipeByScheduleId(1);
-        assertEquals(1, recipeByScheduleId.size());
-
     }
 }
