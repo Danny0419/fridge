@@ -54,9 +54,9 @@ public class StepDAOTest extends TestCase {
         scheduleDAO.insertSchedule(schedules.get(0));
 
         List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0,  1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0 , 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0, 1)
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0, 0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0 ,0, 1),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0,0, 1)
         );
         recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
 
