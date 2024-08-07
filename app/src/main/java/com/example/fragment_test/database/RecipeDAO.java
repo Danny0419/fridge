@@ -15,21 +15,30 @@ public interface RecipeDAO {
     long insertRecipe(Recipe recipe);
 
     @Query("""
-            select id, name, img, serving, status, s_id
+            SELECT id, name, img, serving, status, collected, s_id
+            FROM recipe
+            WHERE name = :name
+            """)
+    Recipe queryRecipeByName(String name);
+
+    @Query("""
+            select id, name, img, serving, status, collected, s_id
             from recipe
             where s_id = :sId AND status = 0
             """)
     List<Recipe> queryRecipeByScheduleId(Integer sId);
 
     @Query("""
-            SELECT id, name, img, serving, status, s_id
+            SELECT id, name, img, serving, status, collected, s_id
             FROM recipe
             WHERE id = :id
             """)
     Recipe queryRecipeById(Integer id);
+
     @Query("""
             UPDATE recipe set status = 1
             WHERE id = :id
             """)
     void updateRecipeStatus(int id);
+
 }
