@@ -12,24 +12,23 @@ import com.example.fragment_test.repository.ShoppingListIngredientRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class ShoppingLIstViewModel extends AndroidViewModel {
+public class ShoppingListViewModel extends AndroidViewModel {
     private ShoppingListIngredientRepository repository;
-    private MutableLiveData<List<ShoppingIngredient>> ingredients = new MutableLiveData<>();
+    private MutableLiveData<List<ShoppingIngredient>> currShoppingList;
 
-    public ShoppingLIstViewModel(@NonNull Application application) {
+    public ShoppingListViewModel(@NonNull Application application) {
         super(application);
         this.repository = ShoppingListIngredientRepository.getInstance(application);
     }
     // TODO: Implement the ViewModel
 
-    public MutableLiveData<List<ShoppingIngredient>> loadShoppingList() {
+    public void loadShoppingList() {
         Maybe.fromCallable(() -> Optional.ofNullable(repository.getShoppingList())
                         .orElse(new ArrayList<>())
                 ).subscribeOn(Schedulers.io())
@@ -37,7 +36,7 @@ public class ShoppingLIstViewModel extends AndroidViewModel {
                 .subscribe(new DisposableMaybeObserver<List<ShoppingIngredient>>() {
                     @Override
                     public void onSuccess(List<ShoppingIngredient> shoppingIngredients) {
-                        ingredients.setValue(shoppingIngredients);
+                        currShoppingList.setValue(shoppingIngredients);
                     }
 
                     @Override
@@ -50,10 +49,9 @@ public class ShoppingLIstViewModel extends AndroidViewModel {
 
                     }
                 });
-        return ingredients;
     }
 
-    public MutableLiveData<List<ShoppingIngredient>> addShoppingItem(ShoppingIngredient ingredient) {
+    public void addShoppingItem(ShoppingIngredient ingredient) {
 
         Maybe.fromCallable(() -> Optional.ofNullable(repository.addShoppingItem(ingredient))
                         .orElse(new ArrayList<>())
@@ -62,7 +60,7 @@ public class ShoppingLIstViewModel extends AndroidViewModel {
                 .subscribe(new DisposableMaybeObserver<List<ShoppingIngredient>>() {
                     @Override
                     public void onSuccess(List<ShoppingIngredient> shoppingList) {
-                        ingredients.setValue(shoppingList);
+                        currShoppingList.setValue(shoppingList);
                     }
 
                     @Override
@@ -76,6 +74,12 @@ public class ShoppingLIstViewModel extends AndroidViewModel {
                     }
                 });
 
-        return ingredients;
+    }
+
+    public MutableLiveData<List<ShoppingIngredient>> getCurrShoppingList() {
+        if (currShoppingList == null) {
+            currShoppingList = new MutableLiveData<>();
+        }
+        return currShoppingList;
     }
 }

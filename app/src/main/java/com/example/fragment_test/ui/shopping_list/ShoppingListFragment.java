@@ -35,7 +35,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
     private FragmentShoppingListBinding binding;
     private ShoppinglistAlterDialogBinding dialogBinding;
-    private ShoppingLIstViewModel mViewModel;
+    private ShoppingListViewModel mViewModel;
     private RecyclerView shoppingListItemRecycleView;
     private Dialog dialog;
     private RecyclerView.LayoutManager layoutManager;
@@ -45,19 +45,10 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
-        View view = initialize(inflater, container);
-        mViewModel = new ShoppingLIstViewModel(getActivity().getApplication());
-
-        // 應急用調整彈跳視窗大小
-        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-        layoutParams.width = 1000;
-        layoutParams.height = 1020;
-        dialog.getWindow().setAttributes(layoutParams);
-
-        mViewModel.loadShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ShoppingListViewModel.class);
+        mViewModel.getCurrShoppingList().observe(this, new Observer<List<ShoppingIngredient>>() {
             @Override
             public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
                 layoutManager = new LinearLayoutManager(getContext());
@@ -65,13 +56,28 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
             }
         });
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = initialize(inflater, container);
+
+        // 應急用調整彈跳視窗大小
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1020;
+        dialog.getWindow().setAttributes(layoutParams);
+
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ShoppingLIstViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ShoppingListViewModel.class);
         // TODO: Use the ViewModel
     }
 
@@ -123,15 +129,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 String quantity = dialogBinding.quantity.getText().toString();
                 ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
 
-                mViewModel.addShoppingItem(ingredient)
-                        .observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
-                            @Override
-                            public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
-                                shoppingListItemRecycleView.setLayoutManager(layoutManager);
-                                shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
-                            }
-                        });
-
+                mViewModel.addShoppingItem(ingredient);
                 dialogBinding.quantity.setText("");
                 dialog.dismiss();
             } catch (NumberFormatException e) {
