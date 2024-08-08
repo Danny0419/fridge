@@ -74,13 +74,6 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ShoppingListViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
     private View initialize(LayoutInflater inflater, ViewGroup container) {
 
         binding = FragmentShoppingListBinding.inflate(inflater, container, false);
