@@ -48,6 +48,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ShoppingListViewModel.class);
+        mViewModel.loadShoppingList();
         mViewModel.getCurrShoppingList().observe(this, new Observer<List<ShoppingIngredient>>() {
             @Override
             public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
