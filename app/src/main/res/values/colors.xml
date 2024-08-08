@@ -9,4 +9,5 @@
     <color name="navBarGary">#FAF6F6</color>
     <color name="blue">#9CC5E2</color>
     <color name="important_red">#FF0000</color>
+    <color name="hintBoxGray">#DEC2C2</color>
 </resources>
