@@ -2,10 +2,12 @@ package com.example.fragment_test.ui.schedule;
 
 import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -13,13 +15,16 @@ import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
@@ -143,4 +148,5 @@ public class ScheduleFragment extends Fragment {
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
     }
+
 }
