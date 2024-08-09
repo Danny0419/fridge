@@ -30,13 +30,13 @@ public class RecipeRepository {
 
     public Optional<List<Recipe>> recommendRecipes() {
         return Optional.of(List.of(
-                new Recipe(0, "蔬菜大餐", "照片", 2, 0, 0, null),
-                new Recipe(0, "菲力牛排", "照片", 2, 0, 0, null),
-                new Recipe(0, "義大利麵", "照片", 2, 0, 0, null),
-                new Recipe(0, "蛋包飯", "照片", 2, 0, 0, null),
-                new Recipe(0, "卡拉雞腿堡", "照片", 2, 0, 0, null),
-                new Recipe(0, "聖誕大餐", "照片", 2, 0, 0, null),
-                new Recipe(0, "來一客", "照片", 2, 0, 0, null)
+                new Recipe(0, "蔬菜大餐", "照片", 2),
+                new Recipe(0, "菲力牛排", "照片", 2),
+                new Recipe(0, "義大利麵", "照片", 2),
+                new Recipe(0, "蛋包飯", "照片", 2),
+                new Recipe(0, "卡拉雞腿堡", "照片", 2),
+                new Recipe(0, "聖誕大餐", "照片", 2),
+                new Recipe(0, "來一客", "照片", 2)
         ));
     }
 
@@ -49,6 +49,6 @@ public class RecipeRepository {
     }
 
     public List<Recipe> showRecipeCollection() {
-        return recipeDAO.queryRecipeByIsCollected();
+        return null;
     }
 }

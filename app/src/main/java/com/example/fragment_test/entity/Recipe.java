@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "recipe", foreignKeys = @ForeignKey(entity = Schedule.class, parentColumns = "id", childColumns = "s_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "recipe")
 public class Recipe {
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -19,35 +19,27 @@ public class Recipe {
     public String img;
     @ColumnInfo
     public int serving;
-    @ColumnInfo
-    public int status;
-    @ColumnInfo
-    public int collected;
-    @ColumnInfo(name = "s_id")
-    public Integer sId;
 
+    @Ignore
+    public List<Step> steps;
     @Ignore
     public List<RecipeIngredient> ingredients;
 
-    public Recipe(int id, String name, String img, int serving, int status, int collected, Integer sId) {
+    public Recipe(int id, String name, String img, int serving) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
-        this.status = status;
-        this.collected = collected;
-        this.sId = sId;
-        this.ingredients = new ArrayList<>();
+        steps = new ArrayList<>();
+        ingredients = new ArrayList<>();
     }
 
-    public Recipe(int id, String name, String img, int serving, int status, int collected, Integer sId, List<RecipeIngredient> ingredients) {
+    public Recipe(int id, String name, String img, int serving, int collected, Integer sId, List<Step> steps, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
-        this.status = status;
-        this.collected = collected;
-        this.sId = sId;
+        this.steps = steps;
         this.ingredients = ingredients;
     }
 
