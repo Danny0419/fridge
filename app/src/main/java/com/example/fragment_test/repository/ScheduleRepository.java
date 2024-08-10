@@ -3,7 +3,6 @@ package com.example.fragment_test.repository;
 import android.content.Context;
 
 import com.example.fragment_test.database.FridgeDatabase;
-import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.database.ScheduleRecipeDAO;
 
 public class ScheduleRepository {
