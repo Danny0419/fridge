@@ -49,14 +49,6 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ShoppingListViewModel.class);
         mViewModel.loadShoppingList();
-        mViewModel.getCurrShoppingList().observe(this, new Observer<List<ShoppingIngredient>>() {
-            @Override
-            public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
-                layoutManager = new LinearLayoutManager(getContext());
-                shoppingListItemRecycleView.setLayoutManager(layoutManager);
-                shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
-            }
-        });
     }
 
     @Override
@@ -64,7 +56,14 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
 
         View view = initialize(inflater, container);
-
+        mViewModel.getCurrShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
+            @Override
+            public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
+                layoutManager = new LinearLayoutManager(getContext());
+                shoppingListItemRecycleView.setLayoutManager(layoutManager);
+                shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
+            }
+        });
         // 應急用調整彈跳視窗大小
         WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
         layoutParams.width = 1000;
