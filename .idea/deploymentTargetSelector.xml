@@ -13,19 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="queryNameIs荷包蛋Recipe()">
+      <SelectionState runConfigName="RecipeIngredientDAOTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="collectOneRecipeRecipeTabDoseNotExist()">
+      <SelectionState runConfigName="insertOneScheduleRecipeRecipeIdEqualsOne()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="collectOneRecipeRecipeTabAlreadyExist()">
+      <SelectionState runConfigName="queryScheduleRecipesScheduleIdIsOne()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="RecipeRepositoryTest">
+      <SelectionState runConfigName="queryScheduleRecipesIsNotDoneAndScheduleIdIsOneReturnListSizeShouldEqualOne()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="showRecipeCollectionRecipeListShouldEqualFour()">
+      <SelectionState runConfigName="updateScheduleRecipeStatus()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

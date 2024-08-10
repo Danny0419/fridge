@@ -31,14 +31,16 @@ public class ScheduleRecipe {
     public Integer rid;
     @ColumnInfo(name = "s_id")
     public Integer sId;
-
+    @ColumnInfo(defaultValue = "0")
+    public int status;
     @Ignore
     Recipe recipe;
 
-    public ScheduleRecipe(int id, Integer rid, Integer sId) {
+    public ScheduleRecipe(int id, Integer rid, Integer sId, int status) {
         this.id = id;
         this.rid = rid;
         this.sId = sId;
+        this.status = status;
     }
 
     @Ignore

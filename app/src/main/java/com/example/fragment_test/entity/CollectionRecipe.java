@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "schedule_recipe", foreignKeys =
+@Entity(tableName = "recipe_collection", foreignKeys =
     @ForeignKey(entity = Recipe.class,
         parentColumns = "id",
         childColumns = "r_id",
