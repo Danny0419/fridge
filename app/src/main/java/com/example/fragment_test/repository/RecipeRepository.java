@@ -5,9 +5,7 @@ import android.content.Context;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.entity.RecipeIngredient;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,5 +48,9 @@ public class RecipeRepository {
 
     public List<Recipe> showRecipeCollection() {
         return null;
+    }
+
+    public long storeRecipe(Recipe recipe) {
+        return recipeDAO.insertRecipe(recipe);
     }
 }

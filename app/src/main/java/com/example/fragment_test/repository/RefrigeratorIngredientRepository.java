@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class RefrigeratorIngredientRepository {
     private final RefrigeratorIngredientDAO refrigeratorIngredientDAO;
     private final ShoppingListIngredientRepository shoppingListIngredientRepository;
-    public static RefrigeratorIngredientRepository refrigeratorIngredientRepository;
+    private static RefrigeratorIngredientRepository refrigeratorIngredientRepository;
 
     private RefrigeratorIngredientRepository(Context context) {
         this.refrigeratorIngredientDAO = FridgeDatabase.getInstance(context).refrigeratorDAO();
