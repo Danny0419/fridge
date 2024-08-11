@@ -15,15 +15,13 @@ import androidx.room.PrimaryKey;
     )
 )
 public class CollectionRecipe {
-    @PrimaryKey(autoGenerate = true)
-    public int id;
+    @PrimaryKey
     @ColumnInfo(name = "r_id")
     public Integer rId;
     @Ignore
     public Recipe recipe;
 
-    public CollectionRecipe(int id, Integer rId) {
-        this.id = id;
+    public CollectionRecipe(Integer rId) {
         this.rId = rId;
     }
 
