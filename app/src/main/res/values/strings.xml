@@ -59,7 +59,7 @@
     <string name="title_recipe">Recipes</string>
     <string name="title_schedule">Schedule</string>
     <string name="title_shopping_list">__</string>
-    
+
     <string-array name="ingredients_name_array">
         <item>牛小排</item>
         <item>豬五花</item>
