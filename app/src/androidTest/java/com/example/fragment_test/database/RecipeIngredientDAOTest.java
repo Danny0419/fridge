@@ -26,22 +26,6 @@ public class RecipeIngredientDAOTest extends TestCase {
     public RecipeDAO recipeDAO;
     public RecipeIngredientDAO recipeIngredientDAO;
 
-    @Before
-    public void setUp() {
-        database = Room.inMemoryDatabaseBuilder(
-                        ApplicationProvider.getApplicationContext(),
-                        FridgeDatabase.class
-                ).allowMainThreadQueries()
-                .build();
-        recipeDAO = database.recipeDAO();
-        recipeIngredientDAO = database.recipeIngredientDAO();
-    }
-
-    @After
-    public void close() {
-        database.close();
-    }
-
     @Test
     public void insertOneRecipeIngredientRowIdShouldEqualOne() {
         Recipe recipe = new Recipe(0, "胡蘿蔔大餐", "胡蘿蔔大餐", 7);
@@ -67,6 +51,22 @@ public class RecipeIngredientDAOTest extends TestCase {
 
         List<RecipeIngredient> recipeIngredients = recipeIngredientDAO.queryRecipeIngredientsByRId(1);
         assertEquals(4, recipeIngredients.size());
+    }
+
+    @Before
+    public void setUp() {
+        database = Room.inMemoryDatabaseBuilder(
+                        ApplicationProvider.getApplicationContext(),
+                        FridgeDatabase.class
+                ).allowMainThreadQueries()
+                .build();
+        recipeDAO = database.recipeDAO();
+        recipeIngredientDAO = database.recipeIngredientDAO();
+    }
+
+    @After
+    public void close() {
+        database.close();
     }
 }
 
