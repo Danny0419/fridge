@@ -4,6 +4,7 @@ import static com.example.fragment_test.utils.setListBackground.setListBackgroun
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -142,11 +143,40 @@ public class ScheduleFragment extends Fragment {
 //                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
                 }
                 if (itemId == R.id.editdate) {
-//                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+                    showDialog();
                 }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
+    }
+
+    //彈跳式窗
+    private void showDialog(){
+        //頁面
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.schedule_change_display_dialog);
+
+        //取消與確認按鈕
+        Button cancelButton = dialog.findViewById(R.id.cancel_button);
+        Button confirmButton = dialog.findViewById(R.id.confirm_button);
+
+        // 取消
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        // 確認
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 }
