@@ -152,7 +152,7 @@ public class ScheduleFragment extends Fragment {
 
     //彈跳式窗
     private void showDialog(){
-        //頁面
+        //彈跳頁面
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.schedule_change_display_dialog);
 
