@@ -23,7 +23,8 @@
             android:layout_marginLeft="25dp"
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/text_under_line"/>
 
         <Button
             android:layout_width="35dp"
