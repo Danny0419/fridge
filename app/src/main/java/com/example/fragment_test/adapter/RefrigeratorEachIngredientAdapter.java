@@ -14,13 +14,13 @@ import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 import java.util.List;
 
-public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKindAdapter.RefrigeratorKindViewHolder>{
+public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<RefrigeratorEachIngredientAdapter.RefrigeratorKindViewHolder>{
 
     private List<RefrigeratorIngredient> kindOfIngredient;
     private Dialog ingredientDetail;
+    private RefrigeratorAdapter.OnClickListener onClickListener;
 
-
-    public RefrigeratorKindAdapter(List<RefrigeratorIngredient> kindOfIngredient, Dialog ingredientDetail) {
+    public RefrigeratorEachIngredientAdapter(List<RefrigeratorIngredient> kindOfIngredient, Dialog ingredientDetail) {
         this.kindOfIngredient = kindOfIngredient;
         this.ingredientDetail = ingredientDetail;
     }
@@ -57,12 +57,11 @@ public class RefrigeratorKindAdapter extends RecyclerView.Adapter<RefrigeratorKi
         holder.ingredientName.setText(ingredient.name);
         holder.ingredientExpr.setText("保存期限");
         holder.ingredientQuan.setText(ingredient.quantity.toString());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    ingredientDetail.show();
-            }
-        });
+        holder.itemView.setOnClickListener(view -> onClickListener.onClick(position, ingredient));
+    }
+
+    public void setOnClickListener(RefrigeratorAdapter.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override

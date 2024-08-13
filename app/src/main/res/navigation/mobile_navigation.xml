@@ -13,7 +13,7 @@
 
     <activity
         android:id="@+id/navigation_recipe_detail"
-        android:name="com.example.fragment_test.RecipeDetailActivity"
+        android:name="com.example.fragment_test.ui.recipe.RecipeDetailActivity"
         android:label="@string/recipe_page_title"
         tools:layout="@layout/activity_recipe_detail"/>/>
     <fragment

@@ -25,6 +25,7 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     private List<String> kinds;
     private Map<String, List<RefrigeratorIngredient>> refrigeratorMap;
     private Context context;
+    private OnClickListener onClickListener;
     private Dialog ingredientDetail;
 
     public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> refrigeratorMap, Dialog ingredientDetail) {
@@ -57,9 +58,17 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
         List<RefrigeratorIngredient> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
-        holder.kindOfIngredientContainer.setAdapter(new RefrigeratorKindAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()), ingredientDetail));
+        RefrigeratorEachIngredientAdapter ingredientAdapter = new RefrigeratorEachIngredientAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()), ingredientDetail);
+        ingredientAdapter.setOnClickListener(onClickListener);
+        holder.kindOfIngredientContainer.setAdapter(ingredientAdapter);
+    }
+    public interface OnClickListener {
+        void onClick(int position, RefrigeratorIngredient refrigeratorIngredient);
     }
 
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
     @Override
     public int getItemCount() {
         return kinds.size();

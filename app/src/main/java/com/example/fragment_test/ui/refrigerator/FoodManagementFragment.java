@@ -4,6 +4,13 @@ import static com.example.fragment_test.utils.setListBackground.setListBackgroun
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
@@ -18,20 +25,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,16 +51,11 @@ public class FoodManagementFragment extends Fragment {
     TabLayout tabLayout;
     LinearLayoutManager layoutManager;
     RecyclerView ingredientContainer;
-    private Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients;
     private Dialog ingredientDetail;
     private FoodManagementViewModel viewModel;
 
     public FoodManagementFragment() {
         // Required empty public constructor
-    }
-
-    public FoodManagementFragment(Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients) {
-        this.refrigeratorIngredients = refrigeratorIngredients;
     }
 
     /**
@@ -106,7 +99,11 @@ public class FoodManagementFragment extends Fragment {
                 layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 ingredientContainer.setLayoutManager(layoutManager);
-                ingredientContainer.setAdapter(new RefrigeratorAdapter(getContext(), refrigeratorMap, ingredientDetail));
+                RefrigeratorAdapter adapter = new RefrigeratorAdapter(getContext(), refrigeratorMap, ingredientDetail);
+                adapter.setOnClickListener((position, refrigeratorIngredient) -> {
+                    ingredientDetail.show();
+                });
+                ingredientContainer.setAdapter(adapter);
                 ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                     @Override
                     public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -189,10 +186,6 @@ public class FoodManagementFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ingredientContainer.setLayoutManager(layoutManager);
-    }
-
-    public void setRefrigeratorIngredients(Map<String, ArrayList<RefrigeratorIngredient>> refrigeratorIngredients) {
-        this.refrigeratorIngredients = refrigeratorIngredients;
     }
 
     //toolbar

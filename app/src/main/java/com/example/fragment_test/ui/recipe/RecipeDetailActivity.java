@@ -1,4 +1,4 @@
-package com.example.fragment_test;
+package com.example.fragment_test.ui.recipe;
 
 import android.os.Bundle;
 
@@ -9,10 +9,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.ActivityRecipeDetailBinding;
 import com.example.fragment_test.databinding.RecipeIntroductionBinding;
 import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.ui.recipe.RecipeViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
