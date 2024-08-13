@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Recipe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private Context context;
     private List<Recipe> recipes;
+    private OnClickListener listener;
 
     public RecipeAdapter(Context context, List<Recipe> recipes) {
         this.recipes = recipes;
@@ -30,6 +30,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         private TextView recipeImg, recipeName;
         private RecyclerView needs;
+
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImg = itemView.findViewById(R.id.recipeImg);
@@ -41,7 +42,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_card_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_card_item, parent, false);
         return new RecipeViewHolder(view);
     }
 
@@ -53,11 +54,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         holder.needs.setLayoutManager(layoutManager);
         holder.needs.setAdapter(new RecipeIngredientAdapter(recipe.ingredients));
+        holder.itemView.setOnClickListener(view -> listener.onClick(position, recipe));
     }
 
+    public interface OnClickListener {
+        void onClick(int position, Recipe recipe);
+    }
 
     @Override
     public int getItemCount() {
         return recipes.size();
+    }
+
+    public void setListener(OnClickListener listener) {
+        this.listener = listener;
     }
 }

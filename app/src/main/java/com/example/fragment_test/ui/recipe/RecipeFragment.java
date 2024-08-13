@@ -1,21 +1,7 @@
 package com.example.fragment_test.ui.recipe;
 
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +9,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fragment_test.R;
+import com.example.fragment_test.RecipeDetailActivity;
 import com.example.fragment_test.adapter.RecipeAdapter;
 import com.example.fragment_test.databinding.FragmentRecipeBinding;
 import com.example.fragment_test.entity.Recipe;
@@ -96,7 +96,16 @@ public class RecipeFragment extends Fragment {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
                         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recipeRecyclerView.setLayoutManager(linearLayoutManager);
-                        recipeRecyclerView.setAdapter(new RecipeAdapter(getContext(), recipes));
+                        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+                        recipeAdapter.setListener(new RecipeAdapter.OnClickListener() {
+                            @Override
+                            public void onClick(int position, Recipe recipe) {
+                                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+                                intent.putExtra("recipe", recipe);
+                                startActivity(intent);
+                            }
+                        });
+                        recipeRecyclerView.setAdapter(recipeAdapter);
                     }
                 });
         return binding.getRoot();

@@ -1,5 +1,6 @@
 package com.example.fragment_test;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -7,16 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.fragment_test.databinding.ActivityRecipeDetailBinding;
+import com.example.fragment_test.databinding.RecipeIntroductionBinding;
+import com.example.fragment_test.entity.Recipe;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
+    private ActivityRecipeDetailBinding activityRecipeDetailBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_recipe_detail);
+        activityRecipeDetailBinding  = ActivityRecipeDetailBinding.inflate(getLayoutInflater());
+        setContentView(activityRecipeDetailBinding.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -24,11 +29,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
             return insets;
         });
 
-        //盲寫，未測試，好像應該會怪怪的
-        RecyclerView RecipeIngredients = findViewById(R.id.recipe_ingredients);
-        RecipeIngredients.setLayoutManager(new LinearLayoutManager(this));
-
-        RecyclerView RecipeSteps = findViewById(R.id.recipe_steps);
-        RecipeSteps.setLayoutManager(new LinearLayoutManager(this));
+        Intent intent = getIntent();
+        Recipe recipe = null;
+        if (intent != null) {
+            recipe = intent.getParcelableExtra("recipe");
+        }
+        RecipeIntroductionBinding recipeIntroduction = activityRecipeDetailBinding.recipeIntroduction;
+        recipeIntroduction.recipeName.setText(recipe.name);
     }
 }
