@@ -1,19 +1,23 @@
 package com.example.fragment_test.ui.recipe;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.repository.PreparedRecipeRepository;
 import com.example.fragment_test.repository.RecipeRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -21,10 +25,12 @@ public class RecipeViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
     private final RecipeRepository recipeRepository;
+    private final PreparedRecipeRepository preparedRecipeRepository;
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
-        this.recipeRepository = RecipeRepository.getInstance(getApplication());
+        this.recipeRepository = RecipeRepository.getInstance(application);
+        this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(application);
     }
 
     public void loadRecommendRecipes() {
@@ -51,5 +57,22 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Recipe>> getRecipes(){
         return recipes;
+    }
+
+    public void addInterestingRecipe(Recipe recipe) {
+        Completable.fromAction(() -> preparedRecipeRepository.addInterestingRecipe(recipe))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(getApplication(), "添加成功", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 }
