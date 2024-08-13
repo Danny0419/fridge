@@ -1,6 +1,5 @@
 package com.example.fragment_test.ui.recipe;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.RecipeDetailActivity;
 import com.example.fragment_test.adapter.RecipeAdapter;
 import com.example.fragment_test.databinding.FragmentRecipeBinding;
 import com.example.fragment_test.entity.Recipe;
@@ -56,6 +54,7 @@ public class RecipeFragment extends Fragment {
         recipeRecyclerView = binding.recipeRecyclerView;
 
         FragmentActivity fragmentActivity = requireActivity();
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
         fragmentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
@@ -88,7 +87,6 @@ public class RecipeFragment extends Fragment {
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
-
         mViewModel.getRecipes()
                 .observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
                     @Override
@@ -100,9 +98,10 @@ public class RecipeFragment extends Fragment {
                         recipeAdapter.setListener(new RecipeAdapter.OnClickListener() {
                             @Override
                             public void onClick(int position, Recipe recipe) {
-                                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
-                                intent.putExtra("recipe", recipe);
-                                startActivity(intent);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("recipe", recipe);
+                                navController.navigate(R.id.navigation_recipe_detail, bundle);
+
                             }
                         });
                         recipeRecyclerView.setAdapter(recipeAdapter);

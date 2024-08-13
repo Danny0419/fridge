@@ -1,6 +1,5 @@
 package com.example.fragment_test;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -34,10 +33,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
             return insets;
         });
 
-        Intent intent = getIntent();
+        Bundle bundle = getIntent().getExtras();
         Recipe recipe;
-        if (intent != null) {
-            recipe = intent.getParcelableExtra("recipe");
+        if (bundle != null) {
+            recipe = bundle.getParcelable("recipe");
         } else {
             recipe = null;
         }

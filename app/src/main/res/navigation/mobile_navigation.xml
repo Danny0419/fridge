@@ -10,6 +10,12 @@
         android:name="com.example.fragment_test.ui.scanner.ScanReceiptActivity"
         android:label="Camera"
         tools:layout="@layout/activity_scan_receipt"/>
+
+    <activity
+        android:id="@+id/navigation_recipe_detail"
+        android:name="com.example.fragment_test.RecipeDetailActivity"
+        android:label="@string/recipe_page_title"
+        tools:layout="@layout/activity_recipe_detail"/>/>
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.fragment_test.ui.home.HomeFragment"
@@ -30,7 +36,11 @@
         android:id="@+id/navigation_recipe"
         android:name="com.example.fragment_test.ui.recipe.RecipeFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_recipe" />
+        tools:layout="@layout/fragment_recipe" >
+        <action
+            android:id="@+id/action_navigation_recipe_to_navigation_shopping_list"
+            app:destination="@id/navigation_shopping_list" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_schedule"
