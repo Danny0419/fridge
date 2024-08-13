@@ -52,9 +52,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeImg.setText(recipe.img);
         holder.recipeName.setText(recipe.name);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.itemView.setOnClickListener(view -> listener.onClick(position, recipe));
         holder.needs.setLayoutManager(layoutManager);
         holder.needs.setAdapter(new RecipeIngredientAdapter(recipe.ingredients));
-        holder.itemView.setOnClickListener(view -> listener.onClick(position, recipe));
     }
 
     public interface OnClickListener {
