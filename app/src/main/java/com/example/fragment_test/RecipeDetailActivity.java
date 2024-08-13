@@ -36,5 +36,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
         RecipeIntroductionBinding recipeIntroduction = activityRecipeDetailBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(recipe.name);
+        recipeIntroduction.recipeImg.setText(recipe.img);
+        recipeIntroduction.recipeServing.setText(Integer.toString(recipe.serving));
     }
 }
