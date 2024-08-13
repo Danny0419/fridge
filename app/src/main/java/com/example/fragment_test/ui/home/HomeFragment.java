@@ -21,7 +21,6 @@ import androidx.navigation.Navigation;
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
 import java.util.List;
