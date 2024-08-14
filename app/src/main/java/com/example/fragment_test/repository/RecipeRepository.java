@@ -28,13 +28,13 @@ public class RecipeRepository {
 
     public Optional<List<Recipe>> recommendRecipes() {
         return Optional.of(List.of(
-                new Recipe(1, "蔬菜大餐", "照片", 2),
-                new Recipe(2, "菲力牛排", "照片", 2),
-                new Recipe(3, "義大利麵", "照片", 2),
-                new Recipe(4, "蛋包飯", "照片", 2),
-                new Recipe(5, "卡拉雞腿堡", "照片", 2),
-                new Recipe(6, "聖誕大餐", "照片", 2),
-                new Recipe(7, "來一客", "照片", 2)
+                new Recipe(1, "蔬菜大餐", "照片", 2, 0),
+                new Recipe(2, "菲力牛排", "照片", 2, 1),
+                new Recipe(3, "義大利麵", "照片", 2, 0),
+                new Recipe(4, "蛋包飯", "照片", 2, 0),
+                new Recipe(5, "卡拉雞腿堡", "照片", 2, 0),
+                new Recipe(6, "聖誕大餐", "照片", 2, 1),
+                new Recipe(7, "來一客", "照片", 2, 1)
         ));
     }
 

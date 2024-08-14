@@ -22,26 +22,31 @@ public class Recipe implements Parcelable {
     public String img;
     @ColumnInfo
     public int serving;
+    @ColumnInfo
+    public int collected;
 
     @Ignore
     public List<Step> steps;
     @Ignore
     public List<RecipeIngredient> ingredients;
 
-    public Recipe(int id, String name, String img, int serving) {
+    public Recipe(int id, String name, String img, int serving, int collected) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
+        this.collected = collected;
         steps = new ArrayList<>();
         ingredients = new ArrayList<>();
     }
 
-    public Recipe(int id, String name, String img, int serving, int collected, Integer sId, List<Step> steps, List<RecipeIngredient> ingredients) {
+    @Ignore
+    public Recipe(int id, String name, String img, int serving, int collected,List<Step> steps, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.serving = serving;
+        this.collected = collected;
         this.steps = steps;
         this.ingredients = ingredients;
     }
