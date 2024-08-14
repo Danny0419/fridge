@@ -38,19 +38,21 @@ public class RecipeRepository {
         ));
     }
 
+    public long storeRecipe(Recipe recipe) {
+        return recipeDAO.insertRecipe(recipe);
+    }
+
     public void collectRecipe(Recipe recipe) {
-        Recipe queryRecipeByName = recipeDAO.queryRecipeByName(recipe.name);
-        if (queryRecipeByName != null) {
-            recipe.id = queryRecipeByName.id;
-        }
-        recipeDAO.insertRecipe(recipe);
+        recipe.collected = 1;
+        recipeDAO.updateRecipeCollectStatus(recipe);
+    }
+
+    public void unCollectRecipe(Recipe recipe) {
+        recipe.collected = 0;
+        recipeDAO.updateRecipeCollectStatus(recipe);
     }
 
     public List<Recipe> showRecipeCollection() {
         return null;
-    }
-
-    public long storeRecipe(Recipe recipe) {
-        return recipeDAO.insertRecipe(recipe);
     }
 }

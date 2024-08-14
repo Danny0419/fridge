@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.fragment_test.entity.Recipe;
 
@@ -26,4 +27,6 @@ public interface RecipeDAO {
             """)
     Recipe queryRecipeById(Integer id);
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateRecipeCollectStatus(Recipe recipe);
 }

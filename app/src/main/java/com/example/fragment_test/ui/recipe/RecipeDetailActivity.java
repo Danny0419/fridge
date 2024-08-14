@@ -44,6 +44,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         recipeIntroduction.recipeName.setText(recipe.name);
         recipeIntroduction.recipeImg.setText(recipe.img);
         recipeIntroduction.recipeServing.setText(Integer.toString(recipe.serving));
+
+        recipeIntroduction.collectBnt.setOnClickListener(view -> {
+            recipeViewModel.collectAndUnCollectRecipe(recipe);
+        });
+
         activityRecipeDetailBinding.addBnt.setOnClickListener(view -> {
             recipeViewModel.addInterestingRecipe(recipe);
             finish();

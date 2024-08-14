@@ -27,6 +27,7 @@
             android:background="@drawable/text_under_line"/>
 
         <Button
+            android:id="@+id/collect_bnt"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="@drawable/bookmark"

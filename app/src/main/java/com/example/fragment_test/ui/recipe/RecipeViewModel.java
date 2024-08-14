@@ -55,7 +55,7 @@ public class RecipeViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<List<Recipe>> getRecipes(){
+    public MutableLiveData<List<Recipe>> getRecipes() {
         return recipes;
     }
 
@@ -74,5 +74,40 @@ public class RecipeViewModel extends AndroidViewModel {
 
                     }
                 });
+    }
+
+    public void collectAndUnCollectRecipe(Recipe recipe) {
+        if (recipe.collected == 0) {
+            Completable.fromAction(() -> recipeRepository.collectRecipe(recipe)).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            Toast.makeText(getApplication(), "已收藏", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
+
+        } else {
+            Completable.fromAction(() -> recipeRepository.unCollectRecipe(recipe)).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            Toast.makeText(getApplication(), "取消收藏", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
+        }
+
+
     }
 }
