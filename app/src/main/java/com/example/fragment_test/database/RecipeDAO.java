@@ -28,5 +28,5 @@ public interface RecipeDAO {
     Recipe queryRecipeById(Integer id);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateRecipeCollectStatus(Recipe recipe);
+    void updateRecipe(Recipe recipe);
 }
