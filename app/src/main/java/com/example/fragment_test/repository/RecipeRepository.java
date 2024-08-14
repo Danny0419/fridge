@@ -44,15 +44,15 @@ public class RecipeRepository {
 
     public void collectRecipe(Recipe recipe) {
         recipe.collected = 1;
-        recipeDAO.updateRecipe(recipe);
+        recipeDAO.insertRecipe(recipe);
     }
 
     public void unCollectRecipe(Recipe recipe) {
         recipe.collected = 0;
-        recipeDAO.updateRecipe(recipe);
+        recipeDAO.insertRecipe(recipe);
     }
 
     public List<Recipe> showRecipeCollection() {
-        return null;
+        return recipeDAO.queryAllCollectedRecipe();
     }
 }

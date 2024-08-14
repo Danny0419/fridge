@@ -8,6 +8,8 @@ import androidx.room.Update;
 
 import com.example.fragment_test.entity.Recipe;
 
+import java.util.List;
+
 @Dao
 public interface RecipeDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,4 +31,11 @@ public interface RecipeDAO {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateRecipe(Recipe recipe);
+
+    @Query("""
+            SELECT id, name, img, serving, collected
+            FROM recipe
+            WHERE collected = 1
+            """)
+    List<Recipe> queryAllCollectedRecipe();
 }

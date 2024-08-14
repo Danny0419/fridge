@@ -74,6 +74,7 @@ public class RecipeFragment extends Fragment {
                 }
                 //收藏
                 else if (itemId == R.id.collection) {
+                    mViewModel.showCollectionRecipe();
                     //如果已經點選過，變回為填滿
                     if (isCollectionSelected) {
                         menuItem.setIcon(R.drawable.bookmark);

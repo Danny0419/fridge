@@ -110,4 +110,24 @@ public class RecipeViewModel extends AndroidViewModel {
 
 
     }
+
+    public void showCollectionRecipe() {
+        Maybe.fromCallable(recipeRepository::showRecipeCollection)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<Recipe>>() {
+                    @Override
+                    public void onSuccess(List<Recipe> collectedRecipe) {
+                        recipes.setValue(collectedRecipe);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
 }

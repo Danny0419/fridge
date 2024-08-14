@@ -51,11 +51,13 @@ public class Recipe implements Parcelable {
         this.ingredients = ingredients;
     }
 
+
     protected Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
         img = in.readString();
         serving = in.readInt();
+        collected = in.readInt();
         steps = in.createTypedArrayList(Step.CREATOR);
     }
 
@@ -82,10 +84,14 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+
         parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeString(img);
         parcel.writeInt(serving);
+        parcel.writeInt(collected);
         parcel.writeTypedList(steps);
     }
+
+
 }
