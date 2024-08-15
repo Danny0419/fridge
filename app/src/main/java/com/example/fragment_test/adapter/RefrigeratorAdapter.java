@@ -30,7 +30,7 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
 
     public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> refrigeratorMap, Dialog ingredientDetail) {
         this.context = context;
-        this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds));
+        this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds_of_ingredient));
         this.refrigeratorMap = refrigeratorMap;
         this.ingredientDetail = ingredientDetail;
     }

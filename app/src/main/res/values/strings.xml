@@ -5,7 +5,7 @@
 
     <string name="main_page_title">冰箱</string>
     <string name="recipe_page_title"></string>
-    <string-array name="kinds">
+    <string-array name="kinds_of_ingredient">
         <item>肉類</item>
         <item>魚肉類</item>
         <item>豆蛋類</item>
@@ -75,4 +75,13 @@
         <item>花椰菜</item>
     </string-array>
 
+    <string-array name="day_of_week">
+        <item>MON</item>
+        <item>TUE</item>
+        <item>WED</item>
+        <item>THU</item>
+        <item>FRI</item>
+        <item>SAT</item>
+        <item>SUN</item>
+    </string-array>
 </resources>

@@ -2,21 +2,9 @@ package com.example.fragment_test.ui.schedule;
 
 import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,15 +13,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
-import com.example.fragment_test.entity.Day;
 import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +38,7 @@ import java.util.Map;
  */
 public class ScheduleFragment extends Fragment {
 
-    private Map<String, ArrayList<Recipe>> schedule = new HashMap<>();
+    private Map<Integer, List<Recipe>> schedule = new HashMap<>();
     private ListView scheduleContainer;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -85,15 +80,6 @@ public class ScheduleFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        ArrayList<Recipe> monday = new ArrayList<>();
-        ArrayList<Recipe> tuesday = new ArrayList<>();
-//        for (int i = 1; i <8; i++) {
-//            monday.add(new Recipe("蛋炒飯照片"+i,"蛋炒飯"+i) );
-//            tuesday.add(new Recipe("煎蛋照片"+i,"煎蛋"+i) );
-//        }
-
-        schedule.put(Day.MONDAY.getDay(), monday);
-        schedule.put(Day.TUESDAY.getDay(), tuesday);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -102,8 +88,8 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
-        scheduleContainer = (ListView) view.findViewById(R.id.schedulesContainer);
-        scheduleContainer.setAdapter(new ScheduleAdapter(inflater,schedule));
+        scheduleContainer = view.findViewById(R.id.schedulesContainer);
+        scheduleContainer.setAdapter(new ScheduleAdapter(getResources().getStringArray(R.array.day_of_week), schedule, inflater));
 
         //去除邊框(分隔線為透明色、高度為0)
         scheduleContainer.setDivider(null);
@@ -123,7 +109,6 @@ public class ScheduleFragment extends Fragment {
     }
 
     public void setSchedule(Map<String, ArrayList<Recipe>> schedule){
-        this.schedule = schedule;
     }
 
     //toolbar

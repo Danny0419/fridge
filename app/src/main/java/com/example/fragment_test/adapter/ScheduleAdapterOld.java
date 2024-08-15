@@ -15,61 +15,62 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.entity.Day;
 import com.example.fragment_test.entity.Recipe;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-public class ScheduleAdapter extends BaseAdapter {
-    private String[] dayOfWeek;
-    private Map<Integer, List<Recipe>> scheduleRecipes;
+public class ScheduleAdapterOld extends BaseAdapter {
     private LayoutInflater layoutInflater;
+    private Day[] days = Day.values();
+    private Map<String, ArrayList<Recipe>> recipes;
+
     class ViewHolder {
         TextView eachDayText;
         RecyclerView foodContainer;
+
     }
 
-    public ScheduleAdapter(String[] dayOfWeek, Map<Integer, List<Recipe>> scheduleRecipes, LayoutInflater layoutInflater) {
-        this.dayOfWeek = dayOfWeek;
-        this.scheduleRecipes = scheduleRecipes;
+    public ScheduleAdapterOld(LayoutInflater layoutInflater, Map<String, ArrayList<Recipe>> recipes) {
         this.layoutInflater = layoutInflater;
+        this.recipes = recipes;
     }
 
     @Override
     public int getCount() {
-        return dayOfWeek.length;
+        return days.length;
     }
 
     @Override
-    public Object getItem(int i) {
-        return dayOfWeek[i];
+    public Object getItem(int position) {
+        return days[position];
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
-        if (view == null) {
-            view = layoutInflater.inflate(R.layout.recipe_item, viewGroup, false);
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.recipe_item, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.eachDayText = view.findViewById(R.id.eachDayText);
-            viewHolder.foodContainer = view.findViewById(R.id.foodContainer);
+            viewHolder.eachDayText = convertView.findViewById(R.id.eachDayText);
+            viewHolder.foodContainer = convertView.findViewById(R.id.foodContainer);
 
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(viewGroup.getContext(), 5);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(parent.getContext(), 5);
             viewHolder.foodContainer.setLayoutManager(gridLayoutManager);
-            view.setTag(viewHolder);
+            convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) view.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.eachDayText.setText(dayOfWeek[position]);
-        List<Recipe> recipe = scheduleRecipes.get(position);
+        viewHolder.eachDayText.setText(days[position].getDay());
+        ArrayList<Recipe> recipe = recipes.get(days[position].getDay());
         if (recipe == null){
-            recipe = new ArrayList<>();
+            recipe = new ArrayList<Recipe>();
         }
 //        viewHolder.foodContainer.setAdapter(new ADayOfScheduleAdapter(recipe));
 
@@ -77,9 +78,9 @@ public class ScheduleAdapter extends BaseAdapter {
         選擇要吃甚麼的區塊下拉與收合
         的動畫*/
         //下拉
-        Button selectMealBtn = view.findViewById(R.id.select_meal_btn);
-        RelativeLayout readyToCook = view.findViewById(R.id.ready_to_cook);
-        TextView clickHint=view.findViewById(R.id.click_hint);
+        Button selectMealBtn = convertView.findViewById(R.id.select_meal_btn);
+        RelativeLayout readyToCook = convertView.findViewById(R.id.ready_to_cook);
+        TextView clickHint=convertView.findViewById(R.id.click_hint);
         selectMealBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +96,7 @@ public class ScheduleAdapter extends BaseAdapter {
         });
 
         //收合
-        View meal_today = view.findViewById(R.id.meal_today);
+        View meal_today = convertView.findViewById(R.id.meal_today);
         meal_today.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +115,6 @@ public class ScheduleAdapter extends BaseAdapter {
                 }
             }
         });
-        return view;
+        return convertView;
     }
 }
