@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeIngredient;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,11 @@ public class RecipeRepository {
     }
 
     public Optional<List<Recipe>> recommendRecipes() {
+        List<RecipeIngredient> recipeIngredients = List.of(
+                new RecipeIngredient("高麗菜", 30, "蔬菜照片", null)
+        );
         return Optional.of(List.of(
-                new Recipe(1, "蔬菜大餐", "照片", 2, 0),
+                new Recipe(1, "蔬菜大餐", "照片", 2, 0,null, recipeIngredients),
                 new Recipe(2, "菲力牛排", "照片", 2, 1),
                 new Recipe(3, "義大利麵", "照片", 2, 0),
                 new Recipe(4, "蛋包飯", "照片", 2, 0),

@@ -59,6 +59,7 @@ public class Recipe implements Parcelable {
         serving = in.readInt();
         collected = in.readInt();
         steps = in.createTypedArrayList(Step.CREATOR);
+        ingredients = in.createTypedArrayList(RecipeIngredient.CREATOR);
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -77,6 +78,7 @@ public class Recipe implements Parcelable {
         this.ingredients = ingredients;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -84,14 +86,12 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
-
         parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeString(img);
         parcel.writeInt(serving);
         parcel.writeInt(collected);
         parcel.writeTypedList(steps);
+        parcel.writeTypedList(ingredients);
     }
-
-
 }
