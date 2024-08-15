@@ -8,11 +8,18 @@
     tools:context=".ui.recipe.RecipeDetailActivity">
 
     <include
+        android:id="@+id/recipe_detail_toolbar"
+        layout="@layout/recipe_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
         android:id="@+id/recipe_introduction"
         layout="@layout/recipe_introduction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_detail_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

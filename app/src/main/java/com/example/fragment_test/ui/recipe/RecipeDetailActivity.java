@@ -1,6 +1,7 @@
 package com.example.fragment_test.ui.recipe;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         activityRecipeDetailBinding  = ActivityRecipeDetailBinding.inflate(getLayoutInflater());
         setContentView(activityRecipeDetailBinding.getRoot());
+
+        // toolbar setting
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.recipe_detail_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // 隐藏預設返回按鈕
+        }
+
+        // 點擊返回
+        ImageView customBackButton = findViewById(R.id.close_view_btn);
+        customBackButton.setOnClickListener(view -> onBackPressed());
 
         recipeViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RecipeViewModel.class);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
