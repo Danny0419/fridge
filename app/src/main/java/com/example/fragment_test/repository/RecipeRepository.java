@@ -29,7 +29,9 @@ public class RecipeRepository {
 
     public Optional<List<Recipe>> recommendRecipes() {
         List<RecipeIngredient> recipeIngredients = List.of(
-                new RecipeIngredient("高麗菜", 30, "蔬菜照片", null)
+                new RecipeIngredient("高麗菜", 30, "蔬菜照片", null),
+                new RecipeIngredient("花椰菜", 10, "蔬菜照片", null),
+                new RecipeIngredient("番茄", 5, "蔬菜照片", null)
         );
         return Optional.of(List.of(
                 new Recipe(1, "蔬菜大餐", "照片", 2, 0,null, recipeIngredients),
