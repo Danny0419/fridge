@@ -55,6 +55,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.itemView.setOnClickListener(view -> listener.onClick(position, recipe));
         holder.needs.setLayoutManager(layoutManager);
         holder.needs.setAdapter(new RecipeIngredientAdapter(recipe.ingredients));
+
+        //頁面跳轉
+//        holder.itemView.setOnClickListener(v -> {
+//            if (listener != null) {
+//                listener.onItemClick(recipe);
+//            }
+//        });
     }
 
     public interface OnClickListener {
