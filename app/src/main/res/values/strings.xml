@@ -54,7 +54,7 @@
     </string-array>
     <string name="title_home">愛呷料</string>
     <string name="title_dashboard">愛呷料</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications"></string>
     <string name="title_food_management">Refrigerator</string>
     <string name="title_recipe">Recipes</string>
     <string name="title_schedule">Schedule</string>
