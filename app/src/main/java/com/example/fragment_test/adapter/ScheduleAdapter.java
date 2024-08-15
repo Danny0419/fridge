@@ -55,7 +55,7 @@ public class ScheduleAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.recipe_item, viewGroup, false);
+            view = layoutInflater.inflate(R.layout.schedule_item, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.eachDayText = view.findViewById(R.id.eachDayText);
             viewHolder.foodContainer = view.findViewById(R.id.foodContainer);
