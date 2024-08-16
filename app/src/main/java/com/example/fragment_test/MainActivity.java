@@ -1,7 +1,9 @@
 package com.example.fragment_test;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.fragment_test.databinding.ActivityMainBinding;
 
 
@@ -15,8 +17,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbarMain);
-        getSupportActionBar();
     }
 
 }
