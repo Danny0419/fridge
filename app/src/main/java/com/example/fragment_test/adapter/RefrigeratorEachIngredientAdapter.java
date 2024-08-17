@@ -55,7 +55,7 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
         RefrigeratorIngredient ingredient = kindOfIngredient.get(position);
         holder.ingredientImg.setText(ingredient.img);
         holder.ingredientName.setText(ingredient.name);
-        holder.ingredientExpr.setText("保存期限");
+        holder.ingredientExpr.setText("保存期限" + ingredient.expiration);
         holder.ingredientQuan.setText(Integer.toString(ingredient.quantity));
         holder.itemView.setOnClickListener(view -> onClickListener.onClick(position, ingredient));
     }
