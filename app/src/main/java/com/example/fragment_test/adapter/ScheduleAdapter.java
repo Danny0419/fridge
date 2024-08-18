@@ -58,7 +58,7 @@ public class ScheduleAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.schedule_item, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.eachDayText = view.findViewById(R.id.eachDayText);
-            viewHolder.foodContainer = view.findViewById(R.id.foodContainer);
+            viewHolder.foodContainer = view.findViewById(R.id.food_item);
 
             GridLayoutManager gridLayoutManager = new GridLayoutManager(viewGroup.getContext(), 5);
             viewHolder.foodContainer.setLayoutManager(gridLayoutManager);
