@@ -3,7 +3,6 @@ package com.example.fragment_test.database;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.fragment_test.entity.Schedule;
 
@@ -15,14 +14,14 @@ public interface ScheduleDAO {
     long insertSchedule(Schedule schedule);
 
     @Query("""
-            SELECT id, day_of_week, date, status
+            SELECT date, day_of_week, status
             from schedule
-            where id = :id
+            where date = :date
             """)
-    Schedule getSchedule(int id);
+    Schedule getSchedule(int date);
 
     @Query("""
-    select id, day_of_week, date, status
+    select date, day_of_week, status
     from schedule
     where status = 0
     """)
@@ -30,7 +29,7 @@ public interface ScheduleDAO {
 
     @Query("""
             update schedule set status = 1
-            where id = :id
+            where date = :date
             """)
-    void updateSchedule(int id);
+    void updateSchedule(int date);
 }
