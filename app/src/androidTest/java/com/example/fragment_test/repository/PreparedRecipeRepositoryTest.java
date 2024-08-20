@@ -31,7 +31,7 @@ public class PreparedRecipeRepositoryTest extends TestCase {
 
     @Test
     public void addOneInterestingRecipe(){
-        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2);
+        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2, 0);
         preparedRecipeRepository.addInterestingRecipe(recipe);
         Recipe recipe1 = recipeDAO.queryRecipeById(1);
         assertEquals(1, recipe1.id);

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.ScheduleRecipeDAO;
-import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.ScheduleRecipe;
 
 public class ScheduleRecipeRepository {
     private static ScheduleRecipeRepository scheduleRecipeRepository;
@@ -22,8 +22,8 @@ public class ScheduleRecipeRepository {
         }
         return scheduleRecipeRepository;
     }
-    public void addInterestingRecipe(Recipe recipe) {
-        recipeRepository.storeRecipe(recipe);
 
+    public void schedule(ScheduleRecipe scheduleRecipe) {
+        scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
     }
 }

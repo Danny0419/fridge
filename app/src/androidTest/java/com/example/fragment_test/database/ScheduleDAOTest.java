@@ -42,7 +42,7 @@ public class ScheduleDAOTest extends TestCase {
 
     @Test
     public void insertAScheduleReturnRowIdOne() {
-        Schedule schedule = new Schedule(0, 5, "2024-7-25", 0);
+        Schedule schedule = new Schedule(0, 5, 0);
         long l = scheduleDAO.insertSchedule(schedule);
         assertEquals(1, l);
 
@@ -50,41 +50,41 @@ public class ScheduleDAOTest extends TestCase {
 
     @Test
     public void getFirstScheduleShouldIdShouldEqualOne() {
-        Schedule schedule = new Schedule(0, 5, "2024-7-25", 0);
+        Schedule schedule = new Schedule(0, 5,  0);
         scheduleDAO.insertSchedule(schedule);
         Schedule schedule1 = scheduleDAO.getSchedule(1);
-        assertEquals(1, schedule1.id);
+        assertEquals(1, schedule1.date);
 
     }
 
     @Test
     public void getAllNotFinishedSchedule_sizeShouldEqualTwo() {
         List<Schedule> schedules = List.of(
-                new Schedule(0, 5, "2024-7-25", 0),
-                new Schedule(0, 5, "2024-7-25", 1),
-                new Schedule(0, 5, "2024-7-25", 1),
-                new Schedule(0, 5, "2024-7-25", 0),
-                new Schedule(0, 5, "2024-7-25", 1)
+                new Schedule(0, 5,  0),
+                new Schedule(0, 5, 1),
+                new Schedule(0, 5, 1),
+                new Schedule(0, 5, 0),
+                new Schedule(0, 5,  1)
         );
 
         schedules.forEach((schedule) -> scheduleDAO.insertSchedule(schedule));
-        List<Schedule> querySchedules = scheduleDAO.getSchedules();
+        List<Schedule> querySchedules = scheduleDAO.getSchedulesStatusIsZero();
         assertEquals(2, querySchedules.size());
     }
 
     @Test
     public void updateScheduleStatusToOne(){
         List<Schedule> schedules = List.of(
-                new Schedule(0, 5, "2024-7-25", 0),
-                new Schedule(0, 5, "2024-7-25", 1),
-                new Schedule(0, 5, "2024-7-25", 1),
-                new Schedule(0, 5, "2024-7-25", 0),
-                new Schedule(0, 5, "2024-7-25", 1)
+                new Schedule(0, 5, 0),
+                new Schedule(0, 5,  1),
+                new Schedule(0, 5,  1),
+                new Schedule(0, 5,  0),
+                new Schedule(0, 5,  1)
         );
         schedules.forEach((schedule) -> scheduleDAO.insertSchedule(schedule));
         scheduleDAO.updateSchedule(1);
 
-        List<Schedule> schedules1 = scheduleDAO.getSchedules();
+        List<Schedule> schedules1 = scheduleDAO.getSchedulesStatusIsZero();
         assertEquals(1, schedules1.size());
     }
 }

@@ -92,7 +92,7 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
         List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
         assertEquals(4, shoppingList.size());
         assertEquals("牛肉卷", shoppingList.get(0).name);
-        assertEquals(1, (shoppingList.get(0).quantity.intValue()));
+        assertEquals(1, (shoppingList.get(0).quantity));
     }
 
     @Test
@@ -125,6 +125,6 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
         List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
         assertEquals(3, shoppingList.size());
         assertEquals("高麗菜", shoppingList.get(0).name);
-        assertEquals(4, (shoppingList.get(0).quantity.intValue()));
+        assertEquals(4, (shoppingList.get(0).quantity));
     }
 }

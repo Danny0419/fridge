@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface ScheduleDAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insertSchedule(Schedule schedule);
 
     @Query("""
@@ -26,7 +26,7 @@ public interface ScheduleDAO {
     from schedule
     where status = 0
     """)
-    List<Schedule> getSchedules();
+    List<Schedule> getSchedulesStatusIsZero();
 
     @Query("""
             update schedule set status = 1

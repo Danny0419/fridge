@@ -28,8 +28,8 @@ public class PreparedRecipeDAOTest extends TestCase {
 
     @Test
     public void queryAllPreparedRecipesReturnListShouldEqualFour(){
-        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2);
-        Recipe recipe1 = new Recipe(2, "炒麵", "炒麵照片", 2);
+        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2, 0);
+        Recipe recipe1 = new Recipe(2, "炒麵", "炒麵照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
         recipeDAO.insertRecipe(recipe1);
 
@@ -51,7 +51,7 @@ public class PreparedRecipeDAOTest extends TestCase {
 
     @Test
     public void insertOnePreparedRecipeRecipeIdIsOne(){
-        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2);
+        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
         PreparedRecipe preparedRecipe = new PreparedRecipe(0, 1);
         long l = preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);

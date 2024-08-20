@@ -49,14 +49,14 @@ public class StepDAOTest extends TestCase {
     @Test
     public void insertFourStepsWithRecipeIdOneQueryListSizeShouldEqualFour(){
         List<Schedule> schedules = List.of(
-                new Schedule(0, 5, "2024-7-25", 0)
+                new Schedule(0, 5, 0)
         );
         scheduleDAO.insertSchedule(schedules.get(0));
 
         List<Recipe> recipes = List.of(
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 1),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 2),
-                new Recipe(0, "荷包蛋", "荷包蛋照片", 3)
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 1, 0),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0),
+                new Recipe(0, "荷包蛋", "荷包蛋照片", 3, 0)
         );
         recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
 

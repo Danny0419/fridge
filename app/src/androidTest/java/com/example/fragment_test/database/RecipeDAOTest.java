@@ -13,8 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 @RunWith(AndroidJUnit4.class)
 public class RecipeDAOTest extends TestCase {
 
@@ -24,7 +22,7 @@ public class RecipeDAOTest extends TestCase {
 
     @Test
     public void queryNameIs荷包蛋Recipe(){
-        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片", 2);
+        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
 
         Recipe recipe1 = recipeDAO.queryRecipeByName("荷包蛋");
@@ -34,7 +32,7 @@ public class RecipeDAOTest extends TestCase {
 
     @Test
     public void insertOneRecipeRowIdShouldEqualOne() {
-        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片", 2);
+        Recipe recipe = new Recipe(0, "荷包蛋", "荷包蛋照片", 2, 0);
         long l = recipeDAO.insertRecipe(recipe);
         assertEquals(1, l);
     }

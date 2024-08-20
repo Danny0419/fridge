@@ -28,7 +28,7 @@ public class RecipeIngredientDAOTest extends TestCase {
 
     @Test
     public void insertOneRecipeIngredientRowIdShouldEqualOne() {
-        Recipe recipe = new Recipe(0, "胡蘿蔔大餐", "胡蘿蔔大餐", 7);
+        Recipe recipe = new Recipe(0, "胡蘿蔔大餐", "胡蘿蔔大餐", 7, 0);
         long l1 = recipeDAO.insertRecipe(recipe);
         assertEquals(1, l1);
         RecipeIngredient recipeIngredient = new RecipeIngredient(0, "胡蘿蔔", 3, "胡蘿蔔照片", 1);
@@ -38,7 +38,7 @@ public class RecipeIngredientDAOTest extends TestCase {
 
     @Test
     public void queryRidIsOneRecipeIngredientsReturnedListSizeShouldEqualFour() {
-        Recipe recipe = new Recipe(0, "胡蘿蔔大餐", "胡蘿蔔大餐", 7);
+        Recipe recipe = new Recipe(0, "胡蘿蔔大餐", "胡蘿蔔大餐", 7, 0);
         long l1 = recipeDAO.insertRecipe(recipe);
         assertEquals(1, l1);
 

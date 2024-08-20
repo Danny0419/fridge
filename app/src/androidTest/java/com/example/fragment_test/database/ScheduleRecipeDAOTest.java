@@ -30,12 +30,12 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
     @Test
     public void updateScheduleRecipeStatus(){
-        Recipe recipe = new Recipe(0, "炒蛋", "炒蛋照片", 2);
-        Recipe recipe1 = new Recipe(0, "炒麵", "炒麵照片", 2);
+        Recipe recipe = new Recipe(0, "炒蛋", "炒蛋照片", 2, 0);
+        Recipe recipe1 = new Recipe(0, "炒麵", "炒麵照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
         recipeDAO.insertRecipe(recipe1);
 
-        Schedule schedule = new Schedule(0, 0, "2024-08-10", 0);
+        Schedule schedule = new Schedule(0, 0, 0);
         scheduleDAO.insertSchedule(schedule);
         ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 0);
         ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 0);
@@ -53,12 +53,12 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
     @Test
     public void queryScheduleRecipesIsNotDoneAndScheduleIdIsOneReturnListSizeShouldEqualOne(){
-        Recipe recipe = new Recipe(0, "炒蛋", "炒蛋照片", 2);
-        Recipe recipe1 = new Recipe(0, "炒麵", "炒麵照片", 2);
+        Recipe recipe = new Recipe(0, "炒蛋", "炒蛋照片", 2, 0);
+        Recipe recipe1 = new Recipe(0, "炒麵", "炒麵照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
         recipeDAO.insertRecipe(recipe1);
 
-        Schedule schedule = new Schedule(0, 0, "2024-08-10", 0);
+        Schedule schedule = new Schedule(0, 0, 0);
         scheduleDAO.insertSchedule(schedule);
         ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 1);
         ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 0);
@@ -73,12 +73,12 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
     @Test
     public void queryScheduleRecipesScheduleIdIsOne(){
-        Recipe recipe = new Recipe(0, "炒蛋", "炒蛋照片", 2);
-        Recipe recipe1 = new Recipe(0, "炒麵", "炒麵照片", 2);
+        Recipe recipe = new Recipe(0, "炒蛋", "炒蛋照片", 2, 0);
+        Recipe recipe1 = new Recipe(0, "炒麵", "炒麵照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
         recipeDAO.insertRecipe(recipe1);
 
-        Schedule schedule = new Schedule(0, 0, "2024-08-10", 0);
+        Schedule schedule = new Schedule(0, 0, 0);
         scheduleDAO.insertSchedule(schedule);
         ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 0);
         ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 0);
@@ -94,7 +94,7 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
     @Test
     public void insertOneScheduleRecipeRecipeIdEqualsOne(){
-        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2);
+        Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
         ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, null, 0);
         long l = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);

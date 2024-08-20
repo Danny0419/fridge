@@ -71,6 +71,6 @@ public class ShoppingDAOTest extends TestCase {
         shoppingDAO.updateItemQuantityByName("牛排",3);
         List<ShoppingIngredient> allShoppingIngredients = shoppingDAO.getAllShoppingIngredients();
         assertEquals("牛排", allShoppingIngredients.get(0).name);
-        assertEquals(3, allShoppingIngredients.get(0).quantity.intValue());
+        assertEquals(3, allShoppingIngredients.get(0).quantity);
     }
 }

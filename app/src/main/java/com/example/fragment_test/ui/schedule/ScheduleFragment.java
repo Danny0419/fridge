@@ -26,6 +26,7 @@ import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.entity.Recipe;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.Map;
  */
 public class ScheduleFragment extends Fragment {
 
+    private final LocalDate[] aWeek = new LocalDate[7];
     private Map<Integer, List<Recipe>> schedule = new HashMap<>();
     private ListView scheduleContainer;
 
@@ -80,6 +82,12 @@ public class ScheduleFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        LocalDate today = LocalDate.now();
+        aWeek[today.getDayOfWeek().getValue()-1] = today;
+        for (int i = 1; i < 7; i++) {
+            LocalDate date = today.plusDays(i);
+            aWeek[date.getDayOfWeek().getValue()-1] = date;
+        }
     }
 
     @SuppressLint("ResourceAsColor")
@@ -89,7 +97,7 @@ public class ScheduleFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         scheduleContainer = view.findViewById(R.id.schedulesContainer);
-        scheduleContainer.setAdapter(new ScheduleAdapter(getResources().getStringArray(R.array.day_of_week), schedule, inflater));
+        scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule, inflater));
 
         //去除邊框(分隔線為透明色、高度為0)
         scheduleContainer.setDivider(null);
