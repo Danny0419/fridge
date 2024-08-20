@@ -6,13 +6,10 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity(tableName = "schedule_recipe", foreignKeys =
         {
                 @ForeignKey(entity = Schedule.class,
-                        parentColumns = "id",
+                        parentColumns = "date",
                         childColumns = "s_id",
                         onUpdate = ForeignKey.CASCADE,
                         onDelete = ForeignKey.CASCADE
