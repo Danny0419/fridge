@@ -17,12 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Recipe;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ScheduleAdapter extends BaseAdapter {
-    private String[] dayOfWeek;
+    private LocalDate[] dates;
     private Map<Integer, List<Recipe>> scheduleRecipes;
     private LayoutInflater layoutInflater;
     class ViewHolder {
@@ -30,20 +31,20 @@ public class ScheduleAdapter extends BaseAdapter {
         RecyclerView foodContainer;
     }
 
-    public ScheduleAdapter(String[] dayOfWeek, Map<Integer, List<Recipe>> scheduleRecipes, LayoutInflater layoutInflater) {
-        this.dayOfWeek = dayOfWeek;
+    public ScheduleAdapter(LocalDate[] dates, Map<Integer, List<Recipe>> scheduleRecipes, LayoutInflater layoutInflater) {
+        this.dates = dates;
         this.scheduleRecipes = scheduleRecipes;
         this.layoutInflater = layoutInflater;
     }
 
     @Override
     public int getCount() {
-        return dayOfWeek.length;
+        return dates.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return dayOfWeek[i];
+        return dates[i];
     }
 
     @Override
@@ -66,7 +67,7 @@ public class ScheduleAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.eachDayText.setText(dayOfWeek[position]);
+        viewHolder.eachDayText.setText(dates[position].getDayOfWeek().toString());
         List<Recipe> recipe = scheduleRecipes.get(position);
         if (recipe == null){
             recipe = new ArrayList<>();
