@@ -33,8 +33,8 @@ public class ScheduleViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableMaybeObserver<Map<Integer, List<ScheduleRecipe>>>() {
                     @Override
-                    public void onSuccess(Map<Integer, List<ScheduleRecipe>> ingredients) {
-                        scheduleRecipes.setValue(ingredients);
+                    public void onSuccess(Map<Integer, List<ScheduleRecipe>> schedules) {
+                        scheduleRecipes.setValue(schedules);
                     }
 
                     @Override

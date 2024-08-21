@@ -19,6 +19,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -38,7 +39,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ScheduleFragment extends Fragment {
-
+    private ScheduleViewModel viewModel;
     private final LocalDate[] aWeek = new LocalDate[7];
     private Map<Integer, List<Recipe>> schedule = new HashMap<>();
     private ListView scheduleContainer;
@@ -81,6 +82,9 @@ public class ScheduleFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ScheduleViewModel.class);
+        viewModel.loadSchedules();
 
         LocalDate today = LocalDate.now();
         aWeek[today.getDayOfWeek().getValue()-1] = today;
