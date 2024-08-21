@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @ExperimentalRoomApi
 @RunWith(AndroidJUnit4.class)
@@ -32,6 +33,34 @@ public class ScheduleRepositoryTest extends TestCase {
     public RecipeDAO recipeDAO;
     public ScheduleDAO scheduleDAO;
     public ScheduleRecipeDAO scheduleRecipeDAO;
+
+    @Test
+    public void getAWeekSchedules() {
+        Recipe recipe = new Recipe(0, "牛肉炒飯", "照片", 1, 0);
+        Recipe recipe1 = new Recipe(0, "豬肉炒飯", "照片", 1, 0);
+        recipeDAO.insertRecipe(recipe);
+        recipeDAO.insertRecipe(recipe1);
+        PreparedRecipe preparedRecipe = new PreparedRecipe(0, 1);
+        PreparedRecipe preparedRecipe1 = new PreparedRecipe(0, 2);
+        scheduleRepository.schedule(LocalDate.now(),preparedRecipe);
+        scheduleRepository.schedule(LocalDate.now().plusDays(1),preparedRecipe1);
+
+        Schedule schedule = scheduleDAO.getSchedule(20240821);
+        assertEquals(20240821, schedule.date);
+
+        Schedule schedule1 = scheduleDAO.getSchedule(20240822);
+        assertEquals(20240822, schedule1.date);
+
+        Map<Integer, List<ScheduleRecipe>> aWeekSchedules = scheduleRepository.getAWeekSchedules();
+        assertEquals(2, aWeekSchedules.size());
+
+        List<ScheduleRecipe> scheduleRecipes = aWeekSchedules.get(20240821);
+        assertEquals(1, scheduleRecipes.size());
+
+        List<ScheduleRecipe> scheduleRecipes1 = aWeekSchedules.get(20240822);
+        assertEquals(1, scheduleRecipes1.size());
+
+    }
 
     @Test
     public void cooking() {

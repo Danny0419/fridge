@@ -45,7 +45,7 @@ public class ScheduleRecipe {
         this.recipe = recipe;
     }
 
-    public int getRId() {
-        return this.rid;
+    public int getsId() {
+        return sId;
     }
 }

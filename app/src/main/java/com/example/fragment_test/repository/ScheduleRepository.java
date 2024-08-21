@@ -54,6 +54,6 @@ public class ScheduleRepository {
         List<ScheduleRecipe> allNotFinishedSchedule = scheduleRecipeRepository.getAllNotFinishedSchedule();
 
         return allNotFinishedSchedule.stream()
-                .collect(Collectors.groupingBy(ScheduleRecipe::getRId, TreeMap::new, Collectors.toList()));
+                .collect(Collectors.groupingBy(ScheduleRecipe::getsId, TreeMap::new, Collectors.toList()));
     }
 }
