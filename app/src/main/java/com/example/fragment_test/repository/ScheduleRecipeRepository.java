@@ -36,4 +36,8 @@ public class ScheduleRecipeRepository {
         List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesBySId(sId);
         return scheduleRecipes.isEmpty();
     }
+
+    public List<ScheduleRecipe> getAllNotFinishedSchedule() {
+        return scheduleRecipeDAO.queryAllIsNotDoneScheduleRecipes();
+    }
 }

@@ -29,6 +29,13 @@ public interface ScheduleRecipeDAO {
     List<ScheduleRecipe> queryIsNotDoneScheduleRecipesBySId(Integer sId);
 
     @Query("""
+            SELECT id, r_id, s_id, status
+            FROM schedule_recipe
+            WHERE status = 0
+            """)
+    List<ScheduleRecipe> queryAllIsNotDoneScheduleRecipes();
+
+    @Query("""
             UPDATE schedule_recipe SET status = 1
             WHERE id = :id
             """)

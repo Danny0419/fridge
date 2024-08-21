@@ -11,6 +11,8 @@ import com.example.fragment_test.entity.ScheduleRecipe;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ScheduleRepository {
     private static ScheduleRepository scheduleRepository;
@@ -45,5 +47,11 @@ public class ScheduleRepository {
         if (isTodayDone) {
             scheduleDAO.updateSchedule(sId);
         }
+    }
+
+    public Map<Integer, List<ScheduleRecipe>> getAWeekSchedules() {
+        List<ScheduleRecipe> allNotFinishedSchedule = scheduleRecipeRepository.getAllNotFinishedSchedule();
+        return allNotFinishedSchedule.stream()
+                .collect(Collectors.groupingBy(ScheduleRecipe::getRId));
     }
 }
