@@ -11,9 +11,6 @@ import java.util.List;
 
 @Dao
 public interface ScheduleDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insertSchedule(Schedule schedule);
-
     @Query("""
             SELECT date, day_of_week, status
             from schedule
@@ -22,11 +19,21 @@ public interface ScheduleDAO {
     Schedule getSchedule(int date);
 
     @Query("""
+            SELECT date, day_of_week, status
+            from schedule
+            where date = :date AND status = 0
+            """)
+    Schedule getScheduleStatusIsZero(int date);
+
+    @Query("""
     select date, day_of_week, status
     from schedule
     where status = 0
     """)
     List<Schedule> getSchedulesStatusIsZero();
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insertSchedule(Schedule schedule);
 
     @Query("""
             update schedule set status = 1

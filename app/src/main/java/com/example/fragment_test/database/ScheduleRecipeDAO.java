@@ -2,8 +2,8 @@ package com.example.fragment_test.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.fragment_test.entity.ScheduleRecipe;
 
@@ -33,4 +33,7 @@ public interface ScheduleRecipeDAO {
             WHERE id = :id
             """)
     void updateScheduleRecipeStatusById(Integer id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void updateScheduleRecipe(ScheduleRecipe scheduleRecipe);
 }

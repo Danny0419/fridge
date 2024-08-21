@@ -10,6 +10,7 @@ import com.example.fragment_test.entity.ScheduleRecipe;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ScheduleRepository {
     private static ScheduleRepository scheduleRepository;
@@ -35,5 +36,14 @@ public class ScheduleRepository {
         scheduleDAO.insertSchedule(new Schedule(scheduleId, day.getDayOfWeek().getValue(), 0));
         ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, preparedRecipe.rId, scheduleId, 0);
         scheduleRecipeRepository.schedule(scheduleRecipe);
+    }
+
+    public void cooking(List<ScheduleRecipe> scheduleRecipes) {
+        scheduleRecipeRepository.finishCooking(scheduleRecipes);
+        Integer sId = scheduleRecipes.get(0).sId;
+        boolean isTodayDone = scheduleRecipeRepository.checkTodayIsDone(sId);
+        if (isTodayDone) {
+            scheduleDAO.updateSchedule(sId);
+        }
     }
 }
