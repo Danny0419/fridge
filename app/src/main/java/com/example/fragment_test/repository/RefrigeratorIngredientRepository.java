@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.entity.Ingredient;
+import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.ShoppingIngredient;
 
@@ -93,5 +94,11 @@ public class RefrigeratorIngredientRepository {
                 .collect(Collectors.groupingBy(RefrigeratorIngredient::getSort));
 
         return refrigeratorMap;
+    }
+
+    public void consumeIngredients(List<RecipeIngredient> recipesUsingIngredients) {
+        recipesUsingIngredients.forEach(recipeIngredient -> {
+            refrigeratorIngredientDAO.insertIngredient(new RefrigeratorIngredient(0, recipeIngredient.name, -recipeIngredient.quantity, 0));
+        });
     }
 }

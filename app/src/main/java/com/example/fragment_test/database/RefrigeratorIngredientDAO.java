@@ -13,7 +13,7 @@ import java.util.List;
 public interface RefrigeratorIngredientDAO {
     @Query("""
             SELECT id, name, img, sort, quantity, saving_day, expiration, expired  FROM refrigerator
-            where expired = 0;
+            WHERE expired = 0;
             """)
     List<RefrigeratorIngredient> getAllRefrigeratorIngredients();
 

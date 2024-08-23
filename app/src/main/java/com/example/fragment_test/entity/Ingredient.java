@@ -29,7 +29,6 @@ public class Ingredient implements Parcelable {
         this.quantity = quantity;
     }
 
-
     protected Ingredient(Parcel in) {
         id = in.readInt();
         name = in.readString();

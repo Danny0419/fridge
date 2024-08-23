@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.ScheduleDAO;
 import com.example.fragment_test.entity.PreparedRecipe;
+import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
@@ -18,11 +19,15 @@ import java.util.stream.Collectors;
 public class ScheduleRepository {
     private static ScheduleRepository scheduleRepository;
     private final ScheduleRecipeRepository scheduleRecipeRepository;
+    private final RefrigeratorIngredientRepository refrigeratorIngredientRepository;
+    private final RecipeIngredientRepository recipeIngredientRepository;
     private final ScheduleDAO scheduleDAO;
 
     private ScheduleRepository(Context context) {
         this.scheduleDAO = FridgeDatabase.getInstance(context).scheduleDAO();
         this.scheduleRecipeRepository = ScheduleRecipeRepository.getInstance(context);
+        this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(context);
+        this.recipeIngredientRepository =RecipeIngredientRepository.getInstance(context);
     }
 
     public static ScheduleRepository getInstance(Context context) {
@@ -48,6 +53,10 @@ public class ScheduleRepository {
         if (isTodayDone) {
             scheduleDAO.updateSchedule(sId);
         }
+
+        List<RecipeIngredient> recipesUsingIngredient = recipeIngredientRepository.getRecipesUsingIngredient(scheduleRecipes);
+
+        refrigeratorIngredientRepository.consumeIngredients(recipesUsingIngredient);
     }
 
     public Map<Integer, List<ScheduleRecipe>> getAWeekSchedules() {
