@@ -17,20 +17,21 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer expiration;
     public Integer savingDay;
 
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer expiration) {
-        super(id, name, quantity);
+    public RefrigeratorIngredient(String img, String sort, Integer purchaseDate, Integer expiration) {
         this.img = img;
         this.sort = sort;
+        this.purchaseDate = purchaseDate;
         this.expiration = expiration;
     }
 
     @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer savingDay, Integer expiration) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, Integer savingDay) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;
-        this.savingDay = savingDay;
+        this.purchaseDate = purchaseDate;
         this.expiration = expiration;
+        this.savingDay = savingDay;
     }
 
     @NonNull
