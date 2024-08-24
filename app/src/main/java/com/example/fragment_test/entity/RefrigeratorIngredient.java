@@ -17,7 +17,8 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer expiration;
     public Integer savingDay;
 
-    public RefrigeratorIngredient(String img, String sort, Integer purchaseDate, Integer expiration) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
+        super(id, name, quantity);
         this.img = img;
         this.sort = sort;
         this.purchaseDate = purchaseDate;
