@@ -31,7 +31,7 @@ public class FoodManagementViewModel extends AndroidViewModel {
 
     public void loadRefrigeratorIngredients() {
 
-        Maybe.fromCallable(repository::getAllIngredients)
+        Maybe.fromCallable(repository::getRefrigeratorIngredients)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredient>>>() {

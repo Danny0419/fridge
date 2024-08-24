@@ -23,6 +23,8 @@ import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -63,17 +65,14 @@ public class HomeFragment extends Fragment {
                     navController.navigate(R.id.action_navigation_home_to_navigation_camera);
                 } else if (itemId == R.id.test) {
                     FoodManagementViewModel foodManagementViewModel = new FoodManagementViewModel(getActivity().getApplication());
+                    LocalDate now = LocalDate.now();
+                    String date = DateTimeFormatter.BASIC_ISO_DATE.format(now);
+                    LocalDate threeDaysLater = now.plusDays(3);
+                    String threeDaysLaterStr = DateTimeFormatter.BASIC_ISO_DATE.format(threeDaysLater);
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient("牛排", "肉類", 3,
-                                    "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛排", "肉類", 3,
-                                    "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛小排", "肉類", 3,
-                                    "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛小排", "肉類", 3,
-                                    "牛排照片", 5, "2024-07-31", 0),
-                            new RefrigeratorIngredient("牛排", "肉類", 3,
-                                    "牛排照片", 5, "2024-07-31", 0)
+                            new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "牛小排", 4, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }

@@ -12,6 +12,8 @@ import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.ShoppingIngredient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +86,12 @@ public class RefrigeratorIngredientRepository {
                         (o1, o2) -> o1.setQuantity(o1.quantity + o2.quantity)));
     }
 
+    public Map<String, List<RefrigeratorIngredient>> getRefrigeratorIngredients() {
+        String now = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
+        List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getQuantityGreaterZeroAndNotExpiredIngredients(Integer.parseInt(now));
+        return sortIngredients(list);
+    }
+
     public Map<String, List<RefrigeratorIngredient>> getAllIngredients() {
         List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
         return sortIngredients(list);
@@ -96,7 +104,7 @@ public class RefrigeratorIngredientRepository {
 
     public void consumeIngredients(List<RecipeIngredient> recipesUsingIngredients) {
         recipesUsingIngredients.forEach(recipeIngredient -> {
-            refrigeratorIngredientDAO.insertIngredient(new RefrigeratorIngredient(0, recipeIngredient.name, -recipeIngredient.quantity, 0));
+            refrigeratorIngredientDAO.insertIngredient(new RefrigeratorIngredient(0, recipeIngredient.name, -recipeIngredient.quantity, null, null, null, null));
         });
     }
 }
