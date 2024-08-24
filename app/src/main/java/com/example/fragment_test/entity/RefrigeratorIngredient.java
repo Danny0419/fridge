@@ -11,30 +11,21 @@ public class RefrigeratorIngredient extends Ingredient {
     public String img;
     @ColumnInfo
     public String sort;
-    @ColumnInfo(name = "saving_day")
-    public Integer savingDay;
+    @ColumnInfo(name = "purchase_date")
+    public Integer purchaseDate;
     @ColumnInfo
-    public String expiration;
-    @ColumnInfo(defaultValue = "0")
-    public Integer expired;
+    public Integer expiration;
+    public Integer savingDay;
 
-    @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, Integer expired) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer expiration) {
         super(id, name, quantity);
-        this.expired = expired;
-    }
-
-    @Ignore
-    public RefrigeratorIngredient(@NonNull String name,  String sort, Integer quantity,  String img,  Integer savingDay,  String expiration,  Integer expired) {
-        super(name, quantity);
         this.img = img;
         this.sort = sort;
-        this.savingDay = savingDay;
         this.expiration = expiration;
-        this.expired = expired;
     }
 
-    public RefrigeratorIngredient(Integer id, @NonNull String name, Integer quantity,  String img, @NonNull String sort,  Integer savingDay, String expiration) {
+    @Ignore
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer savingDay, Integer expiration) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;

@@ -12,10 +12,14 @@ import java.util.List;
 @Dao
 public interface RefrigeratorIngredientDAO {
     @Query("""
-            SELECT id, name, img, sort, quantity, saving_day, expiration, expired  FROM refrigerator
-            WHERE expired = 0;
+            SELECT id, name, img, sort, quantity, expiration  FROM refrigerator
             """)
     List<RefrigeratorIngredient> getAllRefrigeratorIngredients();
+
+    @Query("""
+            SELECT id, name, img, sort, quantity, expiration  FROM refrigerator
+            WHERE quantity > 0 AND expiration >= :today""")
+    List<RefrigeratorIngredient> getQuantityGreaterZeroAndNotExpiredIngredients(int today);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertIngredient(RefrigeratorIngredient ingredient);
