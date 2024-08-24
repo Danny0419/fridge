@@ -25,6 +25,7 @@ import androidx.navigation.Navigation;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
+import com.example.fragment_test.databinding.FragmentScheduleBinding;
 import com.example.fragment_test.entity.Recipe;
 
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ScheduleFragment extends Fragment {
+    private FragmentScheduleBinding scheduleBinding;
     private ScheduleViewModel viewModel;
     private final LocalDate[] aWeek = new LocalDate[7];
     private Map<Integer, List<Recipe>> schedule = new HashMap<>();
@@ -86,6 +88,10 @@ public class ScheduleFragment extends Fragment {
         viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ScheduleViewModel.class);
         viewModel.loadSchedules();
 
+        setAWeek();
+    }
+
+    private void setAWeek() {
         LocalDate today = LocalDate.now();
         aWeek[today.getDayOfWeek().getValue()-1] = today;
         for (int i = 1; i < 7; i++) {
@@ -99,8 +105,8 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
-        scheduleContainer = view.findViewById(R.id.schedulesContainer);
+        scheduleBinding= FragmentScheduleBinding.inflate(inflater, container, false);
+        scheduleContainer = scheduleBinding.schedulesContainer;
         scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule, inflater));
 
         //去除邊框(分隔線為透明色、高度為0)
@@ -117,7 +123,7 @@ public class ScheduleFragment extends Fragment {
 
         addToolbar();
 
-        return view;
+        return scheduleBinding.getRoot();
     }
 
     public void setSchedule(Map<String, ArrayList<Recipe>> schedule){
