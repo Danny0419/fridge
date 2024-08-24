@@ -61,7 +61,6 @@ public class ScheduleRepository {
 
     public Map<Integer, List<ScheduleRecipe>> getAWeekSchedules() {
         List<ScheduleRecipe> allNotFinishedSchedule = scheduleRecipeRepository.getAllNotFinishedSchedule();
-
         return allNotFinishedSchedule.stream()
                 .collect(Collectors.groupingBy(ScheduleRecipe::getsId, TreeMap::new, Collectors.toList()));
     }

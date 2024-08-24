@@ -90,10 +90,8 @@ public class RefrigeratorIngredientRepository {
     }
 
     private Map<String, List<RefrigeratorIngredient>> sortIngredients(List<RefrigeratorIngredient> list) {
-        Map<String, List<RefrigeratorIngredient>> refrigeratorMap = list.stream()
+        return list.stream()
                 .collect(Collectors.groupingBy(RefrigeratorIngredient::getSort));
-
-        return refrigeratorMap;
     }
 
     public void consumeIngredients(List<RecipeIngredient> recipesUsingIngredients) {
