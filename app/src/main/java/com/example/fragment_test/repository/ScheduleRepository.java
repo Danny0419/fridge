@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class ScheduleRepository {
@@ -63,6 +62,6 @@ public class ScheduleRepository {
     public Map<DayOfWeek, List<ScheduleRecipe>> getAWeekSchedules() {
         List<ScheduleRecipe> allNotFinishedSchedule = scheduleRecipeRepository.getAllNotFinishedSchedule();
         return allNotFinishedSchedule.stream()
-                .collect(Collectors.groupingBy(ScheduleRecipe::getDayOfWeek, TreeMap::new, Collectors.toList()));
+                .collect(Collectors.groupingBy(ScheduleRecipe::getDayOfWeek));
     }
 }

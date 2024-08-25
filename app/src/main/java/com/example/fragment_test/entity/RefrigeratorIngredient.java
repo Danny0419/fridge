@@ -15,6 +15,7 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer purchaseDate;
     @ColumnInfo
     public Integer expiration;
+    @Ignore
     public Integer savingDay;
 
     public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
