@@ -54,7 +54,7 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = timeFormatter.format(LocalDate.now());
         List<RefrigeratorIngredient> newIngredients = List.of(
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0)
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826)
         );
 
         refrigeratorIngredientRepository.buyIngredients(newIngredients);
@@ -79,8 +79,8 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = timeFormatter.format(LocalDate.now());
         List<RefrigeratorIngredient> newIngredients = List.of(
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛肉卷", "肉類", 1, "牛排照片", 5, time, 0)
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛肉捲", 3, "牛排照片", "肉類", 20240825, 20240826)
         );
 
         refrigeratorIngredientRepository.buyIngredients(newIngredients);
@@ -110,9 +110,9 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = timeFormatter.format(LocalDate.now());
         List<RefrigeratorIngredient> newIngredients = List.of(
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛肉卷", "肉類", 2, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("高麗菜", "蔬菜類", 1, "高麗菜照片", 5, time, 0)
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛肉捲", 2, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "高麗菜", 1, "牛排照片", "肉類", 20240825, 20240826)
         );
 
         refrigeratorIngredientRepository.buyIngredients(newIngredients);

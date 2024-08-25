@@ -37,8 +37,8 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
         Schedule schedule = new Schedule(0, 0, 0);
         scheduleDAO.insertSchedule(schedule);
-        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 0);
-        ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 0);
+        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 1,0);
+        ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 1,0);
         long l = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
         long l1 = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe1);
         assertEquals(1, l);
@@ -60,8 +60,8 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
         Schedule schedule = new Schedule(0, 0, 0);
         scheduleDAO.insertSchedule(schedule);
-        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 1);
-        ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 0);
+        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 1,1);
+        ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 1,0);
         long l = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
         long l1 = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe1);
         assertEquals(1, l);
@@ -80,8 +80,8 @@ public class ScheduleRecipeDAOTest extends TestCase {
 
         Schedule schedule = new Schedule(0, 0, 0);
         scheduleDAO.insertSchedule(schedule);
-        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 0);
-        ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 0);
+        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, 1, 1,0);
+        ScheduleRecipe scheduleRecipe1 = new ScheduleRecipe(0, 2, 1, 1,0);
         long l = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
         long l1 = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe1);
         assertEquals(1, l);
@@ -96,7 +96,7 @@ public class ScheduleRecipeDAOTest extends TestCase {
     public void insertOneScheduleRecipeRecipeIdEqualsOne(){
         Recipe recipe = new Recipe(1, "炒蛋", "炒蛋照片", 2, 0);
         recipeDAO.insertRecipe(recipe);
-        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, null, 0);
+        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, 1, null, 1,0);
         long l = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
 
         assertEquals(1, l);

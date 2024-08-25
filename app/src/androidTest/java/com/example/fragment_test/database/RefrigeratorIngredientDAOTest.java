@@ -47,8 +47,9 @@ public class RefrigeratorIngredientDAOTest extends TestCase {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = timeFormatter.format(LocalDate.now());
         List<RefrigeratorIngredient> ingredients = List.of(
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0)
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826)
         );
         long[] i = refrigeratorIngredientDAO.insertIngredients(ingredients);
 
@@ -61,11 +62,11 @@ public class RefrigeratorIngredientDAOTest extends TestCase {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = timeFormatter.format(LocalDate.now());
         List<RefrigeratorIngredient> ingredients = List.of(
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0)
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826)
         );
 
         long[] i = refrigeratorIngredientDAO.insertIngredients(ingredients);
@@ -82,18 +83,18 @@ public class RefrigeratorIngredientDAOTest extends TestCase {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = timeFormatter.format(LocalDate.now());
         List<RefrigeratorIngredient> ingredients = List.of(
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0),
-                new RefrigeratorIngredient("牛排", "肉類", 3, "牛排照片", 5, time, 0)
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 2024082),
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826) ,
+                new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", 20240825, 20240826)
+
         );
         refrigeratorIngredientDAO.insertIngredients(ingredients);
-        
+
         List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
 
-        assertEquals(6 ,list.size());
+        assertEquals(6, list.size());
     }
 
 }

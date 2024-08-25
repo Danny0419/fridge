@@ -15,21 +15,21 @@ public interface ScheduleRecipeDAO {
     long insertScheduleRecipe(ScheduleRecipe scheduleRecipe);
 
     @Query("""
-            SELECT id, r_id, s_id, status
+            SELECT id, r_id, s_id, day_of_week, status
             FROM schedule_recipe
             WHERE s_id = :sId
             """)
     List<ScheduleRecipe> queryScheduleRecipesBySId(Integer sId);
 
     @Query("""
-            SELECT id, r_id, s_id, status
+            SELECT id, r_id, s_id, day_of_week, status
             FROM schedule_recipe
             WHERE s_id = :sId AND status = 0
             """)
     List<ScheduleRecipe> queryIsNotDoneScheduleRecipesBySId(Integer sId);
 
     @Query("""
-            SELECT id, r_id, s_id, status
+            SELECT id, r_id, s_id, day_of_week, status
             FROM schedule_recipe
             WHERE status = 0
             """)

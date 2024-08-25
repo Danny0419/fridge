@@ -9,6 +9,7 @@ import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -38,11 +39,11 @@ public class ScheduleRepository {
     }
 
 
-    public void schedule(LocalDate day, PreparedRecipe preparedRecipe) {
-        String date = DateTimeFormatter.BASIC_ISO_DATE.format(day);
+    public void schedule(LocalDate cookingDate, PreparedRecipe preparedRecipe) {
+        String date = DateTimeFormatter.BASIC_ISO_DATE.format(cookingDate);
         int scheduleId = Integer.parseInt(date);
-        scheduleDAO.insertSchedule(new Schedule(scheduleId, day.getDayOfWeek().getValue(), 0));
-        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, preparedRecipe.rId, scheduleId, 0);
+        scheduleDAO.insertSchedule(new Schedule(scheduleId, cookingDate.getDayOfWeek().getValue(), 0));
+        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, preparedRecipe.rId, scheduleId, cookingDate.getDayOfWeek().getValue(),0);
         scheduleRecipeRepository.schedule(scheduleRecipe);
     }
 
@@ -59,9 +60,9 @@ public class ScheduleRepository {
         refrigeratorIngredientRepository.consumeIngredients(recipesUsingIngredient);
     }
 
-    public Map<Integer, List<ScheduleRecipe>> getAWeekSchedules() {
+    public Map<DayOfWeek, List<ScheduleRecipe>> getAWeekSchedules() {
         List<ScheduleRecipe> allNotFinishedSchedule = scheduleRecipeRepository.getAllNotFinishedSchedule();
         return allNotFinishedSchedule.stream()
-                .collect(Collectors.groupingBy(ScheduleRecipe::getsId, TreeMap::new, Collectors.toList()));
+                .collect(Collectors.groupingBy(ScheduleRecipe::getDayOfWeek, TreeMap::new, Collectors.toList()));
     }
 }

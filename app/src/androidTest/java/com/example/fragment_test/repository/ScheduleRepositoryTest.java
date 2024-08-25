@@ -24,7 +24,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +59,7 @@ public class ScheduleRepositoryTest extends TestCase {
         Schedule schedule1 = scheduleDAO.getSchedule(20240822);
         assertEquals(20240822, schedule1.date);
 
-        Map<Integer, List<ScheduleRecipe>> aWeekSchedules = scheduleRepository.getAWeekSchedules();
+        Map<DayOfWeek, List<ScheduleRecipe>> aWeekSchedules = scheduleRepository.getAWeekSchedules();
         assertEquals(2, aWeekSchedules.size());
 
         List<ScheduleRecipe> scheduleRecipes = aWeekSchedules.get(20240821);
@@ -80,8 +82,8 @@ public class ScheduleRepositoryTest extends TestCase {
         recipeIngredientDAO.insertRecipeIngredient(recipeIngredient);
         recipeIngredientDAO.insertRecipeIngredient(recipeIngredient1);
 
-        RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient("牛肉", "牛肉", 4, null, 0, null, 0);
-        RefrigeratorIngredient refrigeratorIngredient1 = new RefrigeratorIngredient("豬肉", "豬肉", 4, null, 0, null, 0);
+        RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(0, "牛肉",  4, null, "牛肉", null, 0);
+        RefrigeratorIngredient refrigeratorIngredient1 = new RefrigeratorIngredient(0, "豬肉",  4, null, "豬肉", null, 0);
         refrigeratorIngredientDAO.insertIngredient(refrigeratorIngredient);
         refrigeratorIngredientDAO.insertIngredient(refrigeratorIngredient1);
 
@@ -90,14 +92,15 @@ public class ScheduleRepositoryTest extends TestCase {
         scheduleRepository.schedule(LocalDate.now(),preparedRecipe);
         scheduleRepository.schedule(LocalDate.now(),preparedRecipe1);
 
-        Schedule schedule = scheduleDAO.getSchedule(20240823);
-        assertEquals(20240823, schedule.date);
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
+        Schedule schedule = scheduleDAO.getSchedule(Integer.parseInt(format));
+        assertEquals(Integer.parseInt(format), schedule.date);
 
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(20240823);
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(Integer.parseInt(format));
 
         scheduleRepository.cooking(scheduleRecipes);
 
-        Schedule scheduleStatusIsZero = scheduleDAO.getScheduleStatusIsZero(20240823);
+        Schedule scheduleStatusIsZero = scheduleDAO.getScheduleStatusIsZero(Integer.parseInt(format));
         assertNull(scheduleStatusIsZero);
 
         List<RefrigeratorIngredient> allRefrigeratorIngredients = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
@@ -106,22 +109,26 @@ public class ScheduleRepositoryTest extends TestCase {
 
     @Test
     public void Schedule() {
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
         Recipe recipe = new Recipe(0, "牛肉炒飯", "照片", 1, 0);
         Recipe recipe1 = new Recipe(0, "豬肉炒飯", "照片", 1, 0);
         recipeDAO.insertRecipe(recipe);
         recipeDAO.insertRecipe(recipe1);
+
         PreparedRecipe preparedRecipe = new PreparedRecipe(0, 1);
         PreparedRecipe preparedRecipe1 = new PreparedRecipe(0, 2);
         scheduleRepository.schedule(LocalDate.now(),preparedRecipe);
         scheduleRepository.schedule(LocalDate.now(),preparedRecipe1);
 
-        Schedule schedule = scheduleDAO.getSchedule(20240820);
-        assertEquals(20240820, schedule.date);
+        Schedule schedule = scheduleDAO.getSchedule(Integer.parseInt(format));
+        assertEquals(Integer.parseInt(format), schedule.date);
 
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(20240820);
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(Integer.parseInt(format));
         assertEquals(2, scheduleRecipes.size());
-        assertEquals(20240820, scheduleRecipes.get(0).sId.intValue());
-        assertEquals(20240820, scheduleRecipes.get(1).sId.intValue());
+        assertEquals(Integer.parseInt(format), scheduleRecipes.get(0).sId.intValue());
+        assertEquals(Integer.parseInt(format), scheduleRecipes.get(1).sId.intValue());
+        assertEquals(LocalDate.now().getDayOfWeek(), scheduleRecipes.get(0).getDayOfWeek());
+        assertEquals(LocalDate.now().getDayOfWeek(), scheduleRecipes.get(1).getDayOfWeek());
     }
 
     @Before
