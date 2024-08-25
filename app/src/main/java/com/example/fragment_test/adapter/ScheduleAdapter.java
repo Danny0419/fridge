@@ -11,30 +11,33 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.ScheduleRecipe;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ScheduleAdapter extends BaseAdapter {
     private LocalDate[] dates;
-    private Map<Integer, List<Recipe>> scheduleRecipes;
-    private LayoutInflater layoutInflater;
+    private Map<DayOfWeek, List<ScheduleRecipe>> scheduleRecipes;
     class ViewHolder {
         TextView eachDayText;
-        RecyclerView foodContainer;
+        RecyclerView eachRecipeRecyclerView;
     }
 
-    public ScheduleAdapter(LocalDate[] dates, Map<Integer, List<Recipe>> scheduleRecipes, LayoutInflater layoutInflater) {
+    public ScheduleAdapter(LocalDate[] dates, Map<DayOfWeek, List<ScheduleRecipe>> scheduleRecipes) {
         this.dates = dates;
         this.scheduleRecipes = scheduleRecipes;
-        this.layoutInflater = layoutInflater;
     }
 
     @Override
@@ -56,23 +59,25 @@ public class ScheduleAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.schedule_item, viewGroup, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.schedule_item, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.eachDayText = view.findViewById(R.id.eachDayText);
-            viewHolder.foodContainer = view.findViewById(R.id.food_item);
+            viewHolder.eachRecipeRecyclerView = view.findViewById(R.id.food_item);
 
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(viewGroup.getContext(), 5);
-            viewHolder.foodContainer.setLayoutManager(gridLayoutManager);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(viewGroup.getContext());
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            viewHolder.eachRecipeRecyclerView.setLayoutManager(layoutManager);
+
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.eachDayText.setText(dates[position].getDayOfWeek().toString());
-        List<Recipe> recipe = scheduleRecipes.get(position);
-        if (recipe == null){
-            recipe = new ArrayList<>();
-        }
-//        viewHolder.foodContainer.setAdapter(new ADayOfScheduleAdapter(recipe));
+        Optional<List<ScheduleRecipe>> dayScheduleRecipesOpt = Optional.ofNullable(scheduleRecipes.get(dates[position].getDayOfWeek()));
+        List<ScheduleRecipe> dayScheduleRecipes = dayScheduleRecipesOpt.orElse(new ArrayList<>());
+        Stream<Recipe> recipeStream = dayScheduleRecipes.stream().map(ScheduleRecipe::getRecipe);
+        List<Recipe> recipes = recipeStream.collect(Collectors.toList());
+        viewHolder.eachRecipeRecyclerView.setAdapter(new ScheduleEachRecipeAdapter(recipes));
 
         /*點擊按鈕
         選擇要吃甚麼的區塊下拉與收合

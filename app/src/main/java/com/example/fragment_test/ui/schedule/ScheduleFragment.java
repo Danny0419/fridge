@@ -22,12 +22,15 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.databinding.FragmentScheduleBinding;
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.ScheduleRecipe;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +46,7 @@ public class ScheduleFragment extends Fragment {
     private FragmentScheduleBinding scheduleBinding;
     private ScheduleViewModel viewModel;
     private final LocalDate[] aWeek = new LocalDate[7];
-    private Map<Integer, List<Recipe>> schedule = new HashMap<>();
+    private Map<DayOfWeek, List<ScheduleRecipe>> schedule = new HashMap<>();
     private ListView scheduleContainer;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -107,7 +110,13 @@ public class ScheduleFragment extends Fragment {
         // Inflate the layout for this fragment
         scheduleBinding= FragmentScheduleBinding.inflate(inflater, container, false);
         scheduleContainer = scheduleBinding.schedulesContainer;
-        scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule, inflater));
+
+        viewModel.getScheduleRecipes().observe(getViewLifecycleOwner(), (scheduleRecipes -> {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
+        }));
+
 
         //去除邊框(分隔線為透明色、高度為0)
         scheduleContainer.setDivider(null);
