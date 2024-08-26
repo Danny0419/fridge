@@ -16,8 +16,10 @@ public interface StepDAO {
     long insertStep(Step step);
 
     @Query("""
-            SELECT id, r_id, content
+            SELECT id, r_id, `order`, content
             FROM step
-            WHERE r_id = :rId""")
+            WHERE r_id = :rId
+            ORDER BY `order`
+            """)
     List<Step> getStepsByRid(int rId);
 }

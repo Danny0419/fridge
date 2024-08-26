@@ -61,10 +61,10 @@ public class StepDAOTest extends TestCase {
         recipes.forEach((recipe) -> recipeDAO.insertRecipe(recipe));
 
         List<Step> steps = List.of(
-                new Step(1, "第一步驟"),
-                new Step(1, "第二步驟"),
-                new Step(1, "第三步驟"),
-                new Step(1, "第四步驟")
+                new Step(0, 1,1, "第一步驟"),
+                new Step(0, 1,2,"第二步驟"),
+                new Step(0, 1,3,"第三步驟"),
+                new Step(0, 1,4,"第四步驟")
         );
         steps.forEach((step -> stepDAO.insertStep(step)));
         List<Step> stepsByRid = stepDAO.getStepsByRid(1);

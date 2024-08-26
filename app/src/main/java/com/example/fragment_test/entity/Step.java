@@ -17,16 +17,21 @@ public class Step implements Parcelable {
     @ColumnInfo(name = "r_id")
     public int rId;
     @ColumnInfo
+    public int order;
+    @ColumnInfo
     public String content;
 
-    public Step(int rId, String content) {
+    public Step(int id, int rId, int order, String content) {
+        this.id = id;
         this.rId = rId;
+        this.order = order;
         this.content = content;
     }
 
     protected Step(Parcel in) {
         id = in.readInt();
         rId = in.readInt();
+        order = in.readInt();
         content = in.readString();
     }
 
@@ -49,8 +54,11 @@ public class Step implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+
         parcel.writeInt(id);
         parcel.writeInt(rId);
+        parcel.writeInt(order);
         parcel.writeString(content);
     }
+
 }
