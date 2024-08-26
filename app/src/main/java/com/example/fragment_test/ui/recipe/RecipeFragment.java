@@ -89,6 +89,7 @@ public class RecipeFragment extends Fragment {
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
+
         mViewModel.getRecipes()
                 .observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
                     @Override
@@ -97,14 +98,11 @@ public class RecipeFragment extends Fragment {
                         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recipeRecyclerView.setLayoutManager(linearLayoutManager);
                         RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
-                        recipeAdapter.setListener(new RecipeAdapter.OnClickListener() {
-                            @Override
-                            public void onClick(int position, Recipe recipe) {
-                                Bundle bundle = new Bundle();
-                                bundle.putParcelable("recipe", recipe);
-                                navController.navigate(R.id.navigation_recipe_detail, bundle);
+                        recipeAdapter.setListener((position, recipe) -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("recipe", recipe);
+                            navController.navigate(R.id.navigation_recipe_detail, bundle);
 
-                            }
                         });
                         recipeRecyclerView.setAdapter(recipeAdapter);
                     }
