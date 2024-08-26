@@ -13,21 +13,21 @@ import java.util.List;
 public interface ScheduleDAO {
     @Query("""
             SELECT date, day_of_week, status
-            from schedule
+            from schedules
             where date = :date
             """)
     Schedule getSchedule(int date);
 
     @Query("""
             SELECT date, day_of_week, status
-            from schedule
+            from schedules
             where date = :date AND status = 0
             """)
     Schedule getScheduleStatusIsZero(int date);
 
     @Query("""
     select date, day_of_week, status
-    from schedule
+    from schedules
     where status = 0
     """)
     List<Schedule> getSchedulesStatusIsZero();
@@ -36,7 +36,7 @@ public interface ScheduleDAO {
     long insertSchedule(Schedule schedule);
 
     @Query("""
-            update schedule set status = 1
+            update schedules set status = 1
             where date = :date
             """)
     void updateSchedule(int date);

@@ -16,27 +16,27 @@ public interface ScheduleRecipeDAO {
 
     @Query("""
             SELECT id, r_id, s_id, day_of_week, status
-            FROM schedule_recipe
+            FROM schedule_recipes
             WHERE s_id = :sId
             """)
     List<ScheduleRecipe> queryScheduleRecipesBySId(Integer sId);
 
     @Query("""
             SELECT id, r_id, s_id, day_of_week, status
-            FROM schedule_recipe
+            FROM schedule_recipes
             WHERE s_id = :sId AND status = 0
             """)
     List<ScheduleRecipe> queryIsNotDoneScheduleRecipesBySId(Integer sId);
 
     @Query("""
             SELECT id, r_id, s_id, day_of_week, status
-            FROM schedule_recipe
+            FROM schedule_recipes
             WHERE status = 0
             """)
     List<ScheduleRecipe> queryAllIsNotDoneScheduleRecipes();
 
     @Query("""
-            UPDATE schedule_recipe SET status = 1
+            UPDATE schedule_recipes SET status = 1
             WHERE id = :id
             """)
     void updateScheduleRecipeStatusById(Integer id);

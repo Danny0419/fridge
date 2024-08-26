@@ -17,7 +17,7 @@ public interface StepDAO {
 
     @Query("""
             SELECT id, r_id, `order`, content
-            FROM step
+            FROM steps
             WHERE r_id = :rId
             ORDER BY `order`
             """)
