@@ -17,6 +17,8 @@ import com.example.fragment_test.databinding.ActivityRecipeDetailBinding;
 import com.example.fragment_test.databinding.RecipeIntroductionBinding;
 import com.example.fragment_test.entity.Recipe;
 
+import java.util.Optional;
+
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private ActivityRecipeDetailBinding activityRecipeDetailBinding;
@@ -26,7 +28,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        activityRecipeDetailBinding  = ActivityRecipeDetailBinding.inflate(getLayoutInflater());
+        activityRecipeDetailBinding = ActivityRecipeDetailBinding.inflate(getLayoutInflater());
         setContentView(activityRecipeDetailBinding.getRoot());
 
         // toolbar setting
@@ -47,13 +49,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
             return insets;
         });
 
-        Bundle bundle = getIntent().getExtras();
-        Recipe recipe;
-        if (bundle != null) {
-            recipe = bundle.getParcelable("recipe");
-        } else {
-            recipe = null;
-        }
+        Optional<Bundle> extras = Optional.ofNullable(getIntent().getExtras());
+        Bundle bundle = extras.orElseThrow(RuntimeException::new);
+        Optional<Recipe> recipeOptional = Optional.ofNullable(bundle.getParcelable("recipe"));
+        Recipe recipe = recipeOptional.orElseThrow(RuntimeException::new);
+
         RecipeIntroductionBinding recipeIntroduction = activityRecipeDetailBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(recipe.name);
         recipeIntroduction.recipeImg.setText(recipe.img);

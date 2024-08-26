@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,7 +102,12 @@ public class RecipeFragment extends Fragment {
                         recipeAdapter.setListener((position, recipe) -> {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("recipe", recipe);
-                            navController.navigate(R.id.navigation_recipe_detail, bundle);
+                            try {
+                                navController.navigate(R.id.navigation_recipe_detail, bundle);
+                            }catch (RuntimeException e) {
+                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
+                            }
+
 
                         });
                         recipeRecyclerView.setAdapter(recipeAdapter);
