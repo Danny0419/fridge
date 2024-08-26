@@ -1,6 +1,5 @@
 package com.example.fragment_test.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,13 +25,11 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     private Map<String, List<RefrigeratorIngredient>> refrigeratorMap;
     private Context context;
     private OnClickListener onClickListener;
-    private Dialog ingredientDetail;
 
-    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> refrigeratorMap, Dialog ingredientDetail) {
+    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> refrigeratorMap) {
         this.context = context;
         this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds_of_ingredient));
         this.refrigeratorMap = refrigeratorMap;
-        this.ingredientDetail = ingredientDetail;
     }
 
      static class RefrigeratorViewHolder extends RecyclerView.ViewHolder {
@@ -58,7 +55,7 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
         List<RefrigeratorIngredient> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
-        RefrigeratorEachIngredientAdapter ingredientAdapter = new RefrigeratorEachIngredientAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()), ingredientDetail);
+        RefrigeratorEachIngredientAdapter ingredientAdapter = new RefrigeratorEachIngredientAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
         ingredientAdapter.setOnClickListener(onClickListener);
         holder.kindOfIngredientContainer.setAdapter(ingredientAdapter);
     }

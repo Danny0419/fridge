@@ -99,7 +99,7 @@ public class FoodManagementFragment extends Fragment {
                 layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 ingredientContainer.setLayoutManager(layoutManager);
-                RefrigeratorAdapter adapter = new RefrigeratorAdapter(getContext(), refrigeratorMap, ingredientDetail);
+                RefrigeratorAdapter adapter = new RefrigeratorAdapter(getContext(), refrigeratorMap);
                 adapter.setOnClickListener((position, refrigeratorIngredient) -> {
                     ingredientDetail.show();
                 });
