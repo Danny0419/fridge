@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "schedule")
+@Entity(tableName = "schedules")
 public class Schedule {
     @PrimaryKey
     public int date;

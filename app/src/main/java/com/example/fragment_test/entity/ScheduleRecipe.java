@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 import java.time.DayOfWeek;
 
-@Entity(tableName = "schedule_recipe", foreignKeys =
+@Entity(tableName = "schedule_recipes", foreignKeys =
         {
                 @ForeignKey(entity = Schedule.class,
                         parentColumns = "date",

@@ -9,7 +9,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "step", foreignKeys = @ForeignKey(entity = Recipe.class, parentColumns = "id", childColumns = "r_id", onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE))
+@Entity(tableName = "steps", foreignKeys = @ForeignKey(entity = Recipe.class, parentColumns = "id", childColumns = "r_id", onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE))
 public class Step implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)

@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "recipe")
+@Entity(tableName = "recipes")
 public class Recipe implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     public int id;
