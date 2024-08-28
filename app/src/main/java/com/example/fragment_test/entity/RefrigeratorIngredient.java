@@ -15,6 +15,8 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer purchaseDate;
     @ColumnInfo
     public Integer expiration;
+    @ColumnInfo
+    public Integer state;
     @Ignore
     public Integer savingDay;
 

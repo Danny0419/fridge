@@ -13,9 +13,6 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="insertOneCollectionRecipeRecipeIdIsOne()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="queryAllCollectionRecipesReturnListShouldEqualFour()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -26,6 +23,9 @@
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="getAWeekSchedules()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="insertFourStepsWithRecipeIdOneQueryListSizeShouldEqualFour()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
