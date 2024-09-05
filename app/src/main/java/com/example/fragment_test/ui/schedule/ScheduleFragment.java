@@ -5,6 +5,7 @@ import static com.example.fragment_test.utils.setListBackground.setListBackgroun
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -117,7 +118,6 @@ public class ScheduleFragment extends Fragment {
             scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
         }));
 
-
         //去除邊框(分隔線為透明色、高度為0)
         scheduleContainer.setDivider(null);
         scheduleContainer.setDividerHeight(0);
@@ -131,6 +131,9 @@ public class ScheduleFragment extends Fragment {
 //        eachDayText.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
         addToolbar();
+
+        // 測試
+        Log.d("ScheduleFragment", "View binding root: " + scheduleBinding.getRoot());
 
         return scheduleBinding.getRoot();
     }
