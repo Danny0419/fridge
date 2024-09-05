@@ -116,6 +116,9 @@ public class ScheduleFragment extends Fragment {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
+
+            //debug測試
+            Log.d("ScheduleFragment", "View binding root: " + scheduleBinding.getRoot());
         }));
 
         //去除邊框(分隔線為透明色、高度為0)
@@ -132,7 +135,7 @@ public class ScheduleFragment extends Fragment {
 
         addToolbar();
 
-        // 測試
+        // debug測試
         Log.d("ScheduleFragment", "View binding root: " + scheduleBinding.getRoot());
 
         return scheduleBinding.getRoot();
