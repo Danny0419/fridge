@@ -52,6 +52,11 @@
             tools:ignore="DiscouragedApi"
             android:name=".ui.scanner.ScanReceiptActivity"
             android:exported="false" />
+        <activity
+            android:name=".RecipeRecommend.RecipeRecommendationActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi"/>
     </application>
 
 </manifest>
