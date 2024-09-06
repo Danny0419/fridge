@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.ShoppingIngredient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
@@ -25,11 +24,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     class ShoppingListViewHolder extends RecyclerView.ViewHolder {
 
-        TextView shoppingItemId, shoppingItemName, shoppingItemSort, shoppingItemQuantity;
+        TextView position, shoppingItemName, shoppingItemSort, shoppingItemQuantity;
         CheckBox shoppingItemState;
         ShoppingListViewHolder(View view) {
             super(view);
-            shoppingItemId = view.findViewById(R.id.shoppingItemId);
+            position = view.findViewById(R.id.position);
             shoppingItemName = view.findViewById(R.id.shoppingItemName);
             shoppingItemSort = view.findViewById(R.id.shoppingItemSort);
             shoppingItemQuantity = view.findViewById(R.id.shoppingItemQuantity);
@@ -57,7 +56,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));
         }
 
-        holder.shoppingItemId.setText(Integer.toString(position));
+        holder.position.setText(Integer.toString(position));
         holder.shoppingItemName.setText(shoppingItems.get(position).name);
         holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
         holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).quantity));
