@@ -1,10 +1,10 @@
 package com.example.fragment_test.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.fragment_test.entity.ShoppingIngredient;
 
@@ -25,7 +25,7 @@ public interface ShoppingDAO {
             UPDATE shopping_list SET status = 1
             WHERE name = :name
             """)
-    void updateItemStatusName(String name);
+    void updateItemStatusByName(String name);
 
     @Query("""
             UPDATE shopping_list SET quantity = :quantity
@@ -33,4 +33,6 @@ public interface ShoppingDAO {
             """)
     void updateItemQuantityByName(String name, int quantity);
 
+    @Delete
+    int deleteShoppingItem(ShoppingIngredient shoppingIngredient);
 }
