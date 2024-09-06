@@ -107,4 +107,8 @@ public class RefrigeratorIngredientRepository {
             refrigeratorIngredientDAO.insertIngredient(new RefrigeratorIngredient(0, recipeIngredient.name, -recipeIngredient.quantity, null, null, null, null));
         });
     }
+
+    public void takeOutIngredients(RefrigeratorIngredient ingredient) {
+        refrigeratorIngredientDAO.insertIngredient(ingredient);
+    }
 }
