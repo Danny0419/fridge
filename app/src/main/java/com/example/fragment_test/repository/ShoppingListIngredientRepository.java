@@ -9,8 +9,6 @@ import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ShoppingListIngredientRepository {
 
@@ -54,7 +52,11 @@ public class ShoppingListIngredientRepository {
     }
 
     public void check(Map<String, Ingredient> finished, Map<String, Ingredient> unfinished) {
-        finished.forEach((key, value) -> shoppingDAO.updateItemStatusName(key));
+        finished.forEach((key, value) -> shoppingDAO.updateItemStatusByName(key));
         unfinished.forEach((key, value) -> shoppingDAO.updateItemQuantityByName(value.name, value.quantity));
+    }
+
+    public void removeShoppingItem(ShoppingIngredient shoppingIngredient) {
+        shoppingDAO.deleteShoppingItem(shoppingIngredient);
     }
 }
