@@ -200,7 +200,8 @@ public class FoodManagementFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                NavController navController = Navigation.findNavController(getActivity(),
+                        R.id.nav_host_fragment_activity_main2);
                 if (itemId == R.id.scan) {
                     navController.navigate(R.id.action_navigation_home_to_navigation_camera);
                 }

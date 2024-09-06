@@ -30,7 +30,12 @@
         android:id="@+id/navigation_refrigerator"
         android:name="com.example.fragment_test.ui.refrigerator.FoodManagementFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_refrigerator" />
+        tools:layout="@layout/fragment_refrigerator"
+        >
+        <action
+            android:id="@+id/action_navigation_refrigerator_to_navigation_camera"
+            app:destination="@id/navigation_camera" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_recipe"
