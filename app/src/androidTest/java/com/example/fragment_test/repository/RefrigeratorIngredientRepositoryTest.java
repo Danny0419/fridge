@@ -43,11 +43,11 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
     public void buyThreeSteakShoppingListSizeShouldEqualFour() {
 
         List<ShoppingIngredient> shoppingIngredients = List.of(
-                new ShoppingIngredient("牛排", "肉類", 3, 0),
-                new ShoppingIngredient("牛肉卷", "肉類", 2, 0),
-                new ShoppingIngredient("高麗菜", "蔬菜類", 5, 0),
-                new ShoppingIngredient("豬排", "肉類", 1, 0),
-                new ShoppingIngredient("五花豬", "肉類", 3, 0)
+                new ShoppingIngredient(0, "牛排", "肉類", 3, 0),
+                new ShoppingIngredient(0, "牛肉卷", "肉類", 2, 0),
+                new ShoppingIngredient(0, "高麗菜", "蔬菜類", 5, 0),
+                new ShoppingIngredient(0, "豬排", "肉類", 1, 0),
+                new ShoppingIngredient(0, "五花豬", "肉類", 3, 0)
         );
         shoppingIngredients.forEach(shoppingIngredient -> shoppingListIngredientRepository.addShoppingItem(shoppingIngredient));
 
@@ -68,11 +68,11 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
     public void buyThreeSteakAndOneBeefRollShoppingListSizeShouldEqualFourAndBeefRollItemQuantityShouldEqualOne() {
 
         List<ShoppingIngredient> shoppingIngredients = List.of(
-                new ShoppingIngredient("牛排", "肉類", 3, 0),
-                new ShoppingIngredient("牛肉卷", "肉類", 2, 0),
-                new ShoppingIngredient("高麗菜", "蔬菜類", 5, 0),
-                new ShoppingIngredient("豬排", "肉類", 1, 0),
-                new ShoppingIngredient("五花豬", "肉類", 3, 0)
+                new ShoppingIngredient(0, "牛排", "肉類", 3, 0),
+                new ShoppingIngredient(0, "牛肉卷", "肉類", 2, 0),
+                new ShoppingIngredient(0, "高麗菜", "蔬菜類", 5, 0),
+                new ShoppingIngredient(0, "豬排", "肉類", 1, 0),
+                new ShoppingIngredient(0, "五花豬", "肉類", 3, 0)
         );
         shoppingIngredients.forEach(shoppingIngredient -> shoppingListIngredientRepository.addShoppingItem(shoppingIngredient));
 
@@ -99,11 +99,11 @@ public class RefrigeratorIngredientRepositoryTest extends TestCase {
     public void buyThreeSteakAndTwoBeefRollAndOneCabbageShoppingListSizeShouldEqualThree() {
 
         List<ShoppingIngredient> shoppingIngredients = List.of(
-                new ShoppingIngredient("牛排", "肉類", 3, 0),
-                new ShoppingIngredient("牛肉卷", "肉類", 2, 0),
-                new ShoppingIngredient("高麗菜", "蔬菜類", 5, 0),
-                new ShoppingIngredient("豬排", "肉類", 1, 0),
-                new ShoppingIngredient("五花豬", "肉類", 3, 0)
+                new ShoppingIngredient(0, "牛排", "肉類", 3, 0),
+                new ShoppingIngredient(0, "牛肉卷", "肉類", 2, 0),
+                new ShoppingIngredient(0, "高麗菜", "蔬菜類", 5, 0),
+                new ShoppingIngredient(0, "豬排", "肉類", 1, 0),
+                new ShoppingIngredient(0, "五花豬", "肉類", 3, 0)
         );
         shoppingIngredients.forEach(shoppingIngredient -> shoppingListIngredientRepository.addShoppingItem(shoppingIngredient));
 

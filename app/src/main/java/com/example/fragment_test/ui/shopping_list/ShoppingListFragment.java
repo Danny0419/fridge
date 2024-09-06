@@ -2,18 +2,8 @@ package com.example.fragment_test.ui.shopping_list;
 
 import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
@@ -120,7 +118,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 String name = dialogBinding.nameSpinner.getSelectedItem().toString();
                 String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
                 String quantity = dialogBinding.quantity.getText().toString();
-                ShoppingIngredient ingredient = new ShoppingIngredient(name, sort, Integer.parseInt(quantity), 0);
+                ShoppingIngredient ingredient = new ShoppingIngredient(0, name, sort, Integer.parseInt(quantity), 0);
 
                 mViewModel.addShoppingItem(ingredient);
                 dialogBinding.quantity.setText("");
