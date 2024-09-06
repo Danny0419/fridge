@@ -1,6 +1,9 @@
 package com.example.fragment_test;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,10 +12,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.fragment_test.RecipeRecommend.RecipeRecommendationActivity;
 import com.example.fragment_test.databinding.ActivityMain2Binding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity{
 
     private ActivityMain2Binding binding;
     NavController navController;
@@ -37,7 +41,13 @@ public class MainActivity2 extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         setSupportActionBar(toolbar);
 
-
+//        Button button=this.findViewById(R.id.ApiText);
+//        button.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity2.this, RecipeRecommendationActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
-
 }
