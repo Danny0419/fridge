@@ -45,12 +45,17 @@ public class RefrigeratorIngredientRepository {
 
         Map<String, RefrigeratorIngredient> sameSortAndEx = collapseFriAndBuy.stream()
                 .collect(Collectors.toMap(this::fetchGroupKey, o -> o, (o1, o2) -> (RefrigeratorIngredient) o1.setQuantity(o1.quantity + o2.quantity)));
-
         sameSortAndEx.forEach((key, value) -> refrigeratorIngredientDAO.insertIngredient(value));
-
-
         ingredients.forEach(ingredient -> ingredient.setQuantity(-ingredient.quantity));
 
+        computeShoppingList(ingredients);
+    }
+
+    private String fetchGroupKey(RefrigeratorIngredient ingredient){
+        return ingredient.name +"#"+ ingredient.expiration;
+    }
+
+    private void computeShoppingList(List<RefrigeratorIngredient> ingredients) {
         List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
         List<Ingredient> collapseBuyAndShoppingList = new LinkedList<>(ingredients);
         collapseBuyAndShoppingList.addAll(shoppingList);
@@ -60,10 +65,6 @@ public class RefrigeratorIngredientRepository {
         Map<String, Ingredient> unfinished = computeIsUnfinished(collect);
 
         shoppingListIngredientRepository.check(finished, unfinished);
-    }
-
-    private String fetchGroupKey(RefrigeratorIngredient ingredient){
-        return ingredient.name +"#"+ ingredient.expiration;
     }
 
     private @NonNull Map<String, Ingredient> computeIsUnfinished(Map<String, Ingredient> collect) {
