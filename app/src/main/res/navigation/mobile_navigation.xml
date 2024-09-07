@@ -58,4 +58,12 @@
         android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_shopping_list" />
+
+    <fragment
+        android:id="@+id/meals_prepare_dialog"
+        android:name="com.example.fragment_test.ui.schedule.MealsPrepareDialogFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/meals_prepare_dialog" >
+    </fragment>
+
 </navigation>

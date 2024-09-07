@@ -11,12 +11,17 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.ScheduleRecipe;
+import com.example.fragment_test.ui.schedule.MealsPrepareDialogFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -100,11 +105,12 @@ public class ScheduleAdapter extends BaseAdapter {
             }
         });
 
-        //收合
+        //收合/彈跳預備食譜
         View meal_today = view.findViewById(R.id.meal_today);
         meal_today.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //收合
                 if (readyToCook.getVisibility() == View.VISIBLE) {
                     ObjectAnimator slideUp = ObjectAnimator.ofFloat(readyToCook, "translationY", 0f, -readyToCook.getHeight());
                     slideUp.setDuration(500);
@@ -117,6 +123,11 @@ public class ScheduleAdapter extends BaseAdapter {
                             selectMealBtn.setVisibility(View.VISIBLE);
                         }
                     });
+                }
+                //彈跳預備食譜
+                else {
+                    NavController navController = Navigation.findNavController((FragmentActivity) v.getContext(), R.id.nav_host_fragment_activity_main2);
+                    navController.navigate(R.id.meals_prepare_dialog);  // 使用導航圖中設定的 ID 進行跳轉
                 }
             }
         });

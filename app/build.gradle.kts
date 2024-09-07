@@ -59,6 +59,9 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.camera:camera-lifecycle:1.3.4")
     implementation("androidx.camera:camera-view:1.3.4")
+
+    implementation ("androidx.fragment:fragment:1.6.1")
+
     //ROOM      (遇到了大概是版本的問題，換了新版本就沒問題了)
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
