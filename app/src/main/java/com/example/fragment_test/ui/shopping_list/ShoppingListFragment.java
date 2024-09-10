@@ -75,7 +75,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     private View initialize(LayoutInflater inflater, ViewGroup container) {
 
         binding = FragmentShoppingListBinding.inflate(inflater, container, false);
-        shoppingListItemRecycleView = binding.shoppingListItemRecyclerview;
+        shoppingListItemRecycleView = binding.getRoot().findViewById(R.id.shoppingListItemRecyclerview);
         layoutManager = new LinearLayoutManager(getContext());
 
         //設定奇偶行數背景顏色

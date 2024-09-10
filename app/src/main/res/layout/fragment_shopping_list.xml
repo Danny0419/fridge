@@ -8,6 +8,7 @@
     android:id="@+id/fragment_shopping_list">
 
     <include
+        android:id="@+id/ingredient_list"
         layout="@layout/ingredient_list"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
