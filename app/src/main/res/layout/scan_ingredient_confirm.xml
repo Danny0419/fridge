@@ -8,7 +8,7 @@
         layout="@layout/ingredient_list"/>
 
     <Button
-        android:id="@+id/continue_btn"
+        android:id="@+id/continue_button"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@drawable/button_style"
@@ -17,10 +17,10 @@
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/finish_btn"/>
+        app:layout_constraintEnd_toStartOf="@+id/confirm_button"/>
 
     <Button
-        android:id="@+id/finish_btn"
+        android:id="@+id/confirm_button"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@drawable/button_style"
@@ -29,6 +29,6 @@
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/continue_btn" />
+        app:layout_constraintStart_toEndOf="@+id/continue_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.fragment_test.ui.home;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,7 @@ import androidx.navigation.Navigation;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
+import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
@@ -27,9 +31,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FragmentHomeBinding binding;
+    private Dialog dialog;
+    private ScanIngredientConfirmBinding scanIngredientConfirmBinding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,10 +48,31 @@ public class HomeFragment extends Fragment {
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-
         addToolbar();
 
+        binding.testButton.setOnClickListener(this);
+        setupDialog(inflater, container);
+
         return root;
+    }
+
+    private void setupDialog(LayoutInflater inflater, ViewGroup container) {
+        scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(inflater, container, false);
+        dialog = new Dialog(getContext());
+        dialog.setContentView(scanIngredientConfirmBinding.getRoot());
+        dialog.setCancelable(false);
+
+        Button continueButton = scanIngredientConfirmBinding.continueButton;
+        Button confirmButton = scanIngredientConfirmBinding.confirmButton;
+
+        continueButton.setOnClickListener(this);
+        confirmButton.setOnClickListener(this);
+
+        // 應急用調整彈跳視窗大小
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1020;
+        dialog.getWindow().setAttributes(layoutParams);
     }
 
     private void addToolbar() {
@@ -85,5 +112,17 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void onClick(View v) {
+        int clickedId = v.getId();
+
+        if (clickedId == R.id.test_button) {
+            dialog.show();
+        } else if (clickedId == R.id.continue_button) {
+            dialog.dismiss();
+        } else if (clickedId == R.id.confirm_button){
+            dialog.dismiss();
+        }
     }
 }
