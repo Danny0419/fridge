@@ -7,70 +7,8 @@
     tools:context=".ui.shopping_list.ShoppingListFragment"
     android:id="@+id/fragment_shopping_list">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="73dp"
-            android:background="@color/dark_pink"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/bold"
-                android:text="@string/shoppingItemIdTitle"
-                android:textAlignment="center"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/bold"
-                android:text="@string/shoppingItemNameTitle"
-                android:textAlignment="center"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/bold"
-                android:text="@string/shoppingItemSortTitle"
-                android:textAlignment="center"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/bold"
-                android:text="@string/shoppingItemQuantityTitle"
-                android:textAlignment="center"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/bold"
-                android:text="@string/shoppingItemStateTitle"
-                android:textAlignment="center"
-                android:textSize="24dp" />
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/shoppingListItemRecyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+    <include
+        layout="@layout/ingredient_list"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

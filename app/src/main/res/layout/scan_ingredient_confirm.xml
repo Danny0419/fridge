@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/ingredient_list"/>
+
+    <Button
+        android:id="@+id/continue_btn"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@drawable/button_style"
+        android:fontFamily="@font/regular"
+        android:text="繼續輸入"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/finish_btn"/>
+
+    <Button
+        android:id="@+id/finish_btn"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@drawable/button_style"
+        android:fontFamily="@font/regular"
+        android:text="完成輸入"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/continue_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
