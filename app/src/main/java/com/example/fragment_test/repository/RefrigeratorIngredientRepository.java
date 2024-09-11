@@ -10,7 +10,6 @@ import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,23 +47,15 @@ public class RefrigeratorIngredientRepository {
         sameSortAndEx.forEach((key, value) -> refrigeratorIngredientDAO.insertIngredient(value));
         ingredients.forEach(ingredient -> ingredient.setQuantity(-ingredient.quantity));
 
-        computeShoppingList(ingredients);
+        List<Ingredient> collect = ingredients.stream().
+                map(o -> (Ingredient) o)
+                .toList();
+
+        shoppingListIngredientRepository.check(collect);
     }
 
     private String fetchGroupKey(RefrigeratorIngredient ingredient){
         return ingredient.name +"#"+ ingredient.expiration;
-    }
-
-    private void computeShoppingList(List<RefrigeratorIngredient> ingredients) {
-        List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
-        List<Ingredient> collapseBuyAndShoppingList = new LinkedList<>(ingredients);
-        collapseBuyAndShoppingList.addAll(shoppingList);
-
-        Map<String, Ingredient> collect = computeSameIngredients(collapseBuyAndShoppingList);
-        Map<String, Ingredient> finished = computeIsFinished(collect);
-        Map<String, Ingredient> unfinished = computeIsUnfinished(collect);
-
-        shoppingListIngredientRepository.check(finished, unfinished);
     }
 
     private @NonNull Map<String, Ingredient> computeIsUnfinished(Map<String, Ingredient> collect) {
