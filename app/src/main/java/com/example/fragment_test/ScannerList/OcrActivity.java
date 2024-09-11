@@ -85,11 +85,11 @@ public class OcrActivity extends AppCompatActivity {
     }
 
     private String extractDate(List<String> lines) {
-        Pattern patternDate = Pattern.compile("\\b\\d{4}/\\d{2}/\\d{2}\\b");
+        Pattern patternDate = Pattern.compile("\\b\\d{4}\\s*/\\s*\\d{2}\\s*/\\s*\\d{2}\\b");
         for (String line : lines) {
             Matcher matcher = patternDate.matcher(line);
             if (matcher.find()) {
-                return matcher.group();
+                return matcher.group().replaceAll("\\s*", "");
             }
         }
         return "未找到日期";
