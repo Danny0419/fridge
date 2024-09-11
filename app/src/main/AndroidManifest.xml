@@ -47,6 +47,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ScannerList.OcrActivity"
+            android:exported="true" />
+
         <activity
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi"
