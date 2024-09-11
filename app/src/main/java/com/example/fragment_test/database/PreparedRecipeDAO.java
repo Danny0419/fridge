@@ -15,7 +15,7 @@ public interface PreparedRecipeDAO {
     long insertPreparedRecipe(PreparedRecipe preparedRecipe);
 
     @Query("""
-            SELECT id, r_id
+            SELECT id, r_id, s_r_id, scheduled
             FROM preparedRecipes
             """)
     List<PreparedRecipe> queryAllPreparedRecipes();

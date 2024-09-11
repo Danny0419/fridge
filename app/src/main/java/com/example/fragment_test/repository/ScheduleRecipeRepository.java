@@ -23,8 +23,8 @@ public class ScheduleRecipeRepository {
         return scheduleRecipeRepository;
     }
 
-    public void schedule(ScheduleRecipe scheduleRecipe) {
-        scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
+    public long schedule(ScheduleRecipe scheduleRecipe) {
+        return scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
     }
 
     public void finishCooking(List<ScheduleRecipe> scheduleRecipes) {
