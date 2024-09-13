@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
@@ -119,6 +121,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         if (clickedId == R.id.test_button) {
             dialog.show();
+
+            //把checkbox改成textview
+            RecyclerView recyclerView = scanIngredientConfirmBinding.ingredientList.shoppingListItemRecyclerview;
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                View view = recyclerView.getChildAt(i);
+                CheckBox checkBox = view.findViewById(R.id.shoppingItemState);
+                if (checkBox != null) {
+                    // textview
+                    TextView textView = new TextView(getContext());
+                    textView.setTextSize(20); //字體大小
+
+                    //替換checkbox
+                    ViewGroup parent = (ViewGroup) checkBox.getParent();
+                    int index = parent.indexOfChild(checkBox);
+                    parent.removeView(checkBox);
+                    parent.addView(textView, index);
+                }
+            }
+
         } else if (clickedId == R.id.continue_button) {
             dialog.dismiss();
         } else if (clickedId == R.id.confirm_button){
