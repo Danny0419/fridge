@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class FoodManagementViewModel extends AndroidViewModel {
-    private final MutableLiveData<Map<String, List<RefrigeratorIngredient>>> refrigeratorIngredients = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, List<RefrigeratorIngredientVO>>> refrigeratorIngredients = new MutableLiveData<>();
     private final RefrigeratorIngredientRepository repository;
 
     public FoodManagementViewModel(@NonNull Application application) {
@@ -34,9 +35,9 @@ public class FoodManagementViewModel extends AndroidViewModel {
         Maybe.fromCallable(repository::getRefrigeratorIngredients)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredient>>>() {
+                .subscribe(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredientVO>>>() {
                     @Override
-                    public void onSuccess(Map<String, List<RefrigeratorIngredient>> ingredients) {
+                    public void onSuccess(Map<String, List<RefrigeratorIngredientVO>> ingredients) {
                         refrigeratorIngredients.setValue(ingredients);
                     }
 
@@ -52,7 +53,7 @@ public class FoodManagementViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<Map<String, List<RefrigeratorIngredient>>> getRefrigeratorIngredients() {
+    public MutableLiveData<Map<String, List<RefrigeratorIngredientVO>>> getRefrigeratorIngredients() {
         return refrigeratorIngredients;
     }
 

@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
-import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -93,9 +93,9 @@ public class FoodManagementFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = initialize(inflater, container);
 
-        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, List<RefrigeratorIngredient>>>() {
+        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, List<RefrigeratorIngredientVO>>>() {
             @Override
-            public void onChanged(Map<String, List<RefrigeratorIngredient>> refrigeratorMap) {
+            public void onChanged(Map<String, List<RefrigeratorIngredientVO>> refrigeratorMap) {
                 layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 ingredientContainer.setLayoutManager(layoutManager);

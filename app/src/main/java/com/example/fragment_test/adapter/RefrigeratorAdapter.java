@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,11 +23,11 @@ import java.util.Map;
 public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapter.RefrigeratorViewHolder> {
 
     private List<String> kinds;
-    private Map<String, List<RefrigeratorIngredient>> refrigeratorMap;
+    private Map<String, List<RefrigeratorIngredientVO>> refrigeratorMap;
     private Context context;
     private OnClickListener onClickListener;
 
-    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredient>> refrigeratorMap) {
+    public RefrigeratorAdapter(Context context, Map<String, List<RefrigeratorIngredientVO>> refrigeratorMap) {
         this.context = context;
         this.kinds = Arrays.asList(context.getResources().getStringArray(R.array.kinds_of_ingredient));
         this.refrigeratorMap = refrigeratorMap;
@@ -52,13 +53,14 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorViewHolder holder, int position) {
         holder.nameOKind.setText(kinds.get(position));
-        List<RefrigeratorIngredient> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
+        List<RefrigeratorIngredientVO> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
         RefrigeratorEachIngredientAdapter ingredientAdapter = new RefrigeratorEachIngredientAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
         ingredientAdapter.setOnClickListener(onClickListener);
         holder.kindOfIngredientContainer.setAdapter(ingredientAdapter);
     }
+
     public interface OnClickListener {
         void onClick(int position, RefrigeratorIngredient refrigeratorIngredient);
     }
