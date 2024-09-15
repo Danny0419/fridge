@@ -45,10 +45,10 @@ android {
 
 dependencies {
 
-    // ML Kit for text recognition
-    implementation ("com.google.mlkit:text-recognition:16.0.0")
-    // ML Kit for text recognition in Chines
-    implementation ("com.google.mlkit:text-recognition-chinese:16.0.0")
+// ML Kit for text recognition
+    implementation ("com.google.mlkit:text-recognition:16.0.0-beta6")
+// ML Kit for text recognition in Chinese
+    implementation ("com.google.mlkit:text-recognition-chinese:16.0.0-beta6")
 
     implementation("androidx.activity:activity:1.8.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
