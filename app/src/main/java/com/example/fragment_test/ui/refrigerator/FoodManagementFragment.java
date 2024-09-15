@@ -100,6 +100,7 @@ public class FoodManagementFragment extends Fragment {
                 ingredientContainer.setLayoutManager(layoutManager);
                 RefrigeratorAdapter adapter = new RefrigeratorAdapter(getContext(), refrigeratorMap);
                 adapter.setOnClickListener((position, refrigeratorIngredient) -> {
+                    refrigeratorItemDetailDialogBinding.name.setText(refrigeratorIngredient.name);
                     viewModel.seeIngredientDetail(refrigeratorIngredient);
                 });
                 ingredientContainer.setAdapter(adapter);
