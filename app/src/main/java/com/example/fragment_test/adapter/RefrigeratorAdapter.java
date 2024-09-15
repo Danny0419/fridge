@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
     }
 
     public interface OnClickListener {
-        void onClick(int position, RefrigeratorIngredient refrigeratorIngredient);
+        void onClick(int position, RefrigeratorIngredientVO refrigeratorIngredientVO);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {

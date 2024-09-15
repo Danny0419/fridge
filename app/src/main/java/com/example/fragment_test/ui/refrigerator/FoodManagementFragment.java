@@ -17,7 +17,6 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,11 +26,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RefrigeratorAdapter;
-import com.example.fragment_test.entity.RefrigeratorIngredientVO;
+import com.example.fragment_test.adapter.RefrigeratorIngredientDetailAdapter;
+import com.example.fragment_test.databinding.FragmentRefrigeratorBinding;
+import com.example.fragment_test.databinding.RefrigeratorItemDetailDialogBinding;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +46,9 @@ public class FoodManagementFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FragmentRefrigeratorBinding refrigeratorBinding;
+    private RefrigeratorItemDetailDialogBinding refrigeratorItemDetailDialogBinding;
     TabLayout tabLayout;
     LinearLayoutManager layoutManager;
     RecyclerView ingredientContainer;
@@ -93,28 +94,31 @@ public class FoodManagementFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = initialize(inflater, container);
 
-        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), new Observer<Map<String, List<RefrigeratorIngredientVO>>>() {
-            @Override
-            public void onChanged(Map<String, List<RefrigeratorIngredientVO>> refrigeratorMap) {
+        viewModel.getRefrigeratorIngredients().observe(getViewLifecycleOwner(), (refrigeratorMap) ->{
                 layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 ingredientContainer.setLayoutManager(layoutManager);
                 RefrigeratorAdapter adapter = new RefrigeratorAdapter(getContext(), refrigeratorMap);
                 adapter.setOnClickListener((position, refrigeratorIngredient) -> {
-                    ingredientDetail.show();
+                    viewModel.seeIngredientDetail(refrigeratorIngredient);
                 });
                 ingredientContainer.setAdapter(adapter);
-                ingredientContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                    @Override
-                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                ingredientContainer.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) ->{
                         tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
-                    }
                 });
 
                 //設定奇偶行數背景顏色
                 setListBackgroundColor(ingredientContainer,requireContext());
-            }
         });
+
+        viewModel.getIngredientDetails()
+                .observe(getViewLifecycleOwner(), (ingredientVOS) -> {
+                    RecyclerView refrigeratorItemDetail = refrigeratorItemDetailDialogBinding.refrigeratorItemDetail;
+                    refrigeratorItemDetail.setLayoutManager(new LinearLayoutManager(getContext()));
+                    refrigeratorItemDetail.setAdapter(new RefrigeratorIngredientDetailAdapter(ingredientVOS));
+                    ingredientDetail.show();
+                });
+
         LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()) {
             @Override
             protected int getVerticalSnapPreference() {
@@ -149,12 +153,12 @@ public class FoodManagementFragment extends Fragment {
     }
 
     private View initialize(LayoutInflater inflater, ViewGroup container){
-        View view = inflater.inflate(R.layout.fragment_refrigerator, container, false);
-        ingredientContainer = view.findViewById(R.id.kinds_of_ingredient_container);
+        refrigeratorBinding = FragmentRefrigeratorBinding.inflate(inflater, container, false);
+        ingredientContainer = refrigeratorBinding.kindsOfIngredientContainer;
 
-        View dialogView = inflater.inflate(R.layout.refrigerator_item_detail_dialog, container, false);
+        refrigeratorItemDetailDialogBinding = RefrigeratorItemDetailDialogBinding.inflate(inflater, container, false);
         ingredientDetail = new Dialog(getContext());
-        ingredientDetail.setContentView(dialogView);
+        ingredientDetail.setContentView(refrigeratorItemDetailDialogBinding.getRoot());
 
         // 應急用調整彈跳視窗大小
         WindowManager.LayoutParams layoutParams = ingredientDetail.getWindow().getAttributes();
@@ -162,8 +166,8 @@ public class FoodManagementFragment extends Fragment {
         layoutParams.height = 1250;
         ingredientDetail.getWindow().setAttributes(layoutParams);
 
-        initTab(view);
-        return view;
+        initTab(refrigeratorBinding.getRoot());
+        return refrigeratorBinding.getRoot();
     }
 
 

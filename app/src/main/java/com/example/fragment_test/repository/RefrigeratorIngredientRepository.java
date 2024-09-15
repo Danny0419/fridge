@@ -10,6 +10,7 @@ import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredientDetailVO;
 import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 
 import java.time.LocalDate;
@@ -95,5 +96,12 @@ public class RefrigeratorIngredientRepository {
 
     public void takeOutIngredients(RefrigeratorIngredient ingredient) {
         refrigeratorIngredientDAO.insertIngredient(ingredient);
+    }
+
+    public List<RefrigeratorIngredientDetailVO> searchRefrigeratorIngredientDetail(RefrigeratorIngredientVO refrigeratorIngredientVO) {
+        LocalDate now = LocalDate.now();
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
+        int today = Integer.parseInt(format);
+        return refrigeratorIngredientDAO.getIngredientByName(refrigeratorIngredientVO.name, today);
     }
 }

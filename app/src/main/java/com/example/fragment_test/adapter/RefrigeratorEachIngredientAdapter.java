@@ -54,7 +54,7 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
         holder.ingredientName.setText(ingredient.name);
         holder.ingredientExpr.setText("保存期限："+ ingredient.earlyEx + "~" + ingredient.lastEx);
         holder.ingredientQuan.setText(Integer.toString(ingredient.sumQuantity));
-//        holder.itemView.setOnClickListener(view -> onClickListener.onClick(position, ingredient));
+        holder.itemView.setOnClickListener(view -> onClickListener.onClick(position, ingredient));
     }
 
     public void setOnClickListener(RefrigeratorAdapter.OnClickListener onClickListener) {
