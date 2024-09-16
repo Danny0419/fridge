@@ -26,6 +26,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
+import com.example.fragment_test.entity.Invoice;
+import com.example.fragment_test.entity.InvoiceItem;
+import com.example.fragment_test.entity.InvoiceWithItems;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
@@ -49,6 +52,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        // 观察 Invoice 列表和其项，并更新 UI
+        homeViewModel.getInvoiceWithItemsList().observe(getViewLifecycleOwner(), invoiceWithItemsList -> {
+            StringBuilder allInvoices = new StringBuilder();
+            for (InvoiceWithItems invoiceWithItems : invoiceWithItemsList) {
+                Invoice invoice = invoiceWithItems.invoice;
+                allInvoices.append("\n")
+                        .append("Invoice ID: ").append(invoice.getId()).append("，")
+                        .append("Date: ").append(invoice.getDate()).append("\n");
+
+                // 显示发票下的所有品项
+                for (InvoiceItem item : invoiceWithItems.items) {
+                    allInvoices.append("    Item Name: ").append(item.getName()).append("\n")
+                            .append("    Quantity: ").append(item.getQuantity()).append("，")
+                            .append("    Price: ").append(item.getPrice()).append("\n");
+                }
+            }
+            textView.setText(allInvoices.toString());
+        });
 
         addToolbar();
 
