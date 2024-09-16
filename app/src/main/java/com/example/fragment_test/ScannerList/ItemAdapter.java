@@ -32,7 +32,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         Item item = items.get(position);
         holder.textViewName.setText(item.getName());
         holder.textViewQuantity.setText("數量: " + item.getQuantity());
-        holder.textViewAmount.setText("金額: " + item.getAmount());
+        //holder.textViewAmount.setText("金額: " + item.getAmount()); //金額不顯示
+        holder.textViewChangename.setText("轉換後商品名稱: " );
+        holder.textViewExpiration.setText("保存期限: " );
     }
 
     @Override
@@ -47,13 +49,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewName, textViewQuantity, textViewAmount;
+        TextView textViewName, textViewQuantity, textViewChangename, textViewExpiration;
 
         ItemViewHolder(View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewName);
             textViewQuantity = itemView.findViewById(R.id.textViewQuantity);
-            textViewAmount = itemView.findViewById(R.id.textViewAmount);
+            textViewChangename = itemView.findViewById(R.id.textViewChangename);
+            textViewExpiration = itemView.findViewById(R.id.textViewExpiration);
         }
     }
 }
