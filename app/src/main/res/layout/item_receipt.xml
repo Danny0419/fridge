@@ -19,9 +19,13 @@
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/textViewAmount"
+        android:id="@+id/textViewChangename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp" />
-
+    <TextView
+        android:id="@+id/textViewExpiration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp" />
 </LinearLayout>
