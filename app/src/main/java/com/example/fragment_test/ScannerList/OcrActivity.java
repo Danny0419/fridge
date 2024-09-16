@@ -3,6 +3,7 @@ package com.example.fragment_test.ScannerList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OcrActivity extends AppCompatActivity {
+
+    private static final String TAG = "OcrActivity";
 
     private Button buttonRecognizeImage;
     private TextView textViewDate;
@@ -57,8 +60,7 @@ public class OcrActivity extends AppCompatActivity {
     }
 
     private void recognizeImageFromDrawable() {
-        // 假設你的圖片資源名稱為 "sample_receipt"
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.scaneerlist01);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.scannerlist01);
         processImage(bitmap);
     }
 
@@ -73,12 +75,19 @@ public class OcrActivity extends AppCompatActivity {
         List<String> allLines = new ArrayList<>();
         for (Text.TextBlock block : text.getTextBlocks()) {
             for (Text.Line line : block.getLines()) {
-                allLines.add(line.getText());
+                String lineText = line.getText();
+                allLines.add(lineText);
+                Log.d(TAG, "Recognized text: " + lineText);
             }
         }
 
         String invoiceDate = extractDate(allLines);
         List<Item> items = extractItems(allLines);
+
+        Log.d(TAG, "Invoice Date: " + invoiceDate);
+        for (Item item : items) {
+            Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
+        }
 
         textViewDate.setText("發票日期: " + invoiceDate);
         itemAdapter.updateItems(items);
@@ -97,11 +106,11 @@ public class OcrActivity extends AppCompatActivity {
 
     private List<Item> extractItems(List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Pattern patternItem = Pattern.compile("^\\*(\\d+)\\s*(.+)");
+        Pattern patternItem = Pattern.compile("^[\\*\\+](\\d+)\\s*(.+)");
         Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");
-        Pattern patternQuantity = Pattern.compile("^\\*(\\d+)$");
+        Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$");
         Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)");
-        Pattern patternFullItem = Pattern.compile("\\$(\\d+)\\s*\\*(\\d+)\\s*(\\d+)TX");
+        Pattern patternFullItem = Pattern.compile("\\$(\\d+)\\s*[\\*\\+](\\d+)\\s*(\\d+)TX");
 
         Item currentItem = null;
 
