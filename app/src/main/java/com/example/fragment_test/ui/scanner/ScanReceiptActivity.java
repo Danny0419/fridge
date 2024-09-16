@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.database.AppDatabase;
+import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -131,7 +131,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
         }
 
         // 获取数据库实例
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+        FridgeDatabase db = FridgeDatabase.getInstance(getApplicationContext());
 
         // 创建后台线程池
         ExecutorService executorService = Executors.newSingleThreadExecutor();
