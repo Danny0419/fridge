@@ -6,22 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".ui.scanner.ScanReceiptActivity"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/scan_receipt_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/text_under_line"
+            android:fontFamily="@font/regular"
+            android:text="掃描發票"
+            android:textSize="24dp"/>
+
+        <Button
+            android:id="@+id/add_manually_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/regular"
+            android:background="@drawable/uper_line"
+            android:text="手動新增"
+            android:textSize="24dp"/>
+
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
-
+        android:layout_weight="1">
         <TextView
             android:id="@+id/addReceiptTile"
-            android:text="@string/addReceiptTileText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/regular"
+            android:text="@string/addReceiptTileText"
+            android:textSize="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="24dp"
-            android:fontFamily="@font/regular"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
