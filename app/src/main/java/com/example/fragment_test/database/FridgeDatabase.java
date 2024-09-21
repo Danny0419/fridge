@@ -27,7 +27,8 @@ import com.example.fragment_test.entity.Step;
         Step.class,
         RecipeIngredient.class,
         ScheduleRecipe.class,
-        PreparedRecipe.class},
+        PreparedRecipe.class,
+        IngredientUsage.class},
         version = 1)
 public abstract class FridgeDatabase extends RoomDatabase {
     public static final String DB_NAME = "fridge.db";
