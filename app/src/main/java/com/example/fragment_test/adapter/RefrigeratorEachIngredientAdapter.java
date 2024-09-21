@@ -9,16 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 
 import java.util.List;
 
 public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<RefrigeratorEachIngredientAdapter.RefrigeratorKindViewHolder>{
 
-    private List<RefrigeratorIngredient> kindOfIngredient;
+    private List<RefrigeratorIngredientVO> kindOfIngredient;
     private RefrigeratorAdapter.OnClickListener onClickListener;
 
-    public RefrigeratorEachIngredientAdapter(List<RefrigeratorIngredient> kindOfIngredient) {
+    public RefrigeratorEachIngredientAdapter(List<RefrigeratorIngredientVO> kindOfIngredient) {
         this.kindOfIngredient = kindOfIngredient;
     }
 
@@ -49,11 +49,11 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
 
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorKindViewHolder holder, int position) {
-        RefrigeratorIngredient ingredient = kindOfIngredient.get(position);
+        RefrigeratorIngredientVO ingredient = kindOfIngredient.get(position);
         holder.ingredientImg.setText(ingredient.img);
         holder.ingredientName.setText(ingredient.name);
-        holder.ingredientExpr.setText("保存期限："+ ingredient.expiration);
-        holder.ingredientQuan.setText(Integer.toString(ingredient.quantity));
+        holder.ingredientExpr.setText("保存期限："+ ingredient.earlyEx + "~" + ingredient.lastEx);
+        holder.ingredientQuan.setText(Integer.toString(ingredient.sumQuantity));
         holder.itemView.setOnClickListener(view -> onClickListener.onClick(position, ingredient));
     }
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,14 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
+import com.example.fragment_test.entity.Invoice;
+import com.example.fragment_test.entity.InvoiceItem;
+import com.example.fragment_test.entity.InvoiceWithItems;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
@@ -47,6 +52,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        // 观察 Invoice 列表和其项，并更新 UI
+        homeViewModel.getInvoiceWithItemsList().observe(getViewLifecycleOwner(), invoiceWithItemsList -> {
+            StringBuilder allInvoices = new StringBuilder();
+            for (InvoiceWithItems invoiceWithItems : invoiceWithItemsList) {
+                Invoice invoice = invoiceWithItems.invoice;
+                allInvoices.append("\n")
+                        .append("Invoice ID: ").append(invoice.getId()).append("，")
+                        .append("Date: ").append(invoice.getDate()).append("\n");
+
+                // 显示发票下的所有品项
+                for (InvoiceItem item : invoiceWithItems.items) {
+                    allInvoices.append("    Item Name: ").append(item.getName()).append("\n")
+                            .append("    Quantity: ").append(item.getQuantity()).append("，")
+                            .append("    Price: ").append(item.getPrice()).append("\n");
+                }
+            }
+            textView.setText(allInvoices.toString());
+        });
 
         addToolbar();
 
@@ -119,6 +143,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         if (clickedId == R.id.test_button) {
             dialog.show();
+
+            //把checkbox改成textview
+            RecyclerView recyclerView = scanIngredientConfirmBinding.ingredientList.shoppingListItemRecyclerview;
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                View view = recyclerView.getChildAt(i);
+                CheckBox checkBox = view.findViewById(R.id.shoppingItemState);
+                if (checkBox != null) {
+                    // textview
+                    TextView textView = new TextView(getContext());
+                    textView.setTextSize(20); //字體大小
+
+                    //替換checkbox
+                    ViewGroup parent = (ViewGroup) checkBox.getParent();
+                    int index = parent.indexOfChild(checkBox);
+                    parent.removeView(checkBox);
+                    parent.addView(textView, index);
+                }
+            }
+
         } else if (clickedId == R.id.continue_button) {
             dialog.dismiss();
         } else if (clickedId == R.id.confirm_button){

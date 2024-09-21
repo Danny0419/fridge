@@ -10,10 +10,11 @@ import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.entity.RefrigeratorIngredientVO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,14 +39,7 @@ public class RefrigeratorIngredientRepository {
 
     public void buyIngredients(List<RefrigeratorIngredient> ingredients) {
 
-        List<RefrigeratorIngredient> curRefrigeratorIng = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
-        List<RefrigeratorIngredient> collapseFriAndBuy = new LinkedList<>(curRefrigeratorIng);
-        collapseFriAndBuy.addAll(ingredients);
-
-        Map<String, RefrigeratorIngredient> sameSortAndEx = collapseFriAndBuy.stream()
-                .collect(Collectors.toMap(this::fetchGroupKey, o -> o, (o1, o2) -> (RefrigeratorIngredient) o1.setQuantity(o1.quantity + o2.quantity)));
-        sameSortAndEx.forEach((key, value) -> refrigeratorIngredientDAO.insertIngredient(value));
-        ingredients.forEach(ingredient -> ingredient.setQuantity(-ingredient.quantity));
+        ingredients.forEach(refrigeratorIngredientDAO::insertIngredient);
 
         List<Ingredient> collect = ingredients.stream().
                 map(o -> (Ingredient) o)
@@ -78,20 +72,20 @@ public class RefrigeratorIngredientRepository {
                         (o1, o2) -> o1.setQuantity(o1.quantity + o2.quantity)));
     }
 
-    public Map<String, List<RefrigeratorIngredient>> getRefrigeratorIngredients() {
+    public Map<String, List<RefrigeratorIngredientVO>> getRefrigeratorIngredients() {
         String now = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
-        List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getQuantityGreaterZeroAndNotExpiredIngredients(Integer.parseInt(now));
+        List<RefrigeratorIngredientVO> list = refrigeratorIngredientDAO.getQuantityGreaterZeroAndNotExpiredIngredientsOverallInfo(Integer.parseInt(now));
         return sortIngredients(list);
     }
 
-    public Map<String, List<RefrigeratorIngredient>> getAllIngredients() {
-        List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
-        return sortIngredients(list);
-    }
+//    public Map<String, List<RefrigeratorIngredient>> getAllIngredients() {
+//        List<RefrigeratorIngredient> list = refrigeratorIngredientDAO.getAllRefrigeratorIngredients();
+//        return sortIngredients(list);
+//    }
 
-    private Map<String, List<RefrigeratorIngredient>> sortIngredients(List<RefrigeratorIngredient> list) {
+    private Map<String, List<RefrigeratorIngredientVO>> sortIngredients(List<RefrigeratorIngredientVO> list) {
         return list.stream()
-                .collect(Collectors.groupingBy(RefrigeratorIngredient::getSort));
+                .collect(Collectors.groupingBy(RefrigeratorIngredientVO::getSort));
     }
 
     public void consumeIngredients(List<RecipeIngredient> recipesUsingIngredients) {
@@ -102,5 +96,12 @@ public class RefrigeratorIngredientRepository {
 
     public void takeOutIngredients(RefrigeratorIngredient ingredient) {
         refrigeratorIngredientDAO.insertIngredient(ingredient);
+    }
+
+    public List<RefrigeratorIngredientDetailVO> searchRefrigeratorIngredientDetail(RefrigeratorIngredientVO refrigeratorIngredientVO) {
+        LocalDate now = LocalDate.now();
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
+        int today = Integer.parseInt(format);
+        return refrigeratorIngredientDAO.getIngredientByName(refrigeratorIngredientVO.name, today);
     }
 }

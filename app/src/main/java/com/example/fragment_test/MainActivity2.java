@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.fragment_test.RecipeRecommend.RecipeRecommendationActivity;
+import com.example.fragment_test.ScannerList.OcrActivity;
 import com.example.fragment_test.databinding.ActivityMain2Binding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -40,6 +41,10 @@ public class MainActivity2 extends AppCompatActivity{
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         setSupportActionBar(toolbar);
+
+        //Intent intent = new Intent(MainActivity2.this, OcrActivity.class);
+        //startActivity(intent);
+
 
 //        Button button=this.findViewById(R.id.ApiText);
 //        button.setOnClickListener(new View.OnClickListener(){
