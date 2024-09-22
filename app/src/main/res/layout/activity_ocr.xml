@@ -9,7 +9,7 @@
         android:id="@+id/buttonRecognizeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="辨識圖片(要改開啟相簿)" />
+        android:text="開啟相簿選取圖片" />
 
     <TextView
         android:id="@+id/textViewDate"

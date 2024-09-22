@@ -1,14 +1,17 @@
 package com.example.fragment_test.ScannerList;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +23,7 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,6 +32,7 @@ import java.util.regex.Pattern;
 public class OcrActivity extends AppCompatActivity {
 
     private static final String TAG = "OcrActivity";
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonRecognizeImage;
     private TextView textViewDate;
@@ -50,7 +55,7 @@ public class OcrActivity extends AppCompatActivity {
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recognizeImageFromDrawable();
+                openGallery();
             }
         });
 
@@ -59,10 +64,25 @@ public class OcrActivity extends AppCompatActivity {
         recyclerViewItems.setAdapter(itemAdapter);
     }
 
-    private void recognizeImageFromDrawable() {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.scannerlist01);
-        processImage(bitmap);
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                processImage(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "無法讀取所選圖片", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     private void processImage(Bitmap bitmap) {
         InputImage image = InputImage.fromBitmap(bitmap, 0);
@@ -70,7 +90,6 @@ public class OcrActivity extends AppCompatActivity {
                 .addOnSuccessListener(this::processText)
                 .addOnFailureListener(e -> Toast.makeText(OcrActivity.this, "OCR失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
     private void processText(Text text) {
         List<String> allLines = new ArrayList<>();
         for (Text.TextBlock block : text.getTextBlocks()) {

@@ -42,9 +42,8 @@ public class MainActivity2 extends AppCompatActivity{
         NavigationUI.setupWithNavController(binding.navView, navController);
         setSupportActionBar(toolbar);
 
-           
-                        Intent intent = new Intent(MainActivity2.this, OcrActivity.class);
-                        startActivity(intent);
+        //Intent intent = new Intent(MainActivity2.this, OcrActivity.class);
+        //startActivity(intent);
 
 
 //        Button button=this.findViewById(R.id.ApiText);
