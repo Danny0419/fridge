@@ -59,11 +59,10 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_shopping_list" />
 
-    <fragment
+    <activity
         android:id="@+id/meals_prepare_dialog"
-        android:name="com.example.fragment_test.ui.schedule.MealsPrepareDialogFragment"
+        android:name="com.example.fragment_test.ui.schedule.MealsPrepareDialogActivity"
         android:label="@string/title_home"
-        tools:layout="@layout/meals_prepare_dialog" >
-    </fragment>
+        tools:layout="@layout/activity_meals_prepare_dialog" />
 
 </navigation>
