@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:text="開啟相簿選取圖片" />
 
+    <Button
+        android:id="@+id/ApiText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="API測試連線" />
+
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
