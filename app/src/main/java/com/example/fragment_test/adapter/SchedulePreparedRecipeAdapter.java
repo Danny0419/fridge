@@ -18,13 +18,13 @@ public class SchedulePreparedRecipeAdapter extends RecyclerView.Adapter<Schedule
     List<Recipe> preparedRecipes;
 
     class SchedulePreparedRecipeViewHolder extends RecyclerView.ViewHolder {
-        ImageView foodPicture;
-        TextView foodName;
+        ImageView recipePicture;
+        TextView recipeName;
 
         public SchedulePreparedRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            foodPicture = itemView.findViewById(R.id.food_picture);
-            foodName = itemView.findViewById(R.id.food_name);
+            recipePicture = itemView.findViewById(R.id.recipe_picture);
+            recipeName = itemView.findViewById(R.id.recipe_name);
         }
     }
 
@@ -42,7 +42,7 @@ public class SchedulePreparedRecipeAdapter extends RecyclerView.Adapter<Schedule
     @Override
     public void onBindViewHolder(@NonNull SchedulePreparedRecipeViewHolder holder, int position) {
         Recipe preparedRecipe = preparedRecipes.get(position);
-        holder.foodName.setText(preparedRecipe.name);
+        holder.recipeName.setText(preparedRecipe.name);
     }
 
     @Override

@@ -6,13 +6,13 @@
     android:id="@+id/drawer_recipe_item">
 
     <ImageView
-        android:id="@+id/food_picture"
+        android:id="@+id/recipe_picture"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:src="@drawable/photo"/>
 
     <TextView
-        android:id="@+id/food_name"
+        android:id="@+id/recipe_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="食譜名稱"
