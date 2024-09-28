@@ -5,6 +5,12 @@
     android:orientation="vertical">
 
     <include
+        android:id="@+id/recipe_detail_toolbar"
+        layout="@layout/recipe_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"/>
+
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="214dp"

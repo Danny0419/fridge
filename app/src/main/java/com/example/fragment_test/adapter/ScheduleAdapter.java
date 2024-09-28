@@ -3,6 +3,7 @@ package com.example.fragment_test.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.ScheduleRecipe;
-import com.example.fragment_test.ui.schedule.MealsPrepareDialogFragment;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.example.fragment_test.ui.schedule.MealsPrepareDialogActivity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -126,8 +126,8 @@ public class ScheduleAdapter extends BaseAdapter {
                 }
                 //彈跳預備食譜
                 else {
-                    NavController navController = Navigation.findNavController((FragmentActivity) v.getContext(), R.id.nav_host_fragment_activity_main2);
-                    navController.navigate(R.id.meals_prepare_dialog);  // 使用導航圖中設定的 ID 進行跳轉
+                    Intent intent = new Intent(v.getContext(), MealsPrepareDialogActivity.class);
+                    v.getContext().startActivity(intent);
                 }
             }
         });

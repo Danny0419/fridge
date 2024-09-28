@@ -45,14 +45,5 @@ public class MainActivity2 extends AppCompatActivity{
         //Intent intent = new Intent(MainActivity2.this, OcrActivity.class);
         //startActivity(intent);
 
-
-//        Button button=this.findViewById(R.id.ApiText);
-//        button.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity2.this, RecipeRecommendationActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 }

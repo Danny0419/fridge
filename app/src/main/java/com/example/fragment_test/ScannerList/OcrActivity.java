@@ -1,5 +1,6 @@
 package com.example.fragment_test.ScannerList;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.ServerAPI.*;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -29,18 +31,24 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class OcrActivity extends AppCompatActivity {
 
     private static final String TAG = "OcrActivity";
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonRecognizeImage;
+    private Button ApiTest;
     private TextView textViewDate;
     private RecyclerView recyclerViewItems;
     private ItemAdapter itemAdapter;
 
     private TextRecognizer recognizer;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +57,7 @@ public class OcrActivity extends AppCompatActivity {
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
         recyclerViewItems = findViewById(R.id.recyclerViewItems);
+        ApiTest = findViewById(R.id.ApiText);
 
         recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
 
@@ -56,6 +65,13 @@ public class OcrActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openGallery();
+            }
+        });
+
+        ApiTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApiStart();
             }
         });
 
@@ -82,7 +98,6 @@ public class OcrActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void processImage(Bitmap bitmap) {
         InputImage image = InputImage.fromBitmap(bitmap, 0);
@@ -190,5 +205,34 @@ public class OcrActivity extends AppCompatActivity {
         }
 
         return items;
+    }
+
+    private void ApiStart(){
+        // 获取 Retrofit 实例和 API 服务
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+
+        // 调用 ingredients API
+        Call<List<Ingredient>> call = apiService.getIngredients();
+        call.enqueue(new Callback<List<Ingredient>>() {
+            @Override
+            public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Ingredient> ingredients = response.body();
+                    for (Ingredient ingredient : ingredients) {
+                        Log.d(TAG, "Ingredient ID: " + ingredient.getIngredient_ID());
+                        Log.d(TAG, "Ingredient Name: " + ingredient.getIngredient_Name());
+                        Log.d(TAG, "Ingredient Category: " + ingredient.getIngredient_category());
+                        Log.d(TAG, "Expiration: " + ingredient.getExpiration());
+                    }
+                } else {
+                    Log.e(TAG, "Response failed or empty");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Ingredient>> call, Throwable t) {
+                Log.e(TAG, "Error: " + t.getMessage());
+            }
+        });
     }
 }
