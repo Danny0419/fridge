@@ -11,6 +11,7 @@
         android:layout_height="67dp"/>
 
     <include
+        android:id="@+id/schedule_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="214dp"

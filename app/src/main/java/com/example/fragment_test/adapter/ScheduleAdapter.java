@@ -12,9 +12,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -127,6 +124,7 @@ public class ScheduleAdapter extends BaseAdapter {
                 //彈跳預備食譜
                 else {
                     Intent intent = new Intent(v.getContext(), MealsPrepareDialogActivity.class);
+                    intent.putExtra("dayOfWeek", dates[position].getDayOfWeek().toString());
                     v.getContext().startActivity(intent);
                 }
             }

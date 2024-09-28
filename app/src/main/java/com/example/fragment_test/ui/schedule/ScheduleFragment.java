@@ -5,7 +5,6 @@ import static com.example.fragment_test.utils.setListBackground.setListBackgroun
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
