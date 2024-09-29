@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeWithPreRecipeId;
 
 import java.util.List;
 
 public class SchedulePreparedRecipeAdapter extends RecyclerView.Adapter<SchedulePreparedRecipeAdapter.SchedulePreparedRecipeViewHolder> {
-    List<Recipe> preparedRecipes;
+    List<RecipeWithPreRecipeId> preparedRecipes;
+    OnClickListener onclickListener;
 
     class SchedulePreparedRecipeViewHolder extends RecyclerView.ViewHolder {
         ImageView recipePicture;
@@ -28,7 +29,11 @@ public class SchedulePreparedRecipeAdapter extends RecyclerView.Adapter<Schedule
         }
     }
 
-    public SchedulePreparedRecipeAdapter(List<Recipe> preparedRecipes) {
+    public interface OnClickListener {
+        void onclick(RecipeWithPreRecipeId recipe);
+    }
+
+    public SchedulePreparedRecipeAdapter(List<RecipeWithPreRecipeId> preparedRecipes) {
         this.preparedRecipes = preparedRecipes;
     }
 
@@ -41,12 +46,17 @@ public class SchedulePreparedRecipeAdapter extends RecyclerView.Adapter<Schedule
 
     @Override
     public void onBindViewHolder(@NonNull SchedulePreparedRecipeViewHolder holder, int position) {
-        Recipe preparedRecipe = preparedRecipes.get(position);
+        RecipeWithPreRecipeId preparedRecipe = preparedRecipes.get(position);
         holder.recipeName.setText(preparedRecipe.name);
+        holder.itemView.setOnClickListener(view -> onclickListener.onclick(preparedRecipe));
     }
 
     @Override
     public int getItemCount() {
         return preparedRecipes.size();
+    }
+
+    public void setOnclickListener(OnClickListener onclickListener) {
+        this.onclickListener = onclickListener;
     }
 }

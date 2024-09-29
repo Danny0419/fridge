@@ -7,9 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.ScheduleRecipe;
-import com.example.fragment_test.repository.ScheduleRepository;
+import com.example.fragment_test.repository.ScheduleRecipeRepository;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -19,23 +20,22 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class ScheduleViewModel extends AndroidViewModel {
-    private final MutableLiveData<Map<DayOfWeek, List<ScheduleRecipe>>> scheduleRecipes = new MutableLiveData<>();
-    private final ScheduleRepository repository;
+    private final MutableLiveData<Map<DayOfWeek, List<ScheduleRecipe>>> scheduledRecipes = new MutableLiveData<>();
+    private final ScheduleRecipeRepository repository;
 
     public ScheduleViewModel(@NonNull Application application) {
         super(application);
-        this.repository = ScheduleRepository.getInstance(getApplication());
+        this.repository = ScheduleRecipeRepository.getInstance(getApplication());
     }
 
     public void loadSchedules() {
-
         Maybe.fromCallable(repository::getAWeekSchedules)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableMaybeObserver<Map<DayOfWeek, List<ScheduleRecipe>>>() {
                     @Override
                     public void onSuccess(Map<DayOfWeek, List<ScheduleRecipe>> schedules) {
-                        scheduleRecipes.setValue(schedules);
+                        scheduledRecipes.setValue(schedules);
                     }
 
                     @Override
@@ -50,8 +50,8 @@ public class ScheduleViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<Map<DayOfWeek, List<ScheduleRecipe>>> getScheduleRecipes() {
-        return scheduleRecipes;
+    public MutableLiveData<Map<DayOfWeek, List<ScheduleRecipe>>> getScheduledRecipes() {
+        return scheduledRecipes;
     }
 
 }

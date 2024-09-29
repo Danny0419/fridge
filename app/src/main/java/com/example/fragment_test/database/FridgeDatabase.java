@@ -12,7 +12,6 @@ import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ScheduleRecipe;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.example.fragment_test.entity.Step;
@@ -22,7 +21,6 @@ import com.example.fragment_test.entity.Step;
         InvoiceItem.class,
         RefrigeratorIngredient.class,
         ShoppingIngredient.class,
-        Schedule.class,
         Recipe.class,
         Step.class,
         RecipeIngredient.class,
@@ -59,7 +57,6 @@ public abstract class FridgeDatabase extends RoomDatabase {
     // 其他 DAO
     public abstract RefrigeratorIngredientDAO refrigeratorDAO();
     public abstract ShoppingDAO shoppingDAO();
-    public abstract ScheduleDAO scheduleDAO();
     public abstract RecipeDAO recipeDAO();
     public abstract StepDAO stepDAO();
     public abstract RecipeIngredientDAO recipeIngredientDAO();

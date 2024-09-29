@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,13 +17,11 @@ import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleEachRecipeAdapter;
 import com.example.fragment_test.adapter.SchedulePreparedRecipeAdapter;
 import com.example.fragment_test.databinding.ActivityMealsPrepareDialogBinding;
-import com.example.fragment_test.entity.Recipe;
-
-import java.util.List;
 
 public class MealsPrepareDialogActivity extends AppCompatActivity {
 
     ActivityMealsPrepareDialogBinding mealsPrepareDialogBinding;
+    MealsPreparedViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,29 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
         mealsPrepareDialogBinding = ActivityMealsPrepareDialogBinding.inflate(getLayoutInflater());
         setContentView(mealsPrepareDialogBinding.getRoot());
 
-        Button invisibleBtn=findViewById(R.id.select_meal_btn);
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MealsPreparedViewModel.class);
+
+        viewModel.getScheduledRecipes()
+                .observe(this, (recipes) -> {
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
+                    RecyclerView foodItem = mealsPrepareDialogBinding.scheduleItem.foodItem;
+                    foodItem.setLayoutManager(gridLayoutManager);
+                    ScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new ScheduleEachRecipeAdapter(recipes);
+                    foodItem.setAdapter(scheduleEachRecipeAdapter);
+                    ;
+                });
+
+        viewModel.getPreparedRecipes()
+                .observe(this, (recipes -> {
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
+                    RecyclerView foodPrepareItem = mealsPrepareDialogBinding.foodPrepareItem;
+                    foodPrepareItem.setLayoutManager(gridLayoutManager);
+                    SchedulePreparedRecipeAdapter schedulePreparedRecipeAdapter = new SchedulePreparedRecipeAdapter(recipes);
+//                    schedulePreparedRecipeAdapter.setOnclickListener(recipe -> viewModel.schedule(recipe));
+                    foodPrepareItem.setAdapter(schedulePreparedRecipeAdapter);
+                }));
+
+        Button invisibleBtn = findViewById(R.id.select_meal_btn);
         invisibleBtn.setVisibility(View.GONE);
 
         // toolbar setting
@@ -55,16 +76,9 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
         TextView eachDayText = mealsPrepareDialogBinding.scheduleItem.eachDayText;
         eachDayText.setText(dayOfWeek);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
-        List<Recipe> scheduledRecipes = intent.getParcelableExtra("scheduledRecipes");
-        RecyclerView foodItem = mealsPrepareDialogBinding.scheduleItem.foodItem;
-        foodItem.setLayoutManager(gridLayoutManager);
-        foodItem.setAdapter(new ScheduleEachRecipeAdapter(scheduledRecipes));
-
-        List<Recipe> preparedRecipe = intent.getParcelableExtra("PreparedRecipe");
-        RecyclerView foodPrepareItem = mealsPrepareDialogBinding.foodPrepareItem;
-        foodPrepareItem.setLayoutManager(gridLayoutManager);
-        foodPrepareItem.setAdapter(new SchedulePreparedRecipeAdapter(preparedRecipe));
+        int scheduleId = intent.getIntExtra("scheduleId", 0);
+        viewModel.loadSchedules(scheduleId);
+        viewModel.loadPreparedRecipes();
 
     }
 }

@@ -7,7 +7,6 @@ import androidx.test.filters.SmallTest;
 
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RecipeDAO;
-import com.example.fragment_test.database.ScheduleDAO;
 import com.example.fragment_test.database.ScheduleRecipeDAO;
 import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
@@ -44,7 +43,7 @@ public class ScheduleRecipeRepositoryTest extends TestCase {
         scheduleRepository.schedule(LocalDate.now(),preparedRecipe1);
 
 
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(20240820);
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesByDate(20240820);
         scheduleRecipeRepository.finishCooking(scheduleRecipes);
     }
 

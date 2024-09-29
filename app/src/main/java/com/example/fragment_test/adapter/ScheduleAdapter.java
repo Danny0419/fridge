@@ -22,6 +22,7 @@ import com.example.fragment_test.ui.schedule.MealsPrepareDialogActivity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +125,8 @@ public class ScheduleAdapter extends BaseAdapter {
                 //彈跳預備食譜
                 else {
                     Intent intent = new Intent(v.getContext(), MealsPrepareDialogActivity.class);
+                    String date = DateTimeFormatter.BASIC_ISO_DATE.format(dates[position]);
+                    intent.putExtra("date", Integer.parseInt(date));
                     intent.putExtra("dayOfWeek", dates[position].getDayOfWeek().toString());
                     v.getContext().startActivity(intent);
                 }

@@ -96,10 +96,10 @@ public class ScheduleFragment extends Fragment {
 
     private void setAWeek() {
         LocalDate today = LocalDate.now();
-        aWeek[today.getDayOfWeek().getValue()-1] = today;
+        aWeek[today.getDayOfWeek().getValue() - 1] = today;
         for (int i = 1; i < 7; i++) {
             LocalDate date = today.plusDays(i);
-            aWeek[date.getDayOfWeek().getValue()-1] = date;
+            aWeek[date.getDayOfWeek().getValue() - 1] = date;
         }
     }
 
@@ -108,21 +108,23 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        scheduleBinding= FragmentScheduleBinding.inflate(inflater, container, false);
+        scheduleBinding = FragmentScheduleBinding.inflate(inflater, container, false);
         scheduleContainer = scheduleBinding.schedulesContainer;
 
-        viewModel.getScheduleRecipes().observe(getViewLifecycleOwner(), (scheduleRecipes -> {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
-        }));
+        viewModel.getScheduledRecipes()
+                .observe(getViewLifecycleOwner(), (scheduleRecipes -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
+                }));
 
-        //去除邊框(分隔線為透明色、高度為0)
-        scheduleContainer.setDivider(null);
-        scheduleContainer.setDividerHeight(0);
+
+//        //去除邊框(分隔線為透明色、高度為0)
+//        scheduleContainer.setDivider(null);
+//        scheduleContainer.setDividerHeight(0);
 
         //設定奇偶行數背景顏色
-        setListBackgroundColor(scheduleContainer,requireContext());
+        setListBackgroundColor(scheduleContainer, requireContext());
 
 //        // 失敗的底線
 //        View viewRecipeItem = inflater.inflate(R.layout.recipe_item, container, false);
@@ -134,7 +136,7 @@ public class ScheduleFragment extends Fragment {
         return scheduleBinding.getRoot();
     }
 
-    public void setSchedule(Map<String, ArrayList<Recipe>> schedule){
+    public void setSchedule(Map<String, ArrayList<Recipe>> schedule) {
     }
 
     //toolbar
@@ -162,7 +164,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     //彈跳式窗
-    private void showDialog(){
+    private void showDialog() {
         //彈跳頁面
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.schedule_change_display_dialog);

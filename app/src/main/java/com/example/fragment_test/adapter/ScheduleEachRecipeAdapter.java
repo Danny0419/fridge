@@ -15,6 +15,7 @@ import java.util.List;
 
 public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEachRecipeAdapter.ScheduleEachRecipeViewHolder> {
     private List<Recipe> recipes;
+    private OnClickListener onClickListener;
 
     class ScheduleEachRecipeViewHolder extends RecyclerView.ViewHolder {
         TextView recipeTitle;
@@ -25,6 +26,10 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
             this.recipeTitle = itemView.findViewById(R.id.recipe_img);
             this.recipeImg = itemView.findViewById(R.id.recipe_title);
         }
+    }
+
+    public interface OnClickListener {
+        void onClick(Recipe recipe);
     }
 
     public ScheduleEachRecipeAdapter(List<Recipe> recipes) {
@@ -43,10 +48,15 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
         Recipe recipe = recipes.get(position);
         holder.recipeImg.setText(recipe.img);
         holder.recipeTitle.setText(recipe.name);
+        holder.itemView.setOnClickListener((v) -> onClickListener.onClick(recipe));
     }
 
     @Override
     public int getItemCount() {
         return recipes.size();
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 }
