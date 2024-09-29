@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,10 +17,14 @@ import com.example.fragment_test.adapter.ScheduleEachRecipeAdapter;
 import com.example.fragment_test.adapter.SchedulePreparedRecipeAdapter;
 import com.example.fragment_test.databinding.ActivityMealsPrepareDialogBinding;
 
+import java.time.DayOfWeek;
+
 public class MealsPrepareDialogActivity extends AppCompatActivity {
 
     ActivityMealsPrepareDialogBinding mealsPrepareDialogBinding;
     MealsPreparedViewModel viewModel;
+    int date;
+    int dayOfWeekInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
                     RecyclerView foodPrepareItem = mealsPrepareDialogBinding.foodPrepareItem;
                     foodPrepareItem.setLayoutManager(gridLayoutManager);
                     SchedulePreparedRecipeAdapter schedulePreparedRecipeAdapter = new SchedulePreparedRecipeAdapter(recipes);
-//                    schedulePreparedRecipeAdapter.setOnclickListener(recipe -> viewModel.schedule(recipe));
+                    schedulePreparedRecipeAdapter.setOnclickListener(recipe -> viewModel.schedule(date, dayOfWeekInt, recipe));
                     foodPrepareItem.setAdapter(schedulePreparedRecipeAdapter);
                 }));
 
@@ -71,13 +74,13 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Intent intent = getIntent();
+        date = intent.getIntExtra("date", 0);
+        dayOfWeekInt = DayOfWeek.valueOf(intent.getStringExtra("dayOfWeek")).getValue();
 
         String dayOfWeek = intent.getStringExtra("dayOfWeek");
-        TextView eachDayText = mealsPrepareDialogBinding.scheduleItem.eachDayText;
-        eachDayText.setText(dayOfWeek);
+        mealsPrepareDialogBinding.scheduleItem.eachDayText.setText(dayOfWeek);
 
-        int scheduleId = intent.getIntExtra("scheduleId", 0);
-        viewModel.loadSchedules(scheduleId);
+        viewModel.loadSchedules(date);
         viewModel.loadPreparedRecipes();
 
     }

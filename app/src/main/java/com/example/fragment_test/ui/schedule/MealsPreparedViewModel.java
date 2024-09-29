@@ -14,8 +14,10 @@ import com.example.fragment_test.repository.ScheduleRecipeRepository;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -31,11 +33,11 @@ public class MealsPreparedViewModel extends AndroidViewModel {
         this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(application);
     }
 
-    public void loadSchedules(int scheduleId) {
+    public void loadSchedules(int date) {
         Maybe.fromCallable(new Callable<List<Recipe>>() {
                     @Override
                     public List<Recipe> call() throws Exception {
-                        return scheduleRecipeRepository.getSpecificDayScheduledRecipes(scheduleId);
+                        return scheduleRecipeRepository.getSpecificDateScheduledRecipes(date);
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -86,20 +88,21 @@ public class MealsPreparedViewModel extends AndroidViewModel {
     }
 
     public void schedule(int date, int dayOfWeek, RecipeWithPreRecipeId recipe) {
-//        Completable.fromAction(() -> scheduleRepository.schedule(date, dayOfWeek, new PreparedRecipe()))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new DisposableCompletableObserver() {
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//                });
+        Completable.fromAction(() -> scheduleRecipeRepository.schedule(date, dayOfWeek, recipe))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        loadSchedules(date);
+                        loadPreparedRecipes();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     public MutableLiveData<List<Recipe>> getScheduledRecipes() {

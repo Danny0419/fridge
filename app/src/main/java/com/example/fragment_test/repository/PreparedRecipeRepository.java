@@ -32,9 +32,8 @@ public class PreparedRecipeRepository {
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
     }
 
-    public void schedule(int scheduleRecipeId,PreparedRecipe preparedRecipe) {
-        preparedRecipe.sRId = scheduleRecipeId;
-        preparedRecipe.scheduled = 1;
+    public void schedule(RecipeWithPreRecipeId recipeWithPreRecipeId) {
+        PreparedRecipe preparedRecipe = new PreparedRecipe(recipeWithPreRecipeId.pRId, recipeWithPreRecipeId.id, 1);
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
     }
 
