@@ -119,9 +119,9 @@ public class ScheduleFragment extends Fragment {
                 }));
 
 
-//        //去除邊框(分隔線為透明色、高度為0)
-//        scheduleContainer.setDivider(null);
-//        scheduleContainer.setDividerHeight(0);
+        //去除邊框(分隔線為透明色、高度為0)
+        scheduleContainer.setDivider(null);
+        scheduleContainer.setDividerHeight(0);
 
         //設定奇偶行數背景顏色
         setListBackgroundColor(scheduleContainer, requireContext());
