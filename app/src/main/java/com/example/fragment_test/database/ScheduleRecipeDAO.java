@@ -47,7 +47,7 @@ public interface ScheduleRecipeDAO {
             SELECT r.id, r.name, r.img, r.serving, r.collected
             FROM schedule_recipes s_r join recipes r
             ON s_r.r_id = r.id
-            WHERE s_r.date = :date
+            WHERE s_r.date = :date AND s_r.status = 0
             """
     )
     List<Recipe> queryScheduleRecipesByDate(int date);
@@ -55,4 +55,11 @@ public interface ScheduleRecipeDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void updateScheduleRecipe(ScheduleRecipe scheduleRecipe);
 
+    @Query(
+            """
+            DELETE FROM schedule_recipes
+            WHERE date = :date AND r_id = :id
+            """
+    )
+    void deleteScheduleRecipeStatusByDateAndRecipeId(int date, int id);
 }

@@ -80,7 +80,9 @@ public class ScheduleAdapter extends BaseAdapter {
         List<ScheduleRecipe> dayScheduleRecipes = dayScheduleRecipesOpt.orElse(new ArrayList<>());
         Stream<Recipe> recipeStream = dayScheduleRecipes.stream().map(ScheduleRecipe::getRecipe);
         List<Recipe> recipes = recipeStream.collect(Collectors.toList());
-        viewHolder.eachRecipeRecyclerView.setAdapter(new ScheduleEachRecipeAdapter(recipes));
+
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(dates[position]);
+        viewHolder.eachRecipeRecyclerView.setAdapter(new ScheduleEachRecipeAdapter(recipes, Integer.parseInt(format)));
 
         /*點擊按鈕
         選擇要吃甚麼的區塊下拉與收合
@@ -125,7 +127,7 @@ public class ScheduleAdapter extends BaseAdapter {
                 //彈跳預備食譜
                 else {
                     Intent intent = new Intent(v.getContext(), MealsPrepareDialogActivity.class);
-                    String date = DateTimeFormatter.BASIC_ISO_DATE.format(dates[position]);
+                    String date = format;
                     intent.putExtra("date", Integer.parseInt(date));
                     intent.putExtra("dayOfWeek", dates[position].getDayOfWeek().toString());
                     v.getContext().startActivity(intent);

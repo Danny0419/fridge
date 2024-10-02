@@ -40,4 +40,8 @@ public class PreparedRecipeRepository {
     public List<RecipeWithPreRecipeId> getPreparedRecipes() {
         return preparedRecipeDAO.queryAllRecipes();
     }
+
+    public void unSchedule(PreparedRecipe preparedRecipe) {
+        preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
+    }
 }

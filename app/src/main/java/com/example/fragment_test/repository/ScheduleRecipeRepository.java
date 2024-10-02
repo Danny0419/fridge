@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.ScheduleRecipeDAO;
+import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeWithPreRecipeId;
 import com.example.fragment_test.entity.ScheduleRecipe;
@@ -36,6 +37,11 @@ public class ScheduleRecipeRepository {
         ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, recipeWithPreRecipeId.id, date, dayOfWeek, 0);
         scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
         preparedRecipeRepository.schedule((recipeWithPreRecipeId));
+    }
+
+    public void unSchedule(int date, Recipe recipe) {
+        scheduleRecipeDAO.deleteScheduleRecipeStatusByDateAndRecipeId(date, recipe.id);
+        preparedRecipeRepository.unSchedule(new PreparedRecipe(0, recipe.id, 0));
     }
 
     public void finishCooking(List<ScheduleRecipe> scheduleRecipes) {

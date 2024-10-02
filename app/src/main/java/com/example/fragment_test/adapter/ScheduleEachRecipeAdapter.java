@@ -16,6 +16,7 @@ import java.util.List;
 public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEachRecipeAdapter.ScheduleEachRecipeViewHolder> {
     private List<Recipe> recipes;
     private OnClickListener onClickListener;
+    private int date;
 
     class ScheduleEachRecipeViewHolder extends RecyclerView.ViewHolder {
         TextView recipeTitle;
@@ -29,11 +30,12 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
     }
 
     public interface OnClickListener {
-        void onClick(Recipe recipe);
+        void onClick(int date, Recipe recipe);
     }
 
-    public ScheduleEachRecipeAdapter(List<Recipe> recipes) {
+    public ScheduleEachRecipeAdapter(List<Recipe> recipes, int date) {
         this.recipes = recipes;
+        this.date = date;
     }
 
     @NonNull
@@ -48,7 +50,7 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
         Recipe recipe = recipes.get(position);
         holder.recipeImg.setText(recipe.img);
         holder.recipeTitle.setText(recipe.name);
-        holder.itemView.setOnClickListener((v) -> onClickListener.onClick(recipe));
+        holder.itemView.setOnClickListener((v) -> onClickListener.onClick(date, recipe));
     }
 
     @Override

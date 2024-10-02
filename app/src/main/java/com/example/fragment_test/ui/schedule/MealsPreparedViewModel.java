@@ -105,6 +105,24 @@ public class MealsPreparedViewModel extends AndroidViewModel {
                 });
     }
 
+    public void unSchedule(int date, Recipe recipe) {
+        Completable.fromAction(() -> scheduleRecipeRepository.unSchedule(date, recipe))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        loadSchedules(date);
+                        loadPreparedRecipes();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
     public MutableLiveData<List<Recipe>> getScheduledRecipes() {
         return scheduledRecipes;
     }

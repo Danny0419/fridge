@@ -22,6 +22,7 @@ import com.example.fragment_test.ui.schedule.MealsPrepareDialogActivity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class ScheduleAdapterOld extends BaseAdapter {
         List<ScheduleRecipe> dayScheduleRecipes = dayScheduleRecipesOpt.orElse(new ArrayList<>());
         Stream<Recipe> recipeStream = dayScheduleRecipes.stream().map(ScheduleRecipe::getRecipe);
         List<Recipe> recipes = recipeStream.collect(Collectors.toList());
-        viewHolder.eachRecipeRecyclerView.setAdapter(new ScheduleEachRecipeAdapter(recipes));
+        viewHolder.eachRecipeRecyclerView.setAdapter(new ScheduleEachRecipeAdapter(recipes, Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(dates[position]))));
 
         /*點擊按鈕
         選擇要吃甚麼的區塊下拉與收合

@@ -40,9 +40,11 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
                     RecyclerView foodItem = mealsPrepareDialogBinding.scheduleItem.foodItem;
                     foodItem.setLayoutManager(gridLayoutManager);
-                    ScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new ScheduleEachRecipeAdapter(recipes);
+                    ScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new ScheduleEachRecipeAdapter(recipes, date);
+                    scheduleEachRecipeAdapter.setOnClickListener((date, recipe) -> {
+                        viewModel.unSchedule(date, recipe);
+                    });
                     foodItem.setAdapter(scheduleEachRecipeAdapter);
-                    ;
                 });
 
         viewModel.getPreparedRecipes()
