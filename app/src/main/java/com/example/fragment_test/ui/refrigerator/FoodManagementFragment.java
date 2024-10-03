@@ -102,6 +102,13 @@ public class FoodManagementFragment extends Fragment {
                 adapter.setOnClickListener((position, refrigeratorIngredient) -> {
                     refrigeratorItemDetailDialogBinding.name.setText(refrigeratorIngredient.name);
                     viewModel.seeIngredientDetail(refrigeratorIngredient);
+                    viewModel.getIngredientDetails()
+                            .observe(getViewLifecycleOwner(), (ingredientVOS) -> {
+                                RecyclerView refrigeratorItemDetail = refrigeratorItemDetailDialogBinding.refrigeratorItemDetail;
+                                refrigeratorItemDetail.setLayoutManager(new LinearLayoutManager(getContext()));
+                                refrigeratorItemDetail.setAdapter(new RefrigeratorIngredientDetailAdapter(ingredientVOS));
+                                ingredientDetail.show();
+                            });
                 });
                 ingredientContainer.setAdapter(adapter);
                 ingredientContainer.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) ->{
@@ -112,13 +119,7 @@ public class FoodManagementFragment extends Fragment {
                 setListBackgroundColor(ingredientContainer,requireContext());
         });
 
-        viewModel.getIngredientDetails()
-                .observe(getViewLifecycleOwner(), (ingredientVOS) -> {
-                    RecyclerView refrigeratorItemDetail = refrigeratorItemDetailDialogBinding.refrigeratorItemDetail;
-                    refrigeratorItemDetail.setLayoutManager(new LinearLayoutManager(getContext()));
-                    refrigeratorItemDetail.setAdapter(new RefrigeratorIngredientDetailAdapter(ingredientVOS));
-                    ingredientDetail.show();
-                });
+
 
         LinearSmoothScroller scroller = new LinearSmoothScroller(getContext()) {
             @Override
