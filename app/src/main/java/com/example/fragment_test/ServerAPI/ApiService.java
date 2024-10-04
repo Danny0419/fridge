@@ -15,5 +15,8 @@ public interface ApiService {
     @GET("api/ingredients")
     Call<List<Ingredient>> getIngredients();
 
+    @GET("api/get_recipe")
+    Call<List<Recipe>> getRecipes();;
+
     // 其他 API 接口
 }
