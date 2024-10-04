@@ -14,9 +14,11 @@ public class PreparedRecipeRepository {
     private static PreparedRecipeRepository preparedRecipeRepository;
     private final PreparedRecipeDAO preparedRecipeDAO;
     private final RecipeRepository recipeRepository;
+    private final RecipeIngredientRepository recipeIngredientRepository;
     private PreparedRecipeRepository(Context context) {
         this.preparedRecipeDAO = FridgeDatabase.getInstance(context).preparedRecipeDAO();
         this.recipeRepository = RecipeRepository.getInstance(context);
+        this.recipeIngredientRepository = RecipeIngredientRepository.getInstance(context);
     }
 
     public static PreparedRecipeRepository getInstance(Context context) {
@@ -28,6 +30,7 @@ public class PreparedRecipeRepository {
 
     public void addInterestingRecipe(Recipe recipe) {
         recipeRepository.storeRecipe(recipe);
+        recipeIngredientRepository.addRecipeIngredients(recipe.ingredients);
         PreparedRecipe preparedRecipe = new PreparedRecipe(0, recipe.id, null, 0);
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
     }

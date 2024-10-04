@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
@@ -27,15 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.databinding.FragmentScheduleBinding;
-import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.entity.ScheduleRecipe;
+import com.example.fragment_test.ui.recipe.RecipeViewModel;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,9 +39,9 @@ import java.util.Map;
  */
 public class ScheduleFragment extends Fragment {
     private FragmentScheduleBinding scheduleBinding;
-    private ScheduleViewModel viewModel;
+    private ScheduleViewModel scheduleViewModel;
+    private RecipeViewModel recipeViewModel;
     private final LocalDate[] aWeek = new LocalDate[7];
-    private Map<DayOfWeek, List<ScheduleRecipe>> schedule = new HashMap<>();
     private ListView scheduleContainer;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -87,9 +82,9 @@ public class ScheduleFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ScheduleViewModel.class);
-        viewModel.loadSchedules();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
+        scheduleViewModel = viewModelProvider.get(ScheduleViewModel.class);
+        recipeViewModel = viewModelProvider.get(RecipeViewModel.class);
 
         setAWeek();
     }
@@ -111,11 +106,26 @@ public class ScheduleFragment extends Fragment {
         scheduleBinding = FragmentScheduleBinding.inflate(inflater, container, false);
         scheduleContainer = scheduleBinding.schedulesContainer;
 
-        viewModel.getScheduledRecipes()
+        scheduleViewModel.getScheduledRecipes()
                 .observe(getViewLifecycleOwner(), (scheduleRecipes -> {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
+                    ScheduleAdapter scheduleAdapter = new ScheduleAdapter(aWeek, scheduleViewModel.getScheduledRecipes().getValue());
+                    scheduleAdapter.setOnClickListener(recipeWithScheduledId -> {
+                        recipeViewModel.loadRecipeIngredients(recipeWithScheduledId);
+                        recipeViewModel.getRecipeIngredients().observe(getViewLifecycleOwner(), ingredients -> {
+                            recipeWithScheduledId.recipe.ingredients = ingredients;
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("scheduleRecipe", recipeWithScheduledId);
+                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                            try {
+                                navController.navigate(R.id.navigation_start_cooking, bundle);
+                            }catch (RuntimeException e) {
+                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    });
+                    scheduleContainer.setAdapter(scheduleAdapter);
                 }));
 
 
@@ -134,9 +144,6 @@ public class ScheduleFragment extends Fragment {
         addToolbar();
 
         return scheduleBinding.getRoot();
-    }
-
-    public void setSchedule(Map<String, ArrayList<Recipe>> schedule) {
     }
 
     //toolbar
@@ -192,4 +199,9 @@ public class ScheduleFragment extends Fragment {
         dialog.show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        scheduleViewModel.loadSchedules();
+    }
 }

@@ -30,4 +30,12 @@ public class RecipeIngredientRepository {
         scheduleRecipes.forEach(scheduleRecipe -> recipesUsingIngredients.addAll(recipeIngredientDAO.queryRecipeIngredientsByRId(scheduleRecipe.rid)));
         return recipesUsingIngredients;
     }
+
+    public List<RecipeIngredient> getRecipeIngredientsByRId(int id) {
+        return recipeIngredientDAO.queryRecipeIngredientsByRId(id);
+    }
+
+    public void addRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+        recipeIngredients.forEach(recipeIngredientDAO::insertRecipeIngredient);
+    }
 }

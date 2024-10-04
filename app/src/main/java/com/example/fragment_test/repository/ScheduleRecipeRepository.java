@@ -7,6 +7,7 @@ import com.example.fragment_test.database.ScheduleRecipeDAO;
 import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeWithPreRecipeId;
+import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
 import java.time.DayOfWeek;
@@ -44,9 +45,7 @@ public class ScheduleRecipeRepository {
         preparedRecipeRepository.unSchedule(new PreparedRecipe(0, recipe.id, 0));
     }
 
-    public void finishCooking(List<ScheduleRecipe> scheduleRecipes) {
-        scheduleRecipes.forEach(scheduleRecipe -> scheduleRecipe.status = 1);
-        scheduleRecipes.forEach(scheduleRecipeDAO::updateScheduleRecipe);
+    public void cooking(RecipeWithScheduledId recipeWithScheduledId) {
     }
 
     public boolean checkTodayIsDone(Integer sId) {
@@ -58,11 +57,11 @@ public class ScheduleRecipeRepository {
         return scheduleRecipeDAO.queryScheduleRecipesByDate(scheduleId);
     }
 
-    public Map<DayOfWeek, List<ScheduleRecipe>> getAWeekSchedules() {
+    public Map<DayOfWeek, List<RecipeWithScheduledId>> getAWeekSchedules() {
         String today = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
-        List<ScheduleRecipe> allNotFinishedSchedule = scheduleRecipeDAO.queryAllNotDoneAndUnexpiredScheduleRecipes(Integer.parseInt(today));
+        List<RecipeWithScheduledId> allNotFinishedSchedule = scheduleRecipeDAO.queryAllNotDoneAndUnexpiredScheduleRecipes(Integer.parseInt(today));
         return allNotFinishedSchedule.stream()
-                .collect(Collectors.groupingBy(ScheduleRecipe::getDayOfWeek));
+                .collect(Collectors.groupingBy(RecipeWithScheduledId::getDayOfWeek));
     }
 
     public List<Recipe> getSpecificDateScheduledRecipes(int date) {

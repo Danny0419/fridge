@@ -8,11 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeIngredient;
+import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.repository.PreparedRecipeRepository;
 import com.example.fragment_test.repository.RecipeRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -24,6 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 public class RecipeViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
+    private final MutableLiveData<List<RecipeIngredient>> recipeIngredients = new MutableLiveData<>();
     private final RecipeRepository recipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
 
@@ -53,10 +57,6 @@ public class RecipeViewModel extends AndroidViewModel {
 
                     }
                 });
-    }
-
-    public MutableLiveData<List<Recipe>> getRecipes() {
-        return recipes;
     }
 
     public void addInterestingRecipe(Recipe recipe) {
@@ -111,6 +111,32 @@ public class RecipeViewModel extends AndroidViewModel {
 
     }
 
+    public void loadRecipeIngredients(RecipeWithScheduledId recipeWithScheduledId) {
+        Maybe.fromCallable(new Callable<List<RecipeIngredient>>() {
+                    @Override
+                    public List<RecipeIngredient> call() throws Exception {
+                        return recipeRepository.getRecipeIngredients(recipeWithScheduledId.recipe.id);
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<RecipeIngredient>>() {
+                    @Override
+                    public void onSuccess(List<RecipeIngredient> ingredients) {
+                        recipeIngredients.setValue(ingredients);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public void showCollectionRecipe() {
         Maybe.fromCallable(recipeRepository::showRecipeCollection)
                 .subscribeOn(Schedulers.io())
@@ -129,5 +155,13 @@ public class RecipeViewModel extends AndroidViewModel {
                     public void onComplete() {
                     }
                 });
+    }
+
+    public MutableLiveData<List<Recipe>> getRecipes() {
+        return recipes;
+    }
+
+    public MutableLiveData<List<RecipeIngredient>> getRecipeIngredients() {
+        return recipeIngredients;
     }
 }

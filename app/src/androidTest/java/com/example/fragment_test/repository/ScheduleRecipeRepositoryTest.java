@@ -32,7 +32,7 @@ public class ScheduleRecipeRepositoryTest extends TestCase {
     public ScheduleRecipeDAO scheduleRecipeDAO;
 
     @Test
-    public void finishCooking() {
+    public void cooking() {
         Recipe recipe = new Recipe(0, "牛肉炒飯", "照片", 1, 0);
         Recipe recipe1 = new Recipe(0, "豬肉炒飯", "照片", 1, 0);
         recipeDAO.insertRecipe(recipe);
@@ -44,7 +44,7 @@ public class ScheduleRecipeRepositoryTest extends TestCase {
 
 
         List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesByDate(20240820);
-        scheduleRecipeRepository.finishCooking(scheduleRecipes);
+        scheduleRecipeRepository.cooking(scheduleRecipes);
     }
 
     @Before

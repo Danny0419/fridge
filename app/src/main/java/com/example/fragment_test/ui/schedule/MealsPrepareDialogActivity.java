@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.adapter.ScheduleEachRecipeAdapter;
+import com.example.fragment_test.adapter.MealsPrepareScheduleEachRecipeAdapter;
 import com.example.fragment_test.adapter.SchedulePreparedRecipeAdapter;
 import com.example.fragment_test.databinding.ActivityMealsPrepareDialogBinding;
 
@@ -40,7 +40,7 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
                     RecyclerView foodItem = mealsPrepareDialogBinding.scheduleItem.foodItem;
                     foodItem.setLayoutManager(gridLayoutManager);
-                    ScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new ScheduleEachRecipeAdapter(recipes, date);
+                    MealsPrepareScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new MealsPrepareScheduleEachRecipeAdapter(recipes, date);
                     scheduleEachRecipeAdapter.setOnClickListener((date, recipe) -> {
                         viewModel.unSchedule(date, recipe);
                     });

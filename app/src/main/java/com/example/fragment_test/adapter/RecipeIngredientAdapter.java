@@ -9,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RecipeIngredient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientAdapter.RecipeIngredientViewHolder> {

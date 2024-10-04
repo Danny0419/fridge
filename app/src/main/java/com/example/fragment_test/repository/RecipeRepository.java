@@ -29,9 +29,9 @@ public class RecipeRepository {
 
     public Optional<List<Recipe>> recommendRecipes() {
         List<RecipeIngredient> recipeIngredients = List.of(
-                new RecipeIngredient("高麗菜", 30, "蔬菜照片", null),
-                new RecipeIngredient("花椰菜", 10, "蔬菜照片", null),
-                new RecipeIngredient("番茄", 5, "蔬菜照片", null)
+                new RecipeIngredient("高麗菜", 30, "蔬菜照片", 1),
+                new RecipeIngredient("花椰菜", 10, "蔬菜照片", 1),
+                new RecipeIngredient("番茄", 5, "蔬菜照片", 1)
         );
         return Optional.of(List.of(
                 new Recipe(1, "蔬菜大餐", "照片", 2, 0,null, recipeIngredients),
@@ -60,5 +60,9 @@ public class RecipeRepository {
 
     public List<Recipe> showRecipeCollection() {
         return recipeDAO.queryAllCollectedRecipe();
+    }
+
+    public List<RecipeIngredient> getRecipeIngredients(int id) {
+        return recipeIngredientRepository.getRecipeIngredientsByRId(id);
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
 import java.util.List;
@@ -30,11 +31,12 @@ public interface ScheduleRecipeDAO {
     List<ScheduleRecipe> queryIsNotDoneScheduleRecipesByDate(Integer date);
 
     @Query("""
-            SELECT id, r_id, date, day_of_week, status
-            FROM schedule_recipes
+            SELECT r.id, r.name, r.img, r.serving, r.collected, s_r.id as sRId, s_r.day_of_week as dayOfWeek
+            FROM schedule_recipes s_r join recipes r
+            on s_r.r_id = r.id
             WHERE date >= :today AND status = 0
             """)
-    List<ScheduleRecipe> queryAllNotDoneAndUnexpiredScheduleRecipes(int today);
+    List<RecipeWithScheduledId> queryAllNotDoneAndUnexpiredScheduleRecipes(int today);
 
     @Query("""
             UPDATE schedule_recipes SET status = 1

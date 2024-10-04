@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.RecipeWithScheduledId;
+import com.example.fragment_test.entity.Recipe;
 
 import java.util.List;
 
-public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEachRecipeAdapter.ScheduleEachRecipeViewHolder> {
-    private List<RecipeWithScheduledId> recipes;
+public class MealsPrepareScheduleEachRecipeAdapter extends RecyclerView.Adapter<MealsPrepareScheduleEachRecipeAdapter.ScheduleEachRecipeViewHolder> {
+    private List<Recipe> recipes;
     private OnClickListener onClickListener;
     private int date;
 
@@ -30,10 +30,10 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
     }
 
     public interface OnClickListener {
-        void onClick(RecipeWithScheduledId recipeWithScheduledId);
+        void onClick(int date, Recipe recipe);
     }
 
-    public ScheduleEachRecipeAdapter(List<RecipeWithScheduledId> recipes, int date) {
+    public MealsPrepareScheduleEachRecipeAdapter(List<Recipe> recipes, int date) {
         this.recipes = recipes;
         this.date = date;
     }
@@ -47,10 +47,10 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
 
     @Override
     public void onBindViewHolder(@NonNull ScheduleEachRecipeViewHolder holder, int position) {
-        RecipeWithScheduledId recipeWithScheduledId = recipes.get(position);
-        holder.recipeImg.setText(recipeWithScheduledId.recipe.img);
-        holder.recipeTitle.setText(recipeWithScheduledId.recipe.name);
-        holder.itemView.setOnClickListener((v) -> onClickListener.onClick(recipeWithScheduledId));
+        Recipe recipe = recipes.get(position);
+        holder.recipeImg.setText(recipe.img);
+        holder.recipeTitle.setText(recipe.name);
+        holder.itemView.setOnClickListener((v) -> onClickListener.onClick(date, recipe));
     }
 
     @Override

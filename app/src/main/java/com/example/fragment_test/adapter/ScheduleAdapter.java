@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.entity.ScheduleRecipe;
+import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.ui.schedule.MealsPrepareDialogActivity;
 
 import java.time.DayOfWeek;
@@ -27,18 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ScheduleAdapter extends BaseAdapter {
     private LocalDate[] dates;
-    private Map<DayOfWeek, List<ScheduleRecipe>> scheduleRecipes;
+    private Map<DayOfWeek, List<RecipeWithScheduledId>> scheduleRecipes;
+    private ScheduleEachRecipeAdapter.OnClickListener onClickListener;
     class ViewHolder {
         TextView eachDayText;
         RecyclerView eachRecipeRecyclerView;
     }
 
-    public ScheduleAdapter(LocalDate[] dates, Map<DayOfWeek, List<ScheduleRecipe>> scheduleRecipes) {
+    public ScheduleAdapter(LocalDate[] dates, Map<DayOfWeek, List<RecipeWithScheduledId>> scheduleRecipes) {
         this.dates = dates;
         this.scheduleRecipes = scheduleRecipes;
     }
@@ -76,13 +74,13 @@ public class ScheduleAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.eachDayText.setText(dates[position].getDayOfWeek().toString());
-        Optional<List<ScheduleRecipe>> dayScheduleRecipesOpt = Optional.ofNullable(scheduleRecipes.get(dates[position].getDayOfWeek()));
-        List<ScheduleRecipe> dayScheduleRecipes = dayScheduleRecipesOpt.orElse(new ArrayList<>());
-        Stream<Recipe> recipeStream = dayScheduleRecipes.stream().map(ScheduleRecipe::getRecipe);
-        List<Recipe> recipes = recipeStream.collect(Collectors.toList());
+        Optional<List<RecipeWithScheduledId>> dayScheduleRecipesOpt = Optional.ofNullable(scheduleRecipes.get(dates[position].getDayOfWeek()));
+        List<RecipeWithScheduledId> dayScheduleRecipes = dayScheduleRecipesOpt.orElse(new ArrayList<>());
 
         String format = DateTimeFormatter.BASIC_ISO_DATE.format(dates[position]);
-        viewHolder.eachRecipeRecyclerView.setAdapter(new ScheduleEachRecipeAdapter(recipes, Integer.parseInt(format)));
+        ScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new ScheduleEachRecipeAdapter(dayScheduleRecipes, Integer.parseInt(format));
+        scheduleEachRecipeAdapter.setOnClickListener(onClickListener);
+        viewHolder.eachRecipeRecyclerView.setAdapter(scheduleEachRecipeAdapter);
 
         /*點擊按鈕
         選擇要吃甚麼的區塊下拉與收合
@@ -135,5 +133,9 @@ public class ScheduleAdapter extends BaseAdapter {
             }
         });
         return view;
+    }
+
+    public void setOnClickListener(ScheduleEachRecipeAdapter.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 }
