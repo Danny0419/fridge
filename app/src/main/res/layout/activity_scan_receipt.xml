@@ -26,72 +26,93 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="@font/regular"
-            android:background="@drawable/uper_line"
+            android:background="@drawable/text_under_line"
             android:text="手動新增"
             android:textSize="24dp"/>
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<!--    手動新增-->
+    <include
+        android:id="@+id/add_manually_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/addReceiptTile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
-            android:text="@string/addReceiptTileText"
-            android:textSize="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_weight="9"
+        android:layout_marginTop="1dp"
+        layout="@layout/shoppinglist_alter_dialog"
+        android:visibility="gone"/>
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/camara"
+
+<!--掃描發票-->
+    <LinearLayout
+        android:id="@+id/scan_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        app:zxing_scanner_layout="@layout/custom_barcode_view" />
+        android:layout_weight="9"
+        android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_weight="1">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/addReceiptTile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="@string/addReceiptTileText"
+                android:textSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/goBackBnt"
-            android:background="@drawable/arrow_left_circle"
-            android:layout_width="66dp"
-            android:layout_height="66dp"
-            android:layout_marginLeft="39dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/camara"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            app:zxing_scanner_layout="@layout/custom_barcode_view" />
 
-        <Button
-            android:id="@+id/captureBnt"
-            android:background="@drawable/rectangle_16"
-            android:layout_width="77.5dp"
-            android:layout_height="77.5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_weight="1">
 
-        <Button
-            android:id="@+id/albumBnt"
-            android:background="@drawable/photo"
-            android:layout_width="66dp"
-            android:layout_height="66dp"
-            android:layout_marginRight="39dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/goBackBnt"
+                android:background="@drawable/arrow_left_circle"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_marginLeft="39dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/captureBnt"
+                android:background="@drawable/rectangle_16"
+                android:layout_width="77.5dp"
+                android:layout_height="77.5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/albumBnt"
+                android:background="@drawable/photo"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_marginRight="39dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
 
 
 </LinearLayout>

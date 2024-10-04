@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //            textView.setText(allInvoices.toString());
 //        });
 //
-//        addToolbar();
+        addToolbar();
 //
 //        binding.testButton.setOnClickListener(this);
 //        setupDialog(inflater, container);

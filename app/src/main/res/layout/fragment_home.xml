@@ -8,15 +8,40 @@
     android:padding="25dp">
 
 <!--    今天想吃......-->
-    <fragment
+    <LinearLayout
         android:id="@+id/meal_today"
-        android:name="com.example.fragment_test.ui.schedule.ScheduleFragment"
         android:layout_width="0dp"
         android:layout_height="140dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/date_today"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="6dp"
+        android:orientation="vertical"
+        android:background="@color/pink">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="午餐想吃......"
+            android:textSize="24dp"
+            android:background="@drawable/text_under_line"
+            android:fontFamily="@font/bold"
+            android:layout_marginBottom="12dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+<!--    <fragment-->
+<!--        android:id="@+id/meal_today"-->
+<!--        android:name="com.example.fragment_test.ui.schedule.ScheduleFragment"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="140dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toLeftOf="@id/date_today"-->
+<!--        android:layout_marginRight="20dp"/>-->
 
 <!--    今天日期-->
     <LinearLayout
@@ -28,14 +53,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical"
         android:paddingHorizontal="10dp"
-        android:paddingVertical="13dp">
+        android:paddingVertical="13dp"
+        android:background="@color/pink">
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="2024.\n03.21."
             android:textSize="24dp"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/bold"
             />
         <TextView
             android:id="@+id/week_date"
@@ -43,7 +69,7 @@
             android:layout_height="match_parent"
             android:text="星期五"
             android:textSize="36dp"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/bold"
             />
     </LinearLayout>
 <!--    <fragment-->
@@ -55,7 +81,7 @@
 <!--        app:layout_constraintTop_toTopOf="parent"/>-->
 
 <!--    待購清單-->
-    <fragment
+    <LinearLayout
         android:id="@+id/shoppingList"
         android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"
         android:layout_width="match_parent"
@@ -63,19 +89,77 @@
         android:layout_marginTop="23.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/meal_today"/>
+        app:layout_constraintTop_toBottomOf="@+id/meal_today"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="6dp"
+        android:background="@color/pink"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="待購清單"
+            android:textSize="24dp"
+            android:fontFamily="@font/bold"
+            android:background="@drawable/text_under_line"
+            android:layout_marginBottom="11dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+<!--    <fragment-->
+<!--        android:id="@+id/shoppingList"-->
+<!--        android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="140dp"-->
+<!--        android:layout_marginTop="23.5dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/meal_today"/>-->
 
 <!--    快過期食材-->
-        <fragment
-            android:id="@+id/expired_food"
-            android:name="com.example.fragment_test.ui.refrigerator.FoodManagementFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:minHeight="380dp"
-            android:minWidth="360dp"
-            android:layout_marginTop="23.5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shoppingList"
-            app:layout_constraintDimensionRatio="1:1"/>
+    <LinearLayout
+        android:id="@+id/expired_food"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:minHeight="380dp"
+        android:minWidth="360dp"
+        android:layout_marginTop="23.5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shoppingList"
+        app:layout_constraintDimensionRatio="1:1"
+        android:background="@color/pink"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="6dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="快過期的食材有......"
+            android:textSize="24dp"
+            android:background="@drawable/text_under_line"
+            android:fontFamily="@font/bold"
+            android:layout_marginBottom="11dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    <!--        <fragment-->
+<!--            android:id="@+id/expired_food"-->
+<!--            android:name="com.example.fragment_test.ui.refrigerator.FoodManagementFragment"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:minHeight="380dp"-->
+<!--            android:minWidth="360dp"-->
+<!--            android:layout_marginTop="23.5dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/shoppingList"-->
+<!--            app:layout_constraintDimensionRatio="1:1"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

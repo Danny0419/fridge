@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.fragment_test.R;
@@ -44,6 +47,33 @@ public class ScanReceiptActivity extends AppCompatActivity {
         intentIntegrator.setBeepEnabled(true);
         intentIntegrator.setBarcodeImageEnabled(true);
         intentIntegrator.initiateScan();
+
+        //點擊
+        Button goBackBtn=findViewById(R.id.goBackBnt);  //返回按鈕
+        Button scanReceiptButton=findViewById(R.id.scan_receipt_button);    //掃描發票orOCR按鈕
+        Button addManuallyButton=findViewById(R.id.add_manually_button);    //手動輸入按鈕
+        LinearLayout scanLayout = findViewById(R.id.scan_layout);   //掃描發票orOCR按鈕區塊
+        LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
+
+
+        //返回
+        goBackBtn.setOnClickListener(v -> {
+            finish();
+                }
+        );
+
+        //掃描發票orOCR
+        scanReceiptButton.setOnClickListener(v -> {
+            addManuallyLayout.setVisibility(View.GONE);
+            scanLayout.setVisibility(View.VISIBLE);
+        });
+
+        //手動輸入
+        addManuallyButton.setOnClickListener(v -> {
+            addManuallyLayout.setVisibility(View.VISIBLE);
+            scanLayout.setVisibility(View.GONE);
+        });
+
     }
 
     @Override
