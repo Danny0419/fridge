@@ -3,11 +3,10 @@ package com.example.fragment_test.RecipeRecommend;
 import android.content.Context;
 import android.util.Log;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.fragment_test.ServerAPI.ApiService;
+import com.example.fragment_test.ServerAPI.Recipe;
+import com.example.fragment_test.ServerAPI.RetrofitClient;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -16,11 +15,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecipeRecommendation {
 
@@ -28,38 +28,56 @@ public class RecipeRecommendation {
     private Context context;
     private static final Set<String> SEASONINGS = new HashSet<>(Arrays.asList("鹽", "油", "醬油", "蠔油", "米酒", "香油", "烏醋", "糖", "胡椒粉"));
 
-    // 無參數構造函數
+    // 无参构造函数
     public RecipeRecommendation() {
         this.recipes = new ArrayList<>();
     }
 
-    // 初始化方法
-    public void init(Context context, String recipesFile) {
+    // 初始化方法，调用API获取食谱数据
+    public void init(Context context, InitCallback recommendationActivity) {
         this.context = context;
-        this.recipes = loadRecipes(recipesFile);
-        preprocessRecipes();
+        loadRecipesFromAPI(); // 从API加载食谱
     }
 
-    private List<Recipe> loadRecipes(String filePath) {
-        ObjectMapper mapper = new ObjectMapper();
-        try (InputStream inputStream = context.getAssets().open(filePath)) {
-            List<Map<String, Object>> rawRecipes = mapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>() {});
-            return rawRecipes.stream().map(Recipe::new).collect(Collectors.toList());
-        } catch (IOException e) {
-            Log.e("RecipeRecommendation", "Error loading recipes", e);
-            return new ArrayList<>();
-        }
+    // 从API加载食谱
+    private void loadRecipesFromAPI() {
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<List<Recipe>> call = apiService.getRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    recipes = response.body();
+                    preprocessRecipes();
+                } else {
+                    Log.e("RecipeRecommendation", "API响应错误");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Log.e("RecipeRecommendation", "加载食谱失败: " + t.getMessage(), t); // 增加日志打印错误堆栈
+            }
+        });
     }
 
+    // 预处理食谱
     private void preprocessRecipes() {
-        recipes.forEach(Recipe::preprocess);
-        Log.d("RecipeRecommendation", "預處理後的食譜數量：" + recipes.size());
+        recipes.forEach(this::preprocessRecipe);
+        Log.d("RecipeRecommendation", "预处理后的食谱数量：" + recipes.size());
     }
 
+    // 处理食谱信息
+    private void preprocessRecipe(Recipe recipe) {
+        // 这里可以进一步处理API返回的食谱信息，如提取或转换字段
+    }
+
+    // 获取冰箱中的食材
     public Map<String, FridgeIngredient> getFridgeIngredients() {
         Calendar today = Calendar.getInstance();
         Map<String, FridgeIngredient> ingredients = new HashMap<>();
 
+        // 模拟冰箱中的食材
         ingredients.put("雞蛋", new FridgeIngredient("雞蛋", 10, today, 10));
         ingredients.put("牛奶", new FridgeIngredient("牛奶", 2000, today, 5));
         ingredients.put("雞胸肉", new FridgeIngredient("雞胸肉", 500, today, 3));
@@ -86,6 +104,7 @@ public class RecipeRecommendation {
         return ingredients;
     }
 
+    // 获取推荐食谱
     public List<Recommendation> getRecommendations(Map<String, FridgeIngredient> fridgeIngredients) {
         return recipes.stream()
                 .map(recipe -> new Recommendation(recipe, calculateScores(recipe, fridgeIngredients)))
@@ -94,44 +113,45 @@ public class RecipeRecommendation {
                 .collect(Collectors.toList());
     }
 
+    public interface InitCallback {
+        void onSuccess(Map<String, FridgeIngredient> fridgeIngredients);
+
+        void onError(String errorMessage);
+    }
+
+    // 计算评分
     private Map<String, Float> calculateScores(Recipe recipe, Map<String, FridgeIngredient> fridgeIngredients) {
-        // 匹配的食材數量和計算權重匹配率
         long matchedIngredientsCount = recipe.getIngredients().stream()
                 .filter(ingredient -> {
-                    if (SEASONINGS.contains(ingredient.getName())) return false;
-                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getName());
-                    return fridgeIngredient != null && ingredient.getQuantity() <= fridgeIngredient.getQuantity();
+                    if (SEASONINGS.contains(ingredient.getIngredient_name())) return false;
+                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getIngredient_name());
+                    return fridgeIngredient != null && Float.parseFloat(ingredient.getIngredient_need()) <= fridgeIngredient.getQuantity();
                 })
                 .count();
 
-        // 计算稀有食材匹配权重
         double rareIngredientWeight = recipe.getIngredients().stream()
                 .filter(ingredient -> {
-                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getName());
-                    return fridgeIngredient != null && ingredient.getQuantity() <= fridgeIngredient.getQuantity();
+                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getIngredient_name());
+                    return fridgeIngredient != null && Float.parseFloat(ingredient.getIngredient_need()) <= fridgeIngredient.getQuantity();
                 })
-                .mapToDouble(ingredient -> calculateIngredientWeight(ingredient.getName()))
+                .mapToDouble(ingredient -> calculateIngredientWeight(ingredient.getIngredient_name()))
                 .sum();
 
-        // 匹配率公式：考慮了食材數量、稀有度、總量歸一化等
         float matchRate = (float) (matchedIngredientsCount * rareIngredientWeight) /
-                recipe.getIngredients().stream().filter(ingredient -> !SEASONINGS.contains(ingredient.getName())).count();
-        float matchScore = matchRate * 3;  // 擴展權重調節因子
+                recipe.getIngredients().stream().filter(ingredient -> !SEASONINGS.contains(ingredient.getIngredient_name())).count();
+        float matchScore = matchRate * 3;
 
-        // 計算食材保質期總分與平滑新鮮度得分
         float totalExpiryScore = (float) recipe.getIngredients().stream()
-                .filter(ingredient -> !SEASONINGS.contains(ingredient.getName())) // 排除調味料
+                .filter(ingredient -> !SEASONINGS.contains(ingredient.getIngredient_name()))
                 .mapToInt(ingredient -> {
-                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getName());
+                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getIngredient_name());
                     return fridgeIngredient != null ? calculateExpiryScore(fridgeIngredient.getExpiryDays()) : 0;
                 })
                 .sum();
 
-        // 平滑因子影響新鮮度得分
-        float averageExpiryScore = (float) (matchedIngredientsCount > 0 ? totalExpiryScore / matchedIngredientsCount : 0);
-        float smoothedExpiryScore = smoothFactor(averageExpiryScore, matchedIngredientsCount); // 增加平滑因子
+        float averageExpiryScore = matchedIngredientsCount > 0 ? totalExpiryScore / matchedIngredientsCount : 0;
+        float smoothedExpiryScore = smoothFactor(averageExpiryScore, matchedIngredientsCount);
 
-        // 綜合分數: 更加複雜的權重配分，考慮多個因素
         float combinedScore = (float) ((matchScore * 2.5f) + smoothedExpiryScore + rareIngredientWeight * 1.2f);
 
         Map<String, Float> scores = new HashMap<>();
@@ -142,78 +162,22 @@ public class RecipeRecommendation {
         return scores;
     }
 
-    // 新增平滑因子函数
     private float smoothFactor(float score, long ingredientCount) {
-        // 平滑處理，根據食材數量以及匹配權重調整
         return (float) (score / Math.sqrt(ingredientCount + 1));
     }
 
-    // 计算稀有食材的权重
     private double calculateIngredientWeight(String ingredientName) {
-        // 稀有度數據可能來自外部的食材稀有度資料庫
         Map<String, Double> rarityMap = new HashMap<>();
         rarityMap.put("魚子", 1.5);
         rarityMap.put("松露", 2.0);
         rarityMap.put("牛肝菌", 1.7);
-        // 默認稀有度為1
         return rarityMap.getOrDefault(ingredientName, 1.0);
     }
 
-
-
-    // 期限配分
     private int calculateExpiryScore(long daysRemaining) {
         if (daysRemaining > 7) return 1;
         if (daysRemaining > 3) return 2;
         return 3;
-    }
-
-    // 內部類
-    public static class Recipe {
-        private String name;
-        private String difficulty;
-        private int totalTime;
-        private int servings;
-        private List<Ingredient> ingredients;
-        private float calories;
-        private float rating;
-
-        public Recipe(Map<String, Object> rawRecipe) {
-            this.name = (String) rawRecipe.get("標題");
-            this.difficulty = (String) rawRecipe.get("難易度");
-            this.totalTime = extractFirstInt((String) rawRecipe.get("總共時間"));
-            this.servings = extractFirstInt((String) rawRecipe.get("份量"));
-            this.ingredients = processIngredients((List<String>) rawRecipe.get("食材"));
-            this.calories = extractFirstFloat(((Map<String, String>) rawRecipe.get("營養價值")).get("卡路里"));
-            this.rating = processRating(rawRecipe.get("評分"));
-        }
-
-        public void preprocess() {
-            this.difficulty = this.difficulty.split(" ")[this.difficulty.split(" ").length - 1];
-        }
-
-        // Getters
-        public String getName() { return name; }
-        public String getDifficulty() { return difficulty; }
-        public int getTotalTime() { return totalTime; }
-        public int getServings() { return servings; }
-        public List<Ingredient> getIngredients() { return ingredients; }
-        public float getCalories() { return calories; }
-        public float getRating() { return rating; }
-    }
-
-    public static class Ingredient {
-        private String name;
-        private float quantity;
-
-        public Ingredient(String name, float quantity) {
-            this.name = name;
-            this.quantity = quantity;
-        }
-
-        // Getters
-        public String getName() { return name; }
-        public float getQuantity() { return quantity; }
     }
 
     public static class FridgeIngredient {
@@ -229,7 +193,6 @@ public class RecipeRecommendation {
             this.expiryDays = (expiryDate.getTimeInMillis() - today.getTimeInMillis()) / (1000 * 60 * 60 * 24);
         }
 
-        // Getters
         public String getName() { return name; }
         public float getQuantity() { return quantity; }
         public long getExpiryDays() { return expiryDays; }
@@ -248,48 +211,9 @@ public class RecipeRecommendation {
             this.combinedScore = scores.get("combinedScore");
         }
 
-        // Getters
         public Recipe getRecipe() { return recipe; }
         public float getMatchScore() { return matchScore; }
         public float getExpiryScore() { return expiryScore; }
         public float getCombinedScore() { return combinedScore; }
-    }
-
-    // Utility methods
-    private static int extractFirstInt(String text) {
-        Matcher matcher = Pattern.compile("\\d+").matcher(text);
-        return matcher.find() ? Integer.parseInt(matcher.group()) : 0;
-    }
-
-    private static float extractFirstFloat(String text) {
-        Matcher matcher = Pattern.compile("\\d+(\\.\\d+)?").matcher(text);
-        return matcher.find() ? Float.parseFloat(matcher.group()) : 0.0f;
-    }
-
-    private static List<Ingredient> processIngredients(List<String> rawIngredients) {
-        return rawIngredients.stream()
-                .map(item -> {
-                    String[] parts = item.trim().split(" ");
-                    if (parts.length > 1) {
-                        try {
-                            float quantity = Float.parseFloat(parts[0]);
-                            String ingredientName = parts[parts.length - 1];
-                            if (!SEASONINGS.contains(ingredientName)) {
-                                return new Ingredient(ingredientName, quantity);
-                            }
-                        } catch (NumberFormatException ignored) {}
-                    }
-                    return null;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
-
-    private static float processRating(Object rating) {
-        try {
-            return extractFirstFloat(rating.toString());
-        } catch (Exception e) {
-            return 0.0f;
-        }
     }
 }

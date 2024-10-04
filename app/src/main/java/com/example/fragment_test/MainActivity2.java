@@ -1,9 +1,6 @@
 package com.example.fragment_test;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,8 +9,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.fragment_test.RecipeRecommend.RecipeRecommendationActivity;
-import com.example.fragment_test.ScannerList.OcrActivity;
 import com.example.fragment_test.databinding.ActivityMain2Binding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

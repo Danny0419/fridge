@@ -4,43 +4,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    android:padding="25dp">
 
-    <TextView
-        android:id="@+id/text_home"
+<!--    今天想吃......-->
+    <fragment
+        android:id="@+id/meal_today"
+        android:name="com.example.fragment_test.ui.schedule.ScheduleFragment"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/date_today"
+        android:layout_marginRight="20dp"/>
+
+<!--    今天日期-->
+    <LinearLayout
+        android:id="@+id/date_today"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/meal_today"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="13dp">
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2024.\n03.21."
+            android:textSize="24dp"
+            android:fontFamily="@font/regular"
+            />
+        <TextView
+            android:id="@+id/week_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="星期五"
+            android:textSize="36dp"
+            android:fontFamily="@font/regular"
+            />
+    </LinearLayout>
+<!--    <fragment-->
+<!--        android:id="@+id/date_today"-->
+<!--        android:layout_width="140dp"-->
+<!--        android:layout_height="140dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintLeft_toRightOf="@id/meal_today"-->
+<!--        app:layout_constraintTop_toTopOf="parent"/>-->
+
+<!--    待購清單-->
+    <fragment
+        android:id="@+id/shoppingList"
+        android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="140dp"
+        android:layout_marginTop="23.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/meal_today"/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.575" />
-
-    <Button
-        android:id="@+id/test_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="彈跳視窗測試紐"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.661" />
+<!--    快過期食材-->
+        <fragment
+            android:id="@+id/expired_food"
+            android:name="com.example.fragment_test.ui.refrigerator.FoodManagementFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:minHeight="380dp"
+            android:minWidth="360dp"
+            android:layout_marginTop="23.5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shoppingList"
+            app:layout_constraintDimensionRatio="1:1"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
