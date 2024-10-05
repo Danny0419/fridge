@@ -28,6 +28,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".CookingStep1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".CookingStep2Activity"
+            android:exported="false" />
+        <activity
+            android:name=".CookingStep3Activity"
+            android:exported="false" />
+        <activity
             android:name=".ui.schedule.StartCookingActivity"
             android:exported="false" />
         <activity

@@ -1,5 +1,6 @@
 package com.example.fragment_test.ui.schedule;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.example.fragment_test.CookingStep1Activity;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeDetailIngredientAdapter;
 import com.example.fragment_test.databinding.ActivityStartCookingBinding;
@@ -70,7 +72,8 @@ public class StartCookingActivity extends AppCompatActivity {
         });
 
         activityStartCookingBinding.cookingBnt.setOnClickListener(view -> {
-
+            Intent intent = new Intent(this, CookingStep1Activity.class);
+            startActivity(intent);
         });
     }
 }

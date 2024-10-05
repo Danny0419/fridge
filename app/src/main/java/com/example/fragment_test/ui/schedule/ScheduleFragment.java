@@ -136,11 +136,6 @@ public class ScheduleFragment extends Fragment {
         //設定奇偶行數背景顏色
         setListBackgroundColor(scheduleContainer, requireContext());
 
-//        // 失敗的底線
-//        View viewRecipeItem = inflater.inflate(R.layout.recipe_item, container, false);
-//        TextView eachDayText=viewRecipeItem.findViewById(R.id.eachDayText);
-//        eachDayText.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-
         addToolbar();
 
         return scheduleBinding.getRoot();
