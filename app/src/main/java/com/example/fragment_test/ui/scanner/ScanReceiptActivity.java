@@ -17,6 +17,7 @@ import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,8 @@ import java.util.concurrent.Executors;
 
 
 public class ScanReceiptActivity extends AppCompatActivity {
+    //相機掃描
+    private DecoratedBarcodeView barcodeView;
 
     // 用于存储已识别的QR码信息
     private Set<String> recognizedQrCodes = new HashSet<>();
@@ -39,22 +42,27 @@ public class ScanReceiptActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_receipt);
 
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setPrompt("Scan a QR code");
-        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.initiateScan();
+        //開啟相機
+//        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+//        intentIntegrator.setPrompt("Scan a QR code");
+//        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
+//        intentIntegrator.setBeepEnabled(true);
+//        intentIntegrator.setBarcodeImageEnabled(true);
+//        intentIntegrator.initiateScan();
 
-        //點擊
+        barcodeView = findViewById(R.id.camara);
+        barcodeView.resume();  // 启动相机预览
+
+        /*
+        個按鈕之點擊
+        */
         Button goBackBtn=findViewById(R.id.goBackBnt);  //返回按鈕
         Button scanReceiptButton=findViewById(R.id.scan_receipt_button);    //掃描發票orOCR按鈕
         Button addManuallyButton=findViewById(R.id.add_manually_button);    //手動輸入按鈕
         LinearLayout scanLayout = findViewById(R.id.scan_layout);   //掃描發票orOCR按鈕區塊
         LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
-
 
         //返回
         goBackBtn.setOnClickListener(v -> {
@@ -74,6 +82,12 @@ public class ScanReceiptActivity extends AppCompatActivity {
             scanLayout.setVisibility(View.GONE);
         });
 
+    }
+
+    // 暂停相機預覽
+    protected void onPause() {
+        super.onPause();
+        barcodeView.pause();
     }
 
     @Override
