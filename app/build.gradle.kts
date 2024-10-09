@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
 // ML Kit for text recognition
     implementation ("com.google.mlkit:text-recognition:16.0.0-beta6")
 // ML Kit for text recognition in Chinese

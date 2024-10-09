@@ -1,5 +1,8 @@
 package com.example.fragment_test.ServerAPI;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -9,9 +12,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
@@ -37,6 +39,7 @@ public class RetrofitClient {
                     .baseUrl(BASE_URL)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson)) // 使用宽松的 Gson 解析器
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
 
         }

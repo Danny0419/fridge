@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.example.fragment_test.ServerAPI.RetrofitClient;
+import com.example.fragment_test.service.ShoppingService;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.ShoppingDAO;
 import com.example.fragment_test.entity.Ingredient;
@@ -14,14 +16,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import io.reactivex.Single;
+
 public class ShoppingListIngredientRepository {
 
     ShoppingDAO shoppingDAO;
+    ShoppingService shoppingService;
 
     public static ShoppingListIngredientRepository shoppingListIngredientRepository;
-
     private ShoppingListIngredientRepository(Context context) {
         this.shoppingDAO = FridgeDatabase.getInstance(context).shoppingDAO();
+        shoppingService = RetrofitClient.getRetrofitInstance().create(ShoppingService.class);
+    }
+
+    public Single<List<String>> getAllSortsOfIngredients() {
+        return shoppingService.getAllSortsOfIngredients();
     }
 
     public static synchronized ShoppingListIngredientRepository getInstance(Context context) {
@@ -89,5 +98,9 @@ public class ShoppingListIngredientRepository {
 
     public void removeShoppingItem(ShoppingIngredient shoppingIngredient) {
         shoppingDAO.deleteShoppingItem(shoppingIngredient);
+    }
+
+    public Single<List<String>> getSortOfIngredientsName(String sort) {
+        return shoppingService.getSortOfIngredientsName(sort);
     }
 }

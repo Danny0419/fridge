@@ -16,11 +16,14 @@ import java.util.Optional;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class ShoppingListViewModel extends AndroidViewModel {
     private ShoppingListIngredientRepository repository;
-    private MutableLiveData<List<ShoppingIngredient>> currShoppingList;
+    private MutableLiveData<List<ShoppingIngredient>> currShoppingList = new MutableLiveData<>();
+    private MutableLiveData<List<String>> allSorts =new MutableLiveData<>();
+    private MutableLiveData<List<String>> allSortOfIngredientsName =new MutableLiveData<>();
 
     public ShoppingListViewModel(@NonNull Application application) {
         super(application);
@@ -77,9 +80,48 @@ public class ShoppingListViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<ShoppingIngredient>> getCurrShoppingList() {
-        if (currShoppingList == null) {
-            currShoppingList = new MutableLiveData<>();
-        }
         return currShoppingList;
+    }
+
+    public MutableLiveData<List<String>> getAllSorts() {
+        return allSorts;
+    }
+
+    public void loadAllSortsOfIngredients() {
+        repository.getAllSortsOfIngredients()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> strings) {
+                        allSorts.setValue(strings);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    public void loadSortOfIngredientsName(String sort) {
+        repository.getSortOfIngredientsName(sort)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> names) {
+                        allSortOfIngredientsName.setValue(names);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    public MutableLiveData<List<String>> getAllSortOfIngredientsName() {
+        return allSortOfIngredientsName;
     }
 }

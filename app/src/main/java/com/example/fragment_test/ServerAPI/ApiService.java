@@ -2,6 +2,7 @@ package com.example.fragment_test.ServerAPI;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -16,7 +17,11 @@ public interface ApiService {
     Call<List<Ingredient>> getIngredients();
 
     @GET("api/get_recipe")
-    Call<List<Recipe>> getRecipes();;
+    Call<List<Recipe>> getRecipes();
+
+    @GET("api/all_ingredients_sorts")
+    Single<List<String>> getAllSortsOfIngredients();
+
 
     // 其他 API 接口
 }

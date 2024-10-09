@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -102,18 +103,18 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int clickedId = v.getId();
-
         if (clickedId == R.id.addNewShoppingListItemButton) {
-            initialSpinner(dialogBinding.nameSpinner, R.array.ingredients_name_array);
-            initialSpinner(dialogBinding.sortSpinner, R.array.ingredients_sort_array);
-            dialog.show();
-
+            mViewModel.loadAllSortsOfIngredients();
+            mViewModel.getAllSorts()
+                    .observe(getViewLifecycleOwner(), strings -> {
+                        initialSpinner(dialogBinding.sortSpinner, dialogBinding.nameSpinner, strings);
+                        dialog.show();
+                    });
         } else if (clickedId == R.id.cancel_button) {
             dialogBinding.quantity.setText("");
             dialog.dismiss();
 
         } else if (clickedId == R.id.confirm_button) {
-
             try {
                 String name = dialogBinding.nameSpinner.getSelectedItem().toString();
                 String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
@@ -130,16 +131,30 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
     }
 
-    private void initialSpinner(Spinner spinner, int textArrayResId) {
-        // Create an ArrayAdapter using the string array and a default spinner layout.
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getContext(),
-                textArrayResId,
-                android.R.layout.simple_spinner_item
-        );
+    private void initialSpinner(Spinner sortSpinner, Spinner nameSpinner, List<String> sorts) {
+        // Create an ArrayAdapter using the string array and a default sortSpinner layout.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sorts);
         // Specify the layout to use when the list of choices appears.
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner.
-        spinner.setAdapter(adapter);
+        // Apply the adapter to the sortSpinner.
+        sortSpinner.setAdapter(adapter);
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String sort = adapterView.getSelectedItem().toString();
+                mViewModel.loadSortOfIngredientsName(sort);
+                mViewModel.getAllSortOfIngredientsName()
+                        .observe(getViewLifecycleOwner(), names -> {
+                            ArrayAdapter<String> namesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, names);
+                            namesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            nameSpinner.setAdapter(namesAdapter);
+                        });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }
