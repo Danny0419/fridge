@@ -23,16 +23,16 @@ import java.util.Optional;
 public class StartCookingActivity extends AppCompatActivity {
     private ActivityStartCookingBinding activityStartCookingBinding;
     private RecipeViewModel recipeViewModel;
-    private ScheduleViewModel scheduleViewModel;
     RecipeWithScheduledId scheduleRecipe;
+    Intent intent;
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityStartCookingBinding = ActivityStartCookingBinding.inflate(getLayoutInflater());
         setContentView(activityStartCookingBinding.getRoot());
-
-        Optional<Bundle> extras = Optional.ofNullable(getIntent().getExtras());
+        intent = getIntent();
+        Optional<Bundle> extras = Optional.ofNullable(intent.getExtras());
         Bundle bundle = extras.orElseThrow(RuntimeException::new);
         Optional<RecipeWithScheduledId> recipeOptional = Optional.ofNullable(bundle.getParcelable("scheduleRecipe", RecipeWithScheduledId.class));
         scheduleRecipe = recipeOptional.orElseThrow(RuntimeException::new);
@@ -50,7 +50,6 @@ public class StartCookingActivity extends AppCompatActivity {
         customBackButton.setOnClickListener(view -> onBackPressed());
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication()));
         recipeViewModel = viewModelProvider.get(RecipeViewModel.class);
-        scheduleViewModel = viewModelProvider.get(ScheduleViewModel.class);
     }
 
     @Override
@@ -73,6 +72,7 @@ public class StartCookingActivity extends AppCompatActivity {
 
         activityStartCookingBinding.cookingBnt.setOnClickListener(view -> {
             Intent intent = new Intent(this, CookingStep1Activity.class);
+            intent.putExtra("cookingRecipe", scheduleRecipe);
             startActivity(intent);
         });
     }

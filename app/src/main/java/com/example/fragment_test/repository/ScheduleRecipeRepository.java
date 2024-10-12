@@ -4,10 +4,13 @@ import android.content.Context;
 
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.ScheduleRecipeDAO;
+import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RecipeWithPreRecipeId;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
 import java.time.DayOfWeek;
@@ -21,10 +24,12 @@ public class ScheduleRecipeRepository {
     private static ScheduleRecipeRepository scheduleRecipeRepository;
     private final ScheduleRecipeDAO scheduleRecipeDAO;
     private final PreparedRecipeRepository preparedRecipeRepository;
+    private RefrigeratorIngredientRepository refrigeratorIngredientRepository;
 
     private ScheduleRecipeRepository(Context context) {
         this.scheduleRecipeDAO = FridgeDatabase.getInstance(context).scheduleRecipeDAO();
         this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(context);
+        this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(context);
     }
 
     public static ScheduleRecipeRepository getInstance(Context context) {
@@ -46,6 +51,32 @@ public class ScheduleRecipeRepository {
     }
 
     public void cooking(RecipeWithScheduledId recipeWithScheduledId) {
+        scheduleRecipeDAO.updateScheduleRecipeStatusById(recipeWithScheduledId.sRId);
+
+        List<RefrigeratorIngredient> refrigeratorIngredients = refrigeratorIngredientRepository.getRefrigeratorIngredients();
+        Map<String, List<RefrigeratorIngredient>> refrigeratorIngredientsSortedByName = refrigeratorIngredients
+                .stream()
+                .collect(Collectors.groupingBy(Ingredient::getName));
+
+        List<RecipeIngredient> usedIngredients = recipeWithScheduledId.recipe.ingredients;
+        for (int i = 0; i < usedIngredients.size(); i++) {
+            RecipeIngredient usedIngredient = usedIngredients.get(i);
+            List<RefrigeratorIngredient> ingredients = refrigeratorIngredientsSortedByName.get(usedIngredient.name);
+            int usedIngredientQuantity = usedIngredient.quantity;
+            for (int j = 0; j < ingredients.size(); j++) {
+                RefrigeratorIngredient ingredient = ingredients.get(i);
+                int ingredientQuantity = ingredient.quantity;
+
+                if (ingredientQuantity < usedIngredientQuantity) {
+                    usedIngredientQuantity -= ingredientQuantity;
+                    ingredient.setQuantity(0);
+                } else {
+                    ingredient.setQuantity(ingredientQuantity - usedIngredientQuantity);
+                    break;
+                }
+                refrigeratorIngredientRepository.useRefrigeratorIngredient(ingredient);
+            }
+        }
     }
 
     public boolean checkTodayIsDone(Integer sId) {

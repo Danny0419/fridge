@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredientDetailVO;
@@ -32,12 +33,6 @@ public interface RefrigeratorIngredientDAO {
             """)
     List<RefrigeratorIngredient> getQuantityGreaterZeroAndNotExpiredIngredients(int today);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertIngredient(RefrigeratorIngredient ingredient);
-
-    @Insert
-    long[] insertIngredients(List<RefrigeratorIngredient> ingredients);
-
     @Query(
             """
             SELECT sum(quantity) as quantity, purchase_date as purchaseDate, expiration, expiration - :today as daysRemaining
@@ -48,4 +43,13 @@ public interface RefrigeratorIngredientDAO {
             """
     )
     List<RefrigeratorIngredientDetailVO> getIngredientByName(String name, int today);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertIngredient(RefrigeratorIngredient ingredient);
+
+    @Insert
+    long[] insertIngredients(List<RefrigeratorIngredient> ingredients);
+
+    @Update
+    void updateRefrigeratorIngredientQuantity(RefrigeratorIngredient ingredient);
 }

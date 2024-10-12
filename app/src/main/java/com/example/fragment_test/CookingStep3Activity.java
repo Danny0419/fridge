@@ -1,24 +1,43 @@
 package com.example.fragment_test;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.fragment_test.databinding.ActivityCookingStep3Binding;
+import com.example.fragment_test.entity.RecipeWithScheduledId;
+import com.example.fragment_test.ui.schedule.ScheduleViewModel;
 
 public class CookingStep3Activity extends AppCompatActivity {
+    private ActivityCookingStep3Binding activityCookingStep3Binding;
+    private ScheduleViewModel viewModel;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_cooking_step3);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        activityCookingStep3Binding = ActivityCookingStep3Binding.inflate(getLayoutInflater());
+        setContentView(activityCookingStep3Binding.getRoot());
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory()).get(ScheduleViewModel.class);
+
+        Intent intent = getIntent();
+        RecipeWithScheduledId cookingRecipe = intent.getParcelableExtra("cookingRecipe", RecipeWithScheduledId.class);
+
+        activityCookingStep3Binding.returnBtn.setOnClickListener(view -> {
+            finish();
         });
+
+        activityCookingStep3Binding.finishBtn.setOnClickListener(view -> {
+            viewModel.cooking(cookingRecipe);
+            Intent intent1 = new Intent(this, MainActivity2.class);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent1);
+        });
+
+
     }
 }
