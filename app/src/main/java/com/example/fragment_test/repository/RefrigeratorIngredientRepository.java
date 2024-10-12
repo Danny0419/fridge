@@ -115,4 +115,21 @@ public class RefrigeratorIngredientRepository {
     public void useRefrigeratorIngredient(RefrigeratorIngredient ingredient) {
         refrigeratorIngredientDAO.updateRefrigeratorIngredientQuantity(ingredient);
     }
+
+    public boolean checkAreIngredientsSufficient(List<RecipeIngredient> ingredients) {
+        LocalDate now = LocalDate.now();
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
+        int today = Integer.parseInt(format);
+        List<RefrigeratorIngredientVO> refrigeratorIngredients = refrigeratorIngredientDAO.getQuantityGreaterZeroAndNotExpiredIngredientsOverallInfo(today);
+        Map<String, RefrigeratorIngredientVO> refrigeratorIngredientSortedByName = refrigeratorIngredients.stream()
+                .collect(Collectors.toMap(RefrigeratorIngredientVO::getName, o -> o));
+        for (RecipeIngredient  ingredient:
+                ingredients) {
+            RefrigeratorIngredientVO ingredientVO = refrigeratorIngredientSortedByName.get(ingredient.name);
+            if (ingredientVO.sumQuantity < ingredient.quantity) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

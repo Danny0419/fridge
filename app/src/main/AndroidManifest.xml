@@ -37,7 +37,7 @@
             android:name=".CookingStep3Activity"
             android:exported="false" />
         <activity
-            android:name=".ui.schedule.StartCookingActivity"
+            android:name=".ui.cooking.StartCookingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.schedule.MealsPrepareDialogActivity"

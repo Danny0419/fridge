@@ -1,4 +1,4 @@
-package com.example.fragment_test.ui.schedule;
+package com.example.fragment_test.ui.cooking;
 
 import android.content.Intent;
 import android.os.Build;
@@ -23,6 +23,7 @@ import java.util.Optional;
 public class StartCookingActivity extends AppCompatActivity {
     private ActivityStartCookingBinding activityStartCookingBinding;
     private RecipeViewModel recipeViewModel;
+    private CookingViewModel cookingViewModel;
     RecipeWithScheduledId scheduleRecipe;
     Intent intent;
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
@@ -31,6 +32,10 @@ public class StartCookingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityStartCookingBinding = ActivityStartCookingBinding.inflate(getLayoutInflater());
         setContentView(activityStartCookingBinding.getRoot());
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication()));
+        recipeViewModel = viewModelProvider.get(RecipeViewModel.class);
+        cookingViewModel = viewModelProvider.get(CookingViewModel.class);
+
         intent = getIntent();
         Optional<Bundle> extras = Optional.ofNullable(intent.getExtras());
         Bundle bundle = extras.orElseThrow(RuntimeException::new);
@@ -48,8 +53,7 @@ public class StartCookingActivity extends AppCompatActivity {
         // 點擊返回
         ImageView customBackButton = findViewById(R.id.close_view_btn);
         customBackButton.setOnClickListener(view -> onBackPressed());
-        ViewModelProvider viewModelProvider = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication()));
-        recipeViewModel = viewModelProvider.get(RecipeViewModel.class);
+
     }
 
     @Override

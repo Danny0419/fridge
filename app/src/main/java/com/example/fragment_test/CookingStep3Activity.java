@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fragment_test.databinding.ActivityCookingStep3Binding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
-import com.example.fragment_test.ui.schedule.ScheduleViewModel;
+import com.example.fragment_test.ui.cooking.CookingViewModel;
 
 public class CookingStep3Activity extends AppCompatActivity {
     private ActivityCookingStep3Binding activityCookingStep3Binding;
-    private ScheduleViewModel viewModel;
+    private CookingViewModel viewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -22,7 +22,7 @@ public class CookingStep3Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityCookingStep3Binding = ActivityCookingStep3Binding.inflate(getLayoutInflater());
         setContentView(activityCookingStep3Binding.getRoot());
-        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory()).get(ScheduleViewModel.class);
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory()).get(CookingViewModel.class);
 
         Intent intent = getIntent();
         RecipeWithScheduledId cookingRecipe = intent.getParcelableExtra("cookingRecipe", RecipeWithScheduledId.class);

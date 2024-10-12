@@ -17,6 +17,10 @@ public class RefrigeratorIngredientVO {
         this.sumQuantity = sumQuantity;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getSort() {
         return sort;
     }

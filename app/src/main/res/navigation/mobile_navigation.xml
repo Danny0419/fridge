@@ -19,7 +19,7 @@
 
     <activity
         android:id="@+id/navigation_start_cooking"
-        android:name="com.example.fragment_test.ui.schedule.StartCookingActivity"
+        android:name="com.example.fragment_test.ui.cooking.StartCookingActivity"
         tools:layout="@layout/activity_start_cooking"/>
 
     <fragment
