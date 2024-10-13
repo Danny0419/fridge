@@ -19,7 +19,7 @@ public interface ShoppingDAO {
             """)
     List<ShoppingIngredient> getAllShoppingIngredients();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.NONE)
     long insertShoppingIngredient(ShoppingIngredient shoppingIngredient);
 
     @Query("""

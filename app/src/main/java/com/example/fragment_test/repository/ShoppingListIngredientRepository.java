@@ -108,23 +108,6 @@ public class ShoppingListIngredientRepository {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private @NonNull Map<String, Ingredient> computeIsFinished(Map<String, Ingredient> collect) {
-        return collect.entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().quantity <= 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    private static @NonNull Map<String, Ingredient> computeSameIngredients(List<Ingredient> collapse) {
-        return collapse.stream()
-                .collect(Collectors.toMap(Ingredient::getName, a -> a,
-                        (o1, o2) -> o1.setQuantity(o1.quantity + o2.quantity)));
-    }
-
-    public void removeShoppingItem(ShoppingIngredient shoppingIngredient) {
-        shoppingDAO.deleteShoppingItem(shoppingIngredient);
-    }
-
     public Single<List<String>> getSortOfIngredientsName(String sort) {
         return shoppingService.getSortOfIngredientsName(sort);
     }
