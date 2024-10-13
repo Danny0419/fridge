@@ -25,7 +25,7 @@ public class CookingViewModel extends AndroidViewModel {
         this.cookingRepository = CookingRepository.getInstance(application);
     }
 
-    public void checkAreIngredientsSufficient(RecipeWithScheduledId recipeWithScheduledId) {
+    public void checkIfIngredientsSufficient(RecipeWithScheduledId recipeWithScheduledId) {
         Maybe.fromCallable(() -> cookingRepository.checkAreIngredientsSufficient(recipeWithScheduledId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -37,7 +37,7 @@ public class CookingViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-
+//                        Toast.makeText(getApplication(), "您的食材不夠", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -62,5 +62,9 @@ public class CookingViewModel extends AndroidViewModel {
 
                     }
                 });
+    }
+
+    public MutableLiveData<Boolean> getAreIngredientSufficient() {
+        return areIngredientSufficient;
     }
 }

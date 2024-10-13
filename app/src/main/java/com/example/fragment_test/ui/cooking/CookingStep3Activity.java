@@ -1,4 +1,4 @@
-package com.example.fragment_test;
+package com.example.fragment_test.ui.cooking;
 
 import android.content.Intent;
 import android.os.Build;
@@ -8,9 +8,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fragment_test.MainActivity2;
 import com.example.fragment_test.databinding.ActivityCookingStep3Binding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
-import com.example.fragment_test.ui.cooking.CookingViewModel;
 
 public class CookingStep3Activity extends AppCompatActivity {
     private ActivityCookingStep3Binding activityCookingStep3Binding;

@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 
@@ -117,6 +119,7 @@ public class RefrigeratorIngredientRepository {
     }
 
     public boolean checkAreIngredientsSufficient(List<RecipeIngredient> ingredients) {
+        AtomicBoolean areIngredientsSufficient = new AtomicBoolean(true);
         LocalDate now = LocalDate.now();
         String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
         int today = Integer.parseInt(format);
@@ -125,11 +128,13 @@ public class RefrigeratorIngredientRepository {
                 .collect(Collectors.toMap(RefrigeratorIngredientVO::getName, o -> o));
         for (RecipeIngredient  ingredient:
                 ingredients) {
-            RefrigeratorIngredientVO ingredientVO = refrigeratorIngredientSortedByName.get(ingredient.name);
-            if (ingredientVO.sumQuantity < ingredient.quantity) {
-                return false;
-            }
+            Optional<RefrigeratorIngredientVO> ingredientVO = Optional.ofNullable(refrigeratorIngredientSortedByName.get(ingredient.name));
+            ingredientVO.ifPresentOrElse(ingredientVO1 -> {
+                if (ingredientVO1.sumQuantity < ingredient.quantity) {
+                     areIngredientsSufficient.set(false);
+                }
+            }, () -> areIngredientsSufficient.set(false));
         }
-        return true;
+        return areIngredientsSufficient.get();
     }
 }

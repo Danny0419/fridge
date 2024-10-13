@@ -1,4 +1,4 @@
-package com.example.fragment_test;
+package com.example.fragment_test.ui.cooking;
 
 import android.content.Intent;
 import android.os.Bundle;

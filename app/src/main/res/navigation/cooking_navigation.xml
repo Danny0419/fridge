@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cookingFragment"
-        android:name="com.example.fragment_test.CookingFragment"
+        android:name="com.example.fragment_test.ui.cooking.CookingFragment"
         android:label="CookingFragment"
         tools:layout="@layout/fragment_cooking"/>
 </navigation>
