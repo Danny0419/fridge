@@ -74,7 +74,7 @@ public class RefrigeratorIngredientRepository {
                         (o1, o2) -> o1.setQuantity(o1.quantity + o2.quantity)));
     }
 
-    public Map<String, List<RefrigeratorIngredientVO>> getRefrigeratorIngredientsSortedByName() {
+    public Map<String, List<RefrigeratorIngredientVO>> getRefrigeratorIngredientsSortedBySort() {
         String now = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
         List<RefrigeratorIngredientVO> list = refrigeratorIngredientDAO.getQuantityGreaterZeroAndNotExpiredIngredientsOverallInfo(Integer.parseInt(now));
         return sortIngredients(list);
@@ -136,5 +136,14 @@ public class RefrigeratorIngredientRepository {
             }, () -> areIngredientsSufficient.set(false));
         }
         return areIngredientsSufficient.get();
+    }
+
+    public Map<String, RefrigeratorIngredientVO> getRefrigeratorIngredientsSortedByName() {
+        LocalDate now = LocalDate.now();
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
+        int today = Integer.parseInt(format);
+        return refrigeratorIngredientDAO.getQuantityGreaterZeroAndNotExpiredIngredientsOverallInfo(today)
+                .stream()
+                .collect(Collectors.toMap(RefrigeratorIngredientVO::getName, o -> o));
     }
 }
