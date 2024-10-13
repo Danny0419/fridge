@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -56,24 +58,17 @@ public class ShoppingListViewModel extends AndroidViewModel {
     }
 
     public void addShoppingItem(ShoppingIngredient ingredient) {
-
-        Maybe.fromCallable(() -> Optional.ofNullable(repository.addShoppingItem(ingredient))
-                        .orElse(new ArrayList<>())
-                ).subscribeOn(Schedulers.io())
+        Completable.fromAction(() -> repository.addShoppingItem(ingredient))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<List<ShoppingIngredient>>() {
+                .subscribe(new DisposableCompletableObserver() {
                     @Override
-                    public void onSuccess(List<ShoppingIngredient> shoppingList) {
+                    public void onComplete() {
                         loadShoppingList();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
 
                     }
                 });
