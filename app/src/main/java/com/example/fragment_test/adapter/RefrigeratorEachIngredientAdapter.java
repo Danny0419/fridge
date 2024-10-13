@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.RefrigeratorIngredientVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
 import java.util.List;
 

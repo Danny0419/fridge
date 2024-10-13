@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.fragment_test.entity.ShoppingIngredient;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface ShoppingDAO {
     @Query("""
             select id, name, sort, quantity, status from shopping_list
-            where status = 0;
+            where status = 0 and quantity > 0;
             """)
     List<ShoppingIngredient> getAllShoppingIngredients();
 
@@ -35,4 +36,14 @@ public interface ShoppingDAO {
 
     @Delete
     int deleteShoppingItem(ShoppingIngredient shoppingIngredient);
+
+    @Query(
+            """
+            SELECT name, sort, sum(quantity) as sumOfQuantity
+            FROM shopping_list
+            GROUP BY name, sort
+            HAVING sumOfQuantity > 0
+            """
+    )
+    List<ShoppingItemVO> getAllSumOfQuaGreaterThanZeroShoppingIngredientsGroupByName();
 }

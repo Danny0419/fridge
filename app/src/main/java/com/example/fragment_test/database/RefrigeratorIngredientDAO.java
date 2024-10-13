@@ -7,8 +7,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.RefrigeratorIngredientDetailVO;
-import com.example.fragment_test.entity.RefrigeratorIngredientVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
 import java.util.List;
 

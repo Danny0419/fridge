@@ -8,10 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
@@ -21,14 +17,10 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
-import com.example.fragment_test.entity.Invoice;
-import com.example.fragment_test.entity.InvoiceItem;
-import com.example.fragment_test.entity.InvoiceWithItems;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
@@ -123,7 +115,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     List<RefrigeratorIngredient> ingredients = List.of(
                             new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "牛小排", 4, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
+                            new RefrigeratorIngredient(0, "牛小排", 4, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "高麗菜", 60, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }

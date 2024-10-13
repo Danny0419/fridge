@@ -1,4 +1,4 @@
-package com.example.fragment_test.entity;
+package com.example.fragment_test.vo;
 
 public class RefrigeratorIngredientVO {
     public String name;

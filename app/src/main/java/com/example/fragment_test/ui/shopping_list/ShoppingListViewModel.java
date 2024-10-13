@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.example.fragment_test.repository.ShoppingListIngredientRepository;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ShoppingListViewModel extends AndroidViewModel {
     private ShoppingListIngredientRepository repository;
-    private MutableLiveData<List<ShoppingIngredient>> currShoppingList = new MutableLiveData<>();
+    private MutableLiveData<List<ShoppingItemVO>> currShoppingList = new MutableLiveData<>();
     private MutableLiveData<List<String>> allSorts =new MutableLiveData<>();
     private MutableLiveData<List<String>> allSortOfIngredientsName =new MutableLiveData<>();
 
@@ -36,9 +37,9 @@ public class ShoppingListViewModel extends AndroidViewModel {
                         .orElse(new ArrayList<>())
                 ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<List<ShoppingIngredient>>() {
+                .subscribe(new DisposableMaybeObserver<List<ShoppingItemVO>>() {
                     @Override
-                    public void onSuccess(List<ShoppingIngredient> shoppingIngredients) {
+                    public void onSuccess(List<ShoppingItemVO> shoppingIngredients) {
                         currShoppingList.setValue(shoppingIngredients);
                     }
 
@@ -63,7 +64,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
                 .subscribe(new DisposableMaybeObserver<List<ShoppingIngredient>>() {
                     @Override
                     public void onSuccess(List<ShoppingIngredient> shoppingList) {
-                        currShoppingList.setValue(shoppingList);
+                        loadShoppingList();
                     }
 
                     @Override
@@ -79,7 +80,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
 
     }
 
-    public MutableLiveData<List<ShoppingIngredient>> getCurrShoppingList() {
+    public MutableLiveData<List<ShoppingItemVO>> getCurrShoppingList() {
         return currShoppingList;
     }
 

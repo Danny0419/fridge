@@ -8,8 +8,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.RefrigeratorIngredientDetailVO;
-import com.example.fragment_test.entity.RefrigeratorIngredientVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
 
 import java.util.List;

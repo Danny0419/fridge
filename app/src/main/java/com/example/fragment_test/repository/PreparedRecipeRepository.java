@@ -8,7 +8,7 @@ import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeWithPreRecipeId;
-import com.example.fragment_test.entity.RefrigeratorIngredientVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 import com.example.fragment_test.entity.ShoppingIngredient;
 
 import java.util.List;

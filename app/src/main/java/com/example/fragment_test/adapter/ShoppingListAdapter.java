@@ -12,13 +12,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.entity.ShoppingIngredient;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
-     List<ShoppingIngredient> shoppingItems;
+     List<ShoppingItemVO> shoppingItems;
      Context context;
 
 
@@ -36,7 +36,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public ShoppingListAdapter(List<ShoppingIngredient> shoppingItems, Context context) {
+    public ShoppingListAdapter(List<ShoppingItemVO> shoppingItems, Context context) {
         this.shoppingItems = shoppingItems;
         this.context = context;
     }
@@ -59,7 +59,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.position.setText(Integer.toString(position));
         holder.shoppingItemName.setText(shoppingItems.get(position).name);
         holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
-        holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).quantity));
+        holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).sumOfQuantity));
 //        Integer state = shoppingItems.get(position).getState();
 //        if (1 == state) {
 //            holder.shoppingItemState.setChecked(true);

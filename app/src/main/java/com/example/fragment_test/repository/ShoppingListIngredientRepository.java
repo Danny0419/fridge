@@ -5,15 +5,16 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.fragment_test.ServerAPI.RetrofitClient;
-import com.example.fragment_test.service.ShoppingService;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.ShoppingDAO;
 import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.ShoppingIngredient;
+import com.example.fragment_test.service.ShoppingService;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import io.reactivex.Single;
@@ -24,6 +25,7 @@ public class ShoppingListIngredientRepository {
     ShoppingService shoppingService;
 
     public static ShoppingListIngredientRepository shoppingListIngredientRepository;
+
     private ShoppingListIngredientRepository(Context context) {
         this.shoppingDAO = FridgeDatabase.getInstance(context).shoppingDAO();
         shoppingService = RetrofitClient.getRetrofitInstance().create(ShoppingService.class);
@@ -60,20 +62,43 @@ public class ShoppingListIngredientRepository {
         return shoppingDAO.getAllShoppingIngredients();
     }
 
-    public List<ShoppingIngredient> getShoppingList() {
-        return shoppingDAO.getAllShoppingIngredients();
+    public List<ShoppingItemVO> getShoppingList() {
+        return shoppingDAO.getAllSumOfQuaGreaterThanZeroShoppingIngredientsGroupByName();
     }
 
     public void check(List<Ingredient> ingredients) {
-        List<ShoppingIngredient> shoppingList = shoppingListIngredientRepository.getShoppingList();
-        List<Ingredient> collapseBuyAndShoppingList = new LinkedList<>(ingredients);
-        collapseBuyAndShoppingList.addAll(shoppingList);
+        Map<String, ShoppingItemVO> shoppingItems = shoppingDAO.getAllSumOfQuaGreaterThanZeroShoppingIngredientsGroupByName()
+                .stream()
+                .collect(Collectors.toMap(ShoppingItemVO::getName, o -> o));
+        flag:
+        for (Ingredient ingredient :
+                ingredients) {
+            Optional<ShoppingItemVO> shoppingItem = Optional.ofNullable(shoppingItems.get(ingredient.name));
+            shoppingItem.ifPresent(item -> {
+                int max = item.sumOfQuantity;
+                int buyQuantity = ingredient.quantity;
+                if (buyQuantity < max) {
+                    shoppingDAO.insertShoppingIngredient(
+                            new ShoppingIngredient(0,
+                                    ingredient.name,
+                                    "新增",
+                                    -buyQuantity,
+                                    0
+                            )
+                    );
+                } else {
+                    shoppingDAO.insertShoppingIngredient(
+                            new ShoppingIngredient(0,
+                                    ingredient.name,
+                                    "新增",
+                                    -max,
+                                    0
+                            )
+                    );
+                }
+            });
+        }
 
-        Map<String, Ingredient> collect = computeSameIngredients(collapseBuyAndShoppingList);
-        Map<String, Ingredient> finished = computeIsFinished(collect);
-        Map<String, Ingredient> unfinished = computeIsUnfinished(collect);
-        finished.forEach((key, value) -> shoppingDAO.updateItemStatusByName(key));
-        unfinished.forEach((key, value) -> shoppingDAO.updateItemQuantityByName(value.name, value.quantity));
     }
 
     private @NonNull Map<String, Ingredient> computeIsUnfinished(Map<String, Ingredient> collect) {

@@ -10,8 +10,8 @@ import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.RefrigeratorIngredientDetailVO;
-import com.example.fragment_test.entity.RefrigeratorIngredientVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

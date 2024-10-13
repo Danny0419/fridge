@@ -27,6 +27,7 @@ import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.databinding.FragmentShoppingListBinding;
 import com.example.fragment_test.databinding.ShoppinglistAlterDialogBinding;
 import com.example.fragment_test.entity.ShoppingIngredient;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.List;
 
@@ -55,9 +56,9 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
 
         View view = initialize(inflater, container);
-        mViewModel.getCurrShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
+        mViewModel.getCurrShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingItemVO>>() {
             @Override
-            public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
+            public void onChanged(List<ShoppingItemVO> shoppingIngredients) {
                 layoutManager = new LinearLayoutManager(getContext());
                 shoppingListItemRecycleView.setLayoutManager(layoutManager);
                 shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
