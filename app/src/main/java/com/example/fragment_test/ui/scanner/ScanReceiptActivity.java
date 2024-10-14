@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
 
 public class ScanReceiptActivity extends AppCompatActivity {
     //相機掃描
-    private DecoratedBarcodeView barcodeView;
+    //private DecoratedBarcodeView barcodeView;
 
     // 用于存储已识别的QR码信息
     private Set<String> recognizedQrCodes = new HashSet<>();
@@ -43,17 +43,17 @@ public class ScanReceiptActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan_receipt);
 
         //開啟相機
-//        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-//        intentIntegrator.setPrompt("Scan a QR code");
-//        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
-//        intentIntegrator.setBeepEnabled(true);
-//        intentIntegrator.setBarcodeImageEnabled(true);
-//        intentIntegrator.initiateScan();
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        intentIntegrator.setPrompt("Scan a QR code");
+        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setBarcodeImageEnabled(true);
+        intentIntegrator.initiateScan();
 
-        barcodeView = findViewById(R.id.camara);
-        barcodeView.resume();  // 启动相机预览
+        //barcodeView = findViewById(R.id.camara);
+        //barcodeView.resume();  // 启动相机预览
 
         /*
         個按鈕之點擊
@@ -66,7 +66,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
         //返回
         goBackBtn.setOnClickListener(v -> {
-            finish();
+                    finish();
                 }
         );
 
@@ -85,10 +85,10 @@ public class ScanReceiptActivity extends AppCompatActivity {
     }
 
     // 暂停相機預覽
-    protected void onPause() {
-        super.onPause();
-        barcodeView.pause();
-    }
+//    protected void onPause() {
+//        super.onPause();
+//        barcodeView.pause();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
