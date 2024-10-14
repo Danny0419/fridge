@@ -17,6 +17,7 @@ import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,8 @@ import java.util.concurrent.Executors;
 
 
 public class ScanReceiptActivity extends AppCompatActivity {
+    //相機掃描
+    private DecoratedBarcodeView barcodeView;
 
     // 用于存储已识别的QR码信息
     private Set<String> recognizedQrCodes = new HashSet<>();
@@ -39,22 +42,27 @@ public class ScanReceiptActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_receipt);
 
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setPrompt("Scan a QR code");
-        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.initiateScan();
+        //開啟相機
+//        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+//        intentIntegrator.setPrompt("Scan a QR code");
+//        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
+//        intentIntegrator.setBeepEnabled(true);
+//        intentIntegrator.setBarcodeImageEnabled(true);
+//        intentIntegrator.initiateScan();
 
-        //點擊
+        barcodeView = findViewById(R.id.camara);
+        barcodeView.resume();  // 启动相机预览
+
+        /*
+        個按鈕之點擊
+        */
         Button goBackBtn=findViewById(R.id.goBackBnt);  //返回按鈕
         Button scanReceiptButton=findViewById(R.id.scan_receipt_button);    //掃描發票orOCR按鈕
         Button addManuallyButton=findViewById(R.id.add_manually_button);    //手動輸入按鈕
         LinearLayout scanLayout = findViewById(R.id.scan_layout);   //掃描發票orOCR按鈕區塊
         LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
-
 
         //返回
         goBackBtn.setOnClickListener(v -> {
@@ -74,6 +82,12 @@ public class ScanReceiptActivity extends AppCompatActivity {
             scanLayout.setVisibility(View.GONE);
         });
 
+    }
+
+    // 暂停相機預覽
+    protected void onPause() {
+        super.onPause();
+        barcodeView.pause();
     }
 
     @Override
@@ -102,88 +116,70 @@ public class ScanReceiptActivity extends AppCompatActivity {
     }
 
     private void handleRecognizedQrCodes(Set<String> qrCodes) {
-        // 用于存储所有QR码合并后的完整信息
+        // 合并QR码信息并解析发票和品项
         StringBuilder combinedInfo = new StringBuilder();
-        // 用于存储解析出的品项列表
         List<ParsedItem> items = new ArrayList<>();
-        // 用于存储发票日期
         String invoiceDate = null;
 
-        // 分开存储不以"**"开头和以"**"开头的内容
         List<String> beforeStarStar = new ArrayList<>();
         List<String> afterStarStar = new ArrayList<>();
 
-        // 分类存储
         for (String qrCode : qrCodes) {
             if (qrCode.startsWith("**")) {
-                // 将开头的"**"替换为":"后存储
                 afterStarStar.add(qrCode.replaceFirst("\\*\\*", ":"));
             } else {
                 beforeStarStar.add(qrCode);
             }
         }
 
-        // 先处理不以"**"开头的内容
         for (String qrCode : beforeStarStar) {
             combinedInfo.append(qrCode);
         }
-
-        // 再处理以"**"开头的内容
         for (String qrCode : afterStarStar) {
             combinedInfo.append(qrCode);
         }
 
-        // 获取合并后的完整字符串
-        String combinedText = combinedInfo.toString();
-        // 去除合并字符串中的所有空格
-        combinedText = combinedText.replaceAll("\\s+", "");
+        String combinedText = combinedInfo.toString().replaceAll("\\s+", "");
         Log.i("QR CODE SCANNER", "合并后的完整信息: " + combinedText);
-
 
         // 解析发票信息
         ParsedInvoice parsedInvoice = parseInvoiceData(combinedText);
         invoiceDate = parsedInvoice.getDate();
         items.addAll(parsedInvoice.getItems());
 
-        // 构建结果字符串
+        // 构建要保存的数据
         if (invoiceDate != null) {
-            StringBuilder parsedResults = new StringBuilder();
-            parsedResults.append("Invoice Date: ").append(invoiceDate).append("\nItems:\n");
-            for (ParsedItem item : items) {
-                parsedResults.append("Name: ").append(item.getName())
-                        .append(", Quantity: ").append(item.getQuantity())
-                        .append(", Price: ").append(item.getPrice())
-                        .append("\n");
-            }
-            // 显示结果
-            Toast.makeText(this, parsedResults.toString(), Toast.LENGTH_LONG).show();
-            Log.i("QR CODE SCANNER", parsedResults.toString());
+            // 创建后台线程池
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+            // 获取数据库实例
+            FridgeDatabase db = FridgeDatabase.getInstance(getApplicationContext());
+
+            // 在后台线程中执行插入操作
+            String finalInvoiceDate = invoiceDate;
+            executorService.execute(() -> {
+                // 插入发票数据
+                Invoice invoice = new Invoice(finalInvoiceDate);
+                long invoiceId = db.invoiceDAO().insertInvoice(invoice);
+
+                // 插入发票品项数据
+                List<InvoiceItem> invoiceItems = new ArrayList<>();
+                for (ParsedItem item : items) {
+                    InvoiceItem invoiceItem = new InvoiceItem((int) invoiceId, item.getName(), item.getQuantity(), item.getPrice());
+                    invoiceItems.add(invoiceItem);
+                }
+                db.invoiceItemDAO().insertInvoiceItems(invoiceItems);
+
+                // 提示用户成功
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "发票和品项已成功保存", Toast.LENGTH_LONG).show();
+                    // 在合适的地方关闭活动或跳转到另一个页面
+                    finish();
+                });
+            });
+
+            executorService.shutdown(); // 在适当的时候关闭线程池
         }
-
-        // 获取数据库实例
-        FridgeDatabase db = FridgeDatabase.getInstance(getApplicationContext());
-
-        // 创建后台线程池
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-        // 在后台线程中执行数据库操作
-        String finalInvoiceDate = invoiceDate;
-        executorService.execute(() -> {
-            // 创建发票对象并保存
-            Invoice invoice = new Invoice(finalInvoiceDate);
-            long invoiceId = db.invoiceDAO().insertInvoice(invoice);
-
-            // 保存发票项目
-            for (ParsedItem item : items) {
-                InvoiceItem invoiceItem = new InvoiceItem((int) invoiceId, item.getName(), item.getQuantity(), item.getPrice());
-                db.invoiceItemDAO().insertInvoiceItems(Collections.singletonList(invoiceItem));
-            }
-        });
-
-        executorService.shutdown(); // 记得在合适的时候关闭ExecutorService
-
-        // 关闭活动或转到其他活动
-        finish();
     }
 
     private ParsedInvoice parseInvoiceData(String qrText) {
@@ -263,4 +259,5 @@ public class ScanReceiptActivity extends AppCompatActivity {
             return items;
         }
     }
+
 }

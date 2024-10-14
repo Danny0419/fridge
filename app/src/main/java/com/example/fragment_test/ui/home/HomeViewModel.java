@@ -16,7 +16,7 @@ import java.util.List;
 public class HomeViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> mText;
-    private final LiveData<List<InvoiceWithItems>> invoiceWithItemsList;
+    //private final LiveData<List<InvoiceWithItems>> invoiceWithItemsList;
 
     public HomeViewModel(Application application) {
         super(application);
@@ -24,19 +24,19 @@ public class HomeViewModel extends AndroidViewModel {
         mText.setValue("This is home fragment");
 
         // 获取数据库实例
-        FridgeDatabase db = FridgeDatabase.getInstance(application);
-        InvoiceDAO invoiceDAO = db.invoiceDAO();
-        InvoiceItemDAO invoiceItemDAO = db.invoiceItemDAO();
+        //FridgeDatabase db = FridgeDatabase.getInstance(application);
+        //InvoiceDAO invoiceDAO = db.invoiceDAO();
+        //InvoiceItemDAO invoiceItemDAO = db.invoiceItemDAO();
 
         // 查询所有发票及其品项
-        invoiceWithItemsList = invoiceDAO.getAllInvoicesWithItems();
+        //invoiceWithItemsList = invoiceDAO.getAllInvoicesWithItems();
     }
 
     public LiveData<String> getText() {
         return mText;
     }
 
-    public LiveData<List<InvoiceWithItems>> getInvoiceWithItemsList() {
-        return invoiceWithItemsList;
-    }
+    //public LiveData<List<InvoiceWithItems>> getInvoiceWithItemsList() {
+    //    return invoiceWithItemsList;
+    //}
 }
