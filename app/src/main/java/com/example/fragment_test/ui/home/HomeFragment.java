@@ -24,6 +24,7 @@ import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -41,6 +42,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        fragmentOfDate();
 
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -72,6 +74,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
+    private void fragmentOfDate() {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM\n.dd");
+        String dateStr = dateTimeFormatter.format(now);
+        binding.date.setText(dateStr);
+        DayOfWeek dayOfWeek = now.getDayOfWeek();
+        binding.weekDate.setText(convertDayOfWeekToChiStr(dayOfWeek));
+    }
+
+    public String convertDayOfWeekToChiStr(DayOfWeek dayOfWeek) {
+        String dOWeek = "一";
+        switch (dayOfWeek) {
+            case TUESDAY -> dOWeek = "二";
+            case WEDNESDAY -> dOWeek = "三";
+            case THURSDAY -> dOWeek = "四";
+            case FRIDAY -> dOWeek = "五";
+            case SATURDAY -> dOWeek = "六";
+            case SUNDAY -> dOWeek = "日";
+        }
+        return "星期"+ dOWeek;
+    }
 //    private void setupDialog(LayoutInflater inflater, ViewGroup container) {
 //        scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(inflater, container, false);
 //        dialog = new Dialog(getContext());
@@ -89,6 +112,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //        layoutParams.width = 1000;
 //        layoutParams.height = 1020;
 //        dialog.getWindow().setAttributes(layoutParams);
+
 //    }
 
     private void addToolbar() {
