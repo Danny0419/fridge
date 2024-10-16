@@ -28,11 +28,12 @@ import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OcrActivity extends AppCompatActivity {
@@ -41,12 +42,13 @@ public class OcrActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonRecognizeImage;
-    private Button ApiTest;
     private TextView textViewDate;
+    private TextView textViewItems;
     private RecyclerView recyclerViewItems;
     private ItemAdapter itemAdapter;
 
     private TextRecognizer recognizer;
+    private ExecutorService apiExecutor;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,22 +58,16 @@ public class OcrActivity extends AppCompatActivity {
 
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
+        textViewItems = findViewById(R.id.textViewItems);
         recyclerViewItems = findViewById(R.id.recyclerViewItems);
-        ApiTest = findViewById(R.id.ApiText);
 
         recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
+        apiExecutor = Executors.newSingleThreadExecutor();
 
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
-            }
-        });
-
-        ApiTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ApiStart();
             }
         });
 
@@ -84,6 +80,7 @@ public class OcrActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -105,6 +102,7 @@ public class OcrActivity extends AppCompatActivity {
                 .addOnSuccessListener(this::processText)
                 .addOnFailureListener(e -> Toast.makeText(OcrActivity.this, "OCR失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+
     private void processText(Text text) {
         List<String> allLines = new ArrayList<>();
         for (Text.TextBlock block : text.getTextBlocks()) {
@@ -121,6 +119,7 @@ public class OcrActivity extends AppCompatActivity {
         Log.d(TAG, "Invoice Date: " + invoiceDate);
         for (Item item : items) {
             Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
+            callApiWithProductName(item.getName());
         }
 
         textViewDate.setText("發票日期: " + invoiceDate);
@@ -140,7 +139,7 @@ public class OcrActivity extends AppCompatActivity {
 
     private List<Item> extractItems(List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Pattern patternItem = Pattern.compile("^[\\*\\+](\\d+)\\s*(.+)");
+        Pattern patternItem = Pattern.compile("^[\\*\\+#](\\d+)\\s*(.+)");
         Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");
         Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$");
         Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)");
@@ -157,7 +156,9 @@ public class OcrActivity extends AppCompatActivity {
                 String totalPrice = fullItemMatcher.group(3);
                 if (i > 0) {
                     String itemName = lines.get(i - 1);
-                    items.add(new Item(itemName, quantity, totalPrice));
+                    String changedName = "default_changed_name";
+                    String expiration = "default_expiration";
+                    items.add(new Item(itemName, quantity, totalPrice, changedName, expiration));
                 }
                 continue;
             }
@@ -167,7 +168,7 @@ public class OcrActivity extends AppCompatActivity {
                 if (currentItem != null) {
                     items.add(currentItem);
                 }
-                currentItem = new Item(itemMatcher.group(2), "1", "");
+                currentItem = new Item(itemMatcher.group(2), "1", "", "default_changed_name", "default_expiration");
                 Matcher priceMatcher = patternPrice.matcher(text);
                 if (priceMatcher.find()) {
                     currentItem.setAmount(priceMatcher.group(1));
@@ -207,32 +208,42 @@ public class OcrActivity extends AppCompatActivity {
         return items;
     }
 
-    private void ApiStart(){
-        // 获取 Retrofit 实例和 API 服务
-        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-
-        // 调用 ingredients API
-        Call<List<Ingredient>> call = apiService.getIngredients();
-        call.enqueue(new Callback<List<Ingredient>>() {
-            @Override
-            public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
+    private void callApiWithProductName(String productName) {
+        // 如果帶有奇怪字符的時候用的
+        String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
+        apiExecutor.execute(() -> {
+            ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+            Call<List<CombinedIngredient>> call = apiService.getCombinedIngredients(cleanedProductName);
+            Response<List<CombinedIngredient>> response = null;
+            try {
+                response = call.execute();
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Ingredient> ingredients = response.body();
-                    for (Ingredient ingredient : ingredients) {
-                        Log.d(TAG, "Ingredient ID: " + ingredient.getIngredient_ID());
-                        Log.d(TAG, "Ingredient Name: " + ingredient.getIngredient_Name());
-                        Log.d(TAG, "Ingredient Category: " + ingredient.getIngredient_category());
-                        Log.d(TAG, "Expiration: " + ingredient.getExpiration());
-                    }
+                    List<CombinedIngredient> ingredients = response.body();
+                    runOnUiThread(() -> updateUIWithIngredients(ingredients));
                 } else {
-                    Log.e(TAG, "Response failed or empty");
+              //      runOnUiThread(() -> Toast.makeText(OcrActivity.this, "無法獲取商品信息", Toast.LENGTH_SHORT).show());
+                    Log.d(TAG, "無法獲取商品信息");
                 }
-            }
+            } catch (IOException e) {
+                e.printStackTrace();
+//                runOnUiThread(() -> Toast.makeText(OcrActivity.this, "API 呼叫失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                Log.d(TAG, "呼叫API失敗");
 
-            @Override
-            public void onFailure(Call<List<Ingredient>> call, Throwable t) {
-                Log.e(TAG, "Error: " + t.getMessage());
             }
         });
+    }
+
+
+    private void updateUIWithIngredients(List<CombinedIngredient> ingredients) {
+        // 更新UI顯示所獲取的成分
+        StringBuilder result = new StringBuilder("\n");
+        for (CombinedIngredient ingredient : ingredients) {
+            result.append(ingredient.getIngredient_Name())
+                    .append(": ")
+                    .append(ingredient.getIngredients_category())
+                    .append("\n");
+        }
+
+        textViewItems.setText(result.toString());
     }
 }
