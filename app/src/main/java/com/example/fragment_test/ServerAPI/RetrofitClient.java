@@ -15,7 +15,8 @@ import com.google.gson.GsonBuilder;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "http://120.125.83.32:5000/";
+   private static final String BASE_URL = "http://120.125.83.32:5000/";
+
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

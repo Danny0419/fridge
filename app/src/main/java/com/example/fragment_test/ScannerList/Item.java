@@ -4,13 +4,18 @@ public class Item {
     private String name;
     private String quantity;
     private String amount;
+    private String changedName;  // 新增轉換後的商品名稱
+    private String expiration;   // 新增保存期限
 
-    public Item(String name, String quantity, String amount) {
+    public Item(String name, String quantity, String amount, String changedName, String expiration) {
         this.name = name;
         this.quantity = quantity;
         this.amount = amount;
+        this.changedName = changedName;  // 初始化轉換後的商品名稱
+        this.expiration = expiration;    // 初始化保存期限
     }
 
+    // Getter 和 Setter 方法
     public String getName() {
         return name;
     }
@@ -23,11 +28,27 @@ public class Item {
         return amount;
     }
 
-    public void setQuantity(String quantity) {
+    public void setAmount(String amount) { // 添加 setAmount 方法
+        this.amount = amount;
+    }
+
+    public void setQuantity(String quantity) { // 添加 setQuantity 方法
         this.quantity = quantity;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public String getChangedName() {
+        return changedName;   // 新增 getter
+    }
+
+    public String getExpiration() {
+        return expiration;    // 新增 getter
+    }
+
+    public void setChangedName(String changedName) {
+        this.changedName = changedName;
+    }
+
+    public void setExpiration(String expiration) {
+        this.expiration = expiration;
     }
 }

@@ -32,10 +32,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         Item item = items.get(position);
         holder.textViewName.setText(item.getName());
         holder.textViewQuantity.setText("數量: " + item.getQuantity());
-        //holder.textViewAmount.setText("金額: " + item.getAmount()); //金額不顯示
-        holder.textViewChangename.setText("轉換後商品名稱: " );
-        holder.textViewExpiration.setText("保存期限: " );
+        //holder.textViewAmount.setText("金額: " + item.getAmount()); // 金額不顯示
+
+        // 設定轉換後的商品名稱與保存期限
+        holder.textViewChangename.setText("轉換後商品名稱: " + item.getChangedName());
+        holder.textViewExpiration.setText("保存期限: " + item.getExpiration());
     }
+
 
     @Override
     public int getItemCount() {
