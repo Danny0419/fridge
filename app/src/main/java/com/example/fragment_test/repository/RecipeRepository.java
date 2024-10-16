@@ -7,6 +7,7 @@ import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +34,11 @@ public class RecipeRepository {
                 new RecipeIngredient("花椰菜", 10, "蔬菜照片", 1),
                 new RecipeIngredient("番茄", 5, "蔬菜照片", 1)
         );
+        ArrayList<RecipeIngredient> steak = new ArrayList<>();
+        steak.add(new RecipeIngredient("牛小排", 3, "",2));
         return Optional.of(List.of(
                 new Recipe(1, "蔬菜大餐", "照片", 2, 0,null, recipeIngredients),
-                new Recipe(2, "菲力牛排", "照片", 2, 1),
+                new Recipe(2, "菲力牛排", "照片", 2, 1, null, steak),
                 new Recipe(3, "義大利麵", "照片", 2, 0),
                 new Recipe(4, "蛋包飯", "照片", 2, 0),
                 new Recipe(5, "卡拉雞腿堡", "照片", 2, 0),
