@@ -15,39 +15,44 @@ import com.google.gson.GsonBuilder;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
-   private static final String BASE_URL = "http://120.125.83.32:5000/";
-
+    private static final String BASE_URL = "http://120.125.83.32:5000/";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
+            // 配置日誌攔截器
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            // 配置重試攔截器
+            RetryInterceptor retryInterceptor = new RetryInterceptor(3);
+
             // 配置 OkHttpClient
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(60, TimeUnit.SECONDS) // 增加连接超时
-                    .readTimeout(60, TimeUnit.SECONDS) // 增加读取超时
-                    .writeTimeout(60, TimeUnit.SECONDS) // 增加写入超时
-                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)) // 日志拦截器
-                    .addInterceptor(new RetryInterceptor(3)) // 添加重试机制，最多重试3次
+                    .connectTimeout(60, TimeUnit.SECONDS) // 增加連接超時
+                    .readTimeout(60, TimeUnit.SECONDS)    // 增加讀取超時
+                    .writeTimeout(60, TimeUnit.SECONDS)   // 增加寫入超時
+                    .addInterceptor(loggingInterceptor)    // 添加日誌攔截器
+                    .addInterceptor(retryInterceptor)      // 添加重試攔截器
                     .build();
 
-            // 创建 Gson 对象并设置为宽松模式
+            // 配置 Gson
             Gson gson = new GsonBuilder()
-                    .setLenient() // 宽松模式，允许解析宽松的 JSON
+                    .setLenient()
                     .create();
 
+            // 建立 Retrofit 實例
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create(gson)) // 使用宽松的 Gson 解析器
+                    .addConverterFactory(GsonConverterFactory.create(gson)) // 使用寬鬆的 Gson 解析器
                     .build();
-
         }
         return retrofit;
     }
 
-    // 定义 RetryInterceptor，处理重试逻辑
+    // 重試攔截器
     private static class RetryInterceptor implements Interceptor {
-        private int maxRetries;
-        private int retryCount = 0;
+        private final int maxRetries;
 
         public RetryInterceptor(int maxRetries) {
             this.maxRetries = maxRetries;
@@ -56,22 +61,41 @@ public class RetrofitClient {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
+            int retryCount = 0;
             Response response = null;
-            boolean responseOK = false;
+            IOException exception = null;
 
-            // 重试逻辑
-            while (retryCount < maxRetries && !responseOK) {
+            while (retryCount < maxRetries) {
                 try {
                     response = chain.proceed(request);
-                    responseOK = response.isSuccessful(); // 如果成功，退出循环
-                } catch (Exception e) {
-                    retryCount++;
-                    if (retryCount >= maxRetries) {
-                        throw e; // 达到最大重试次数，抛出异常
+                    if (response.isSuccessful()) {
+                        return response;
+                    } else {
+                        // 根據需要添加特定的 HTTP 狀態碼重試邏輯
+                        // 例如，只在 5xx 錯誤時重試
+                        if (response.code() < 500) {
+                            // 非服務器錯誤，避免重試
+                            return response;
+                        }
                     }
+                } catch (IOException e) {
+                    exception = e;
                 }
+
+                // 如果回應不成功且還有重試機會，關閉回應並重試
+                if (response != null) {
+                    response.close();
+                }
+
+                retryCount++;
             }
-            return response;
+
+            // 如果所有重試均失敗，則拋出最後一個異常或返回最後一個響應
+            if (response != null) {
+                return response;
+            } else {
+                throw exception != null ? exception : new IOException("Unknown network error");
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ public class CombinedIngredient {
     private int Supermarket_ingredient_ID;
     private int Ingredient_ID;
     private String supermarket_ingredientcol_name;
-    private int Grams;
+    private String Grams;
     private String Ingredient_Name;
     private String Ingredients_category;
     private int expiration;
@@ -34,11 +34,11 @@ public class CombinedIngredient {
         this.supermarket_ingredientcol_name = supermarket_ingredientcol_name;
     }
 
-    public int getGrams() {
+    public String getGrams() {
         return Grams;
     }
 
-    public void setGrams(int grams) {
+    public void setGrams(String grams) {
         Grams = grams;
     }
 
