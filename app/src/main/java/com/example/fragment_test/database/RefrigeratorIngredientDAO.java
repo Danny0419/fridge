@@ -20,7 +20,7 @@ public interface RefrigeratorIngredientDAO {
     List<RefrigeratorIngredient> getAllRefrigeratorIngredients();
 
     @Query("""
-            SELECT name, sort, img, min(expiration) as earlyEx, max(expiration) as lastEx, sum(quantity) as sumQuantity
+            SELECT name, sort, img, min(expiration) as earlyEx, max(expiration) as lastEx, sum(quantity) as sumQuantity, unit
             FROM refrigerator
             WHERE quantity > 0 AND expiration >= :today
             GROUP BY name
@@ -28,7 +28,8 @@ public interface RefrigeratorIngredientDAO {
     List<RefrigeratorIngredientVO> getQuantityGreaterZeroAndNotExpiredIngredientsOverallInfo(int today);
 
     @Query("""
-            SELECT id, name, img, sort, quantity, expiration  FROM refrigerator
+            SELECT id, name, img, sort, quantity, expiration, unit
+            FROM refrigerator
             WHERE quantity > 0 AND expiration >= :today
             """)
     List<RefrigeratorIngredient> getQuantityGreaterZeroAndNotExpiredIngredients(int today);
