@@ -6,7 +6,8 @@ public class Item {
     private String amount;
     private String changedName;  // 新增轉換後的商品名稱
     private String expiration;   // 新增保存期限
-
+    private String Ingredient_Name;
+    private String Ingredients_category;
     public Item(String name, String quantity, String amount, String changedName, String expiration) {
         this.name = name;
         this.quantity = quantity;
@@ -50,5 +51,16 @@ public class Item {
 
     public void setExpiration(String expiration) {
         this.expiration = expiration;
+    }
+
+    public String getIngredient_Name() {
+        return Ingredient_Name;
+    }
+    public String getIngredients_category() {
+        return Ingredients_category;
+    }
+
+    public void setIngredients_category(String ingredients_category) {
+        Ingredients_category = ingredients_category;
     }
 }
