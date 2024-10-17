@@ -117,14 +117,17 @@ public class OcrActivity extends AppCompatActivity {
         List<Item> items = extractItems(allLines);
 
         Log.d(TAG, "Invoice Date: " + invoiceDate);
-        for (Item item : items) {
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
             Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
-            callApiWithProductName(item.getName());
+            callApiWithProductName(item.getName(), items, i);  // 傳入 items 列表和當前索引
         }
 
         textViewDate.setText("發票日期: " + invoiceDate);
         itemAdapter.updateItems(items);
     }
+
+
 
     private String extractDate(List<String> lines) {
         Pattern patternDate = Pattern.compile("\\b\\d{4}\\s*/\\s*\\d{2}\\s*/\\s*\\d{2}\\b");
@@ -208,8 +211,8 @@ public class OcrActivity extends AppCompatActivity {
         return items;
     }
 
-    private void callApiWithProductName(String productName) {
-        // 如果帶有奇怪字符的時候用的
+    private void callApiWithProductName(String productName, List<Item> items, int itemIndex) {
+        // 清除不必要字符
         String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
         apiExecutor.execute(() -> {
             ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
@@ -217,33 +220,37 @@ public class OcrActivity extends AppCompatActivity {
             Response<List<CombinedIngredient>> response = null;
             try {
                 response = call.execute();
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     List<CombinedIngredient> ingredients = response.body();
-                    runOnUiThread(() -> updateUIWithIngredients(ingredients));
+                    // 更新 UI，只傳有回應資料的商品
+                    runOnUiThread(() -> updateUIWithIngredients(ingredients, items, itemIndex));
                 } else {
-              //      runOnUiThread(() -> Toast.makeText(OcrActivity.this, "無法獲取商品信息", Toast.LENGTH_SHORT).show());
-                    Log.d(TAG, "無法獲取商品信息");
+                    Log.d(TAG, "無法獲取商品信息: " + productName);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-//                runOnUiThread(() -> Toast.makeText(OcrActivity.this, "API 呼叫失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                Log.d(TAG, "呼叫API失敗");
-
+                Log.d(TAG, "API 呼叫失敗: " + e.getMessage());
             }
         });
     }
 
 
-    private void updateUIWithIngredients(List<CombinedIngredient> ingredients) {
-        // 更新UI顯示所獲取的成分
-        StringBuilder result = new StringBuilder("\n");
-        for (CombinedIngredient ingredient : ingredients) {
-            result.append(ingredient.getIngredient_Name())
-                    .append(": ")
-                    .append(ingredient.getIngredients_category())
-                    .append("\n");
+    private void updateUIWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
+        // 確保只有該商品對應有資料才會顯示
+        if (itemIndex < items.size()) {
+            Item item = items.get(itemIndex);
+            StringBuilder result = new StringBuilder(textViewItems.getText());
+            for (CombinedIngredient ingredient : ingredients) {
+                result.append("商品原始名稱: ").append(item.getName()).append("\n")
+                        .append("數量: ").append(item.getQuantity()).append("\n")
+                        .append("商品種類: ").append(ingredient.getIngredients_category()).append("\n")
+                        .append("商品轉換名稱: ").append(ingredient.getIngredient_Name()).append("\n")
+                        .append("保存期限: ").append(ingredient.getExpiration()).append(" 天\n")
+                        .append("-------------------------\n");
+            }
+            textViewItems.setText(result.toString());
         }
-
-        textViewItems.setText(result.toString());
     }
 }
+
+
