@@ -28,11 +28,12 @@ import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OcrActivity extends AppCompatActivity {
@@ -41,12 +42,13 @@ public class OcrActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonRecognizeImage;
-    private Button ApiTest;
     private TextView textViewDate;
+    private TextView textViewItems;
     private RecyclerView recyclerViewItems;
     private ItemAdapter itemAdapter;
 
     private TextRecognizer recognizer;
+    private ExecutorService apiExecutor;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,22 +58,16 @@ public class OcrActivity extends AppCompatActivity {
 
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
+        textViewItems = findViewById(R.id.textViewItems);
         recyclerViewItems = findViewById(R.id.recyclerViewItems);
-        ApiTest = findViewById(R.id.ApiText);
 
         recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
+        apiExecutor = Executors.newSingleThreadExecutor();
 
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
-            }
-        });
-
-        ApiTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ApiStart();
             }
         });
 
@@ -84,6 +80,7 @@ public class OcrActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -105,6 +102,7 @@ public class OcrActivity extends AppCompatActivity {
                 .addOnSuccessListener(this::processText)
                 .addOnFailureListener(e -> Toast.makeText(OcrActivity.this, "OCR失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+
     private void processText(Text text) {
         List<String> allLines = new ArrayList<>();
         for (Text.TextBlock block : text.getTextBlocks()) {
@@ -119,13 +117,17 @@ public class OcrActivity extends AppCompatActivity {
         List<Item> items = extractItems(allLines);
 
         Log.d(TAG, "Invoice Date: " + invoiceDate);
-        for (Item item : items) {
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
             Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
+            callApiWithProductName(item.getName(), items, i);  // 傳入 items 列表和當前索引
         }
 
         textViewDate.setText("發票日期: " + invoiceDate);
         itemAdapter.updateItems(items);
     }
+
+
 
     private String extractDate(List<String> lines) {
         Pattern patternDate = Pattern.compile("\\b\\d{4}\\s*/\\s*\\d{2}\\s*/\\s*\\d{2}\\b");
@@ -140,7 +142,7 @@ public class OcrActivity extends AppCompatActivity {
 
     private List<Item> extractItems(List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Pattern patternItem = Pattern.compile("^[\\*\\+](\\d+)\\s*(.+)");
+        Pattern patternItem = Pattern.compile("^[\\*\\+#](\\d+)\\s*(.+)");
         Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");
         Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$");
         Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)");
@@ -157,7 +159,9 @@ public class OcrActivity extends AppCompatActivity {
                 String totalPrice = fullItemMatcher.group(3);
                 if (i > 0) {
                     String itemName = lines.get(i - 1);
-                    items.add(new Item(itemName, quantity, totalPrice));
+                    String changedName = "default_changed_name";
+                    String expiration = "default_expiration";
+                    items.add(new Item(itemName, quantity, totalPrice, changedName, expiration));
                 }
                 continue;
             }
@@ -167,7 +171,7 @@ public class OcrActivity extends AppCompatActivity {
                 if (currentItem != null) {
                     items.add(currentItem);
                 }
-                currentItem = new Item(itemMatcher.group(2), "1", "");
+                currentItem = new Item(itemMatcher.group(2), "1", "", "default_changed_name", "default_expiration");
                 Matcher priceMatcher = patternPrice.matcher(text);
                 if (priceMatcher.find()) {
                     currentItem.setAmount(priceMatcher.group(1));
@@ -207,32 +211,46 @@ public class OcrActivity extends AppCompatActivity {
         return items;
     }
 
-    private void ApiStart(){
-        // 获取 Retrofit 实例和 API 服务
-        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-
-        // 调用 ingredients API
-        Call<List<Ingredient>> call = apiService.getIngredients();
-        call.enqueue(new Callback<List<Ingredient>>() {
-            @Override
-            public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Ingredient> ingredients = response.body();
-                    for (Ingredient ingredient : ingredients) {
-                        Log.d(TAG, "Ingredient ID: " + ingredient.getIngredient_ID());
-                        Log.d(TAG, "Ingredient Name: " + ingredient.getIngredient_Name());
-                        Log.d(TAG, "Ingredient Category: " + ingredient.getIngredient_category());
-                        Log.d(TAG, "Expiration: " + ingredient.getExpiration());
-                    }
+    private void callApiWithProductName(String productName, List<Item> items, int itemIndex) {
+        // 清除不必要字符
+        String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
+        apiExecutor.execute(() -> {
+            ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+            Call<List<CombinedIngredient>> call = apiService.getCombinedIngredients(cleanedProductName);
+            Response<List<CombinedIngredient>> response = null;
+            try {
+                response = call.execute();
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    List<CombinedIngredient> ingredients = response.body();
+                    // 更新 UI，只傳有回應資料的商品
+                    runOnUiThread(() -> updateUIWithIngredients(ingredients, items, itemIndex));
                 } else {
-                    Log.e(TAG, "Response failed or empty");
+                    Log.d(TAG, "無法獲取商品信息: " + productName);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<Ingredient>> call, Throwable t) {
-                Log.e(TAG, "Error: " + t.getMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "API 呼叫失敗: " + e.getMessage());
             }
         });
     }
+
+
+    private void updateUIWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
+        // 確保只有該商品對應有資料才會顯示
+        if (itemIndex < items.size()) {
+            Item item = items.get(itemIndex);
+            StringBuilder result = new StringBuilder(textViewItems.getText());
+            for (CombinedIngredient ingredient : ingredients) {
+                result.append("商品原始名稱: ").append(item.getName()).append("\n")
+                        .append("數量: ").append(item.getQuantity()).append("\n")
+                        .append("商品種類: ").append(ingredient.getIngredients_category()).append("\n")
+                        .append("商品轉換名稱: ").append(ingredient.getIngredient_Name()).append("\n")
+                        .append("保存期限: ").append(ingredient.getExpiration()).append(" 天\n")
+                        .append("-------------------------\n");
+            }
+            textViewItems.setText(result.toString());
+        }
+    }
 }
+
+

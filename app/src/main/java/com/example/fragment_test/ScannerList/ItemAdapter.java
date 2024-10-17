@@ -27,15 +27,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return new ItemViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = items.get(position);
-        holder.textViewName.setText(item.getName());
-        holder.textViewQuantity.setText("數量: " + item.getQuantity());
-        //holder.textViewAmount.setText("金額: " + item.getAmount()); //金額不顯示
-        holder.textViewChangename.setText("轉換後商品名稱: " );
-        holder.textViewExpiration.setText("保存期限: " );
+       // holder.textViewName.setText(item.getName()); //原本的商品名稱
+       // holder.textViewQuantity.setText("數量: " + item.getQuantity()); //商品數量
+        //holder.textViewAmount.setText("金額: " + item.getAmount()); // 金額，不顯示
+        //holder.textViewCategory.setText("商品種類: " + item.getChangedName());//商品種類
+        //holder.textViewChangename.setText("轉換後商品名稱: " + item.getChangedName());//轉換後名稱
+        //holder.textViewExpiration.setText("保存期限: " + item.getExpiration());//保存期限
     }
+
 
     @Override
     public int getItemCount() {
@@ -49,14 +52,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewName, textViewQuantity, textViewChangename, textViewExpiration;
+        TextView textViewName, textViewQuantity,textViewCategory, textViewChangename, textViewExpiration;
 
         ItemViewHolder(View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewName);
             textViewQuantity = itemView.findViewById(R.id.textViewQuantity);
+            textViewCategory = itemView.findViewById(R.id.textViewCategory);
             textViewChangename = itemView.findViewById(R.id.textViewChangename);
             textViewExpiration = itemView.findViewById(R.id.textViewExpiration);
+
         }
     }
 }
