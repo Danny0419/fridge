@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.ScannerList.OcrActivity;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
@@ -81,7 +82,12 @@ public class ScanReceiptActivity extends AppCompatActivity {
             addManuallyLayout.setVisibility(View.VISIBLE);
             scanLayout.setVisibility(View.GONE);
         });
+        Button albumBtn = findViewById(R.id.albumBnt);
+        albumBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, OcrActivity.class);
+            startActivity(intent);
 
+        });
     }
 
     // 暂停相機預覽
