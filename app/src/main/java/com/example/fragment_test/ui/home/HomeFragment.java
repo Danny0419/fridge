@@ -1,6 +1,5 @@
 package com.example.fragment_test.ui.home;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import androidx.navigation.Navigation;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
-import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
@@ -29,11 +27,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private Dialog dialog;
-    private ScanIngredientConfirmBinding scanIngredientConfirmBinding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -95,25 +91,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         return "星期"+ dOWeek;
     }
-//    private void setupDialog(LayoutInflater inflater, ViewGroup container) {
-//        scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(inflater, container, false);
-//        dialog = new Dialog(getContext());
-//        dialog.setContentView(scanIngredientConfirmBinding.getRoot());
-//        dialog.setCancelable(false);
-//
-//        Button continueButton = scanIngredientConfirmBinding.continueButton;
-//        Button confirmButton = scanIngredientConfirmBinding.confirmButton;
-//
-//        continueButton.setOnClickListener(this);
-//        confirmButton.setOnClickListener(this);
-//
-//        // 應急用調整彈跳視窗大小
-//        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-//        layoutParams.width = 1000;
-//        layoutParams.height = 1020;
-//        dialog.getWindow().setAttributes(layoutParams);
-
-//    }
 
     private void addToolbar() {
         FragmentActivity fragmentActivity = requireActivity();
@@ -153,36 +130,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    public void onClick(View v) {
-        int clickedId = v.getId();
-
-//        if (clickedId == R.id.test_button) {
-//            dialog.show();
-//
-//            //把checkbox改成textview
-//            RecyclerView recyclerView = scanIngredientConfirmBinding.ingredientList.shoppingListItemRecyclerview;
-//            for (int i = 0; i < recyclerView.getChildCount(); i++) {
-//                View view = recyclerView.getChildAt(i);
-//                CheckBox checkBox = view.findViewById(R.id.shoppingItemState);
-//                if (checkBox != null) {
-//                    // textview
-//                    TextView textView = new TextView(getContext());
-//                    textView.setTextSize(20); //字體大小
-//
-//                    //替換checkbox
-//                    ViewGroup parent = (ViewGroup) checkBox.getParent();
-//                    int index = parent.indexOfChild(checkBox);
-//                    parent.removeView(checkBox);
-//                    parent.addView(textView, index);
-//                }
-//            }
-//
-//        } else if (clickedId == R.id.continue_button) {
-//            dialog.dismiss();
-//        } else if (clickedId == R.id.confirm_button){
-//            dialog.dismiss();
-//        }
     }
 }
