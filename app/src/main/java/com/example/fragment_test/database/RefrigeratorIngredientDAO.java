@@ -28,7 +28,7 @@ public interface RefrigeratorIngredientDAO {
     List<RefrigeratorIngredientVO> getQuantityGreaterZeroAndNotExpiredIngredientsOverallInfo(int today);
 
     @Query("""
-            SELECT id, name, img, sort, quantity, expiration  FROM refrigerator
+            SELECT id, name, img, sort, quantity, purchase_date, expiration  FROM refrigerator
             WHERE quantity > 0 AND expiration >= :today
             """)
     List<RefrigeratorIngredient> getQuantityGreaterZeroAndNotExpiredIngredients(int today);
