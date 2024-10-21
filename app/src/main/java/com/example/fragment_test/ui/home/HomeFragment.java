@@ -16,8 +16,10 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.adapter.RecipeAdapterForHome;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
@@ -31,47 +33,32 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    private HomeViewModel homeViewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        fragmentOfDate();
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-//
-//        // 观察 Invoice 列表和其项，并更新 UI
-//        homeViewModel.getInvoiceWithItemsList().observe(getViewLifecycleOwner(), invoiceWithItemsList -> {
-//            StringBuilder allInvoices = new StringBuilder();
-//            for (InvoiceWithItems invoiceWithItems : invoiceWithItemsList) {
-//                Invoice invoice = invoiceWithItems.invoice;
-//                allInvoices.append("\n")
-//                        .append("Invoice ID: ").append(invoice.getId()).append("，")
-//                        .append("Date: ").append(invoice.getDate()).append("\n");
-//
-//                // 显示发票下的所有品项
-//                for (InvoiceItem item : invoiceWithItems.items) {
-//                    allInvoices.append("    Item Name: ").append(item.getName()).append("\n")
-//                            .append("    Quantity: ").append(item.getQuantity()).append("，")
-//                            .append("    Price: ").append(item.getPrice()).append("\n");
-//                }
-//            }
-//            textView.setText(allInvoices.toString());
-//        });
-//
+        LocalDate now = LocalDate.now();
+
+        fragmentOfDate(now);
+
+        homeViewModel.loadScheduleRecipesOfToday(Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(now)));
+        homeViewModel.getScheduleRecipesOfToday()
+                        .observe(getViewLifecycleOwner(), (recipes -> {
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            binding.eatingForToday.setLayoutManager(layoutManager);
+                            binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
+                        }));
+
         addToolbar();
-//
-//        binding.testButton.setOnClickListener(this);
-//        setupDialog(inflater, container);
 
-        return root;
+        return binding.getRoot();
     }
 
-    private void fragmentOfDate() {
-        LocalDate now = LocalDate.now();
+    private void fragmentOfDate(LocalDate now) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.\nMM.dd.");
         String dateStr = dateTimeFormatter.format(now);
         binding.date.setText(dateStr);
