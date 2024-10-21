@@ -34,37 +34,37 @@ import java.util.List;
         PreparedRecipe.class},
         version = 1)
 public abstract class FridgeDatabase extends RoomDatabase {
-    public abstract InvoiceDAO invoiceDAO();
-    public abstract InvoiceItemDAO invoiceItemDAO();
 
     private static volatile FridgeDatabase INSTANCE;
+
+    public static final String DB_NAME = "fridge.db";
 
     public static FridgeDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (FridgeDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    FridgeDatabase.class, "fridge_database")
+                                    FridgeDatabase.class, DB_NAME)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
-    public static final String DB_NAME = "fridge.db";
 
+    public abstract InvoiceDAO invoiceDAO();
+    public abstract InvoiceItemDAO invoiceItemDAO();
+    public abstract RefrigeratorIngredientDAO refrigeratorIngredientDAO();
+    public abstract ShoppingDAO shoppingDAO();
+    public abstract ScheduleDAO scheduleDAO();
+    public abstract RecipeDAO recipeDAO();
+    public abstract StepDAO stepDAO();
+    public abstract RecipeIngredientDAO recipeIngredientDAO();
+    public abstract ScheduleRecipeDAO scheduleRecipeDAO();
+    public abstract PreparedRecipeDAO preparedRecipeDAO();
 
-    // 创建数据库
-    private static FridgeDatabase create(final Context context){
-        return Room.databaseBuilder(context, FridgeDatabase.class, DB_NAME).build();
-    }
-
-    // 关闭数据库
-    public void close(){
-        super.close();
-    }
-
-    // 添加 Invoice 和 InvoiceItem 的 DAO
+    // 其他 DAO
     @Dao
     public interface InvoiceDAO {
         @Insert
@@ -76,15 +76,4 @@ public abstract class FridgeDatabase extends RoomDatabase {
         @Insert
         void insertInvoiceItems(List<InvoiceItem> invoiceItems);
     }
-
-    // 其他 DAO
-    public abstract RefrigeratorIngredientDAO refrigeratorDAO();
-    public abstract ShoppingDAO shoppingDAO();
-    public abstract ScheduleDAO scheduleDAO();
-    public abstract RecipeDAO recipeDAO();
-    public abstract StepDAO stepDAO();
-    public abstract RecipeIngredientDAO recipeIngredientDAO();
-    public abstract ScheduleRecipeDAO scheduleRecipeDAO();
-    public abstract PreparedRecipeDAO preparedRecipeDAO();
-
 }

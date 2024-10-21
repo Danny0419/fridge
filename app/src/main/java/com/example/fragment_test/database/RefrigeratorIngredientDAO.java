@@ -35,6 +35,9 @@ public interface RefrigeratorIngredientDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertIngredient(RefrigeratorIngredient ingredient);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertRefrigeratorIngredient(RefrigeratorIngredient ingredient);
+
     @Insert
     long[] insertIngredients(List<RefrigeratorIngredient> ingredients);
 

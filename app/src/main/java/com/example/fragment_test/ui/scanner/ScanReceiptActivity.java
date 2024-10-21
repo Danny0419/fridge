@@ -18,7 +18,6 @@ import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 public class ScanReceiptActivity extends AppCompatActivity {
     //相機掃描
@@ -46,7 +45,6 @@ public class ScanReceiptActivity extends AppCompatActivity {
         //開啟相機
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         intentIntegrator.setPrompt("Scan a QR code");
         intentIntegrator.setCameraId(0);  // 使用特定的摄像头
         intentIntegrator.setBeepEnabled(true);
@@ -59,17 +57,14 @@ public class ScanReceiptActivity extends AppCompatActivity {
         /*
         個按鈕之點擊
         */
-        Button goBackBtn=findViewById(R.id.goBackBnt);  //返回按鈕
-        Button scanReceiptButton=findViewById(R.id.scan_receipt_button);    //掃描發票orOCR按鈕
-        Button addManuallyButton=findViewById(R.id.add_manually_button);    //手動輸入按鈕
+        Button goBackBtn = findViewById(R.id.goBackBnt);  //返回按鈕
+        Button scanReceiptButton = findViewById(R.id.scan_receipt_button);    //掃描發票orOCR按鈕
+        Button addManuallyButton = findViewById(R.id.add_manually_button);    //手動輸入按鈕
         LinearLayout scanLayout = findViewById(R.id.scan_layout);   //掃描發票orOCR按鈕區塊
         LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
 
         //返回
-        goBackBtn.setOnClickListener(v -> {
-                    finish();
-                }
-        );
+        goBackBtn.setOnClickListener(v -> finish());
 
         //掃描發票orOCR
         scanReceiptButton.setOnClickListener(v -> {
@@ -86,15 +81,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
         albumBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, OcrActivity.class);
             startActivity(intent);
-
         });
     }
-
-    // 暂停相機預覽
-//    protected void onPause() {
-//        super.onPause();
-//        barcodeView.pause();
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -153,7 +141,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
         invoiceDate = parsedInvoice.getDate();
         items.addAll(parsedInvoice.getItems());
 
-        // 构建要保存的数据
+        // 建立要保存的數據
         if (invoiceDate != null) {
             // 创建后台线程池
             ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -176,15 +164,28 @@ public class ScanReceiptActivity extends AppCompatActivity {
                 }
                 db.invoiceItemDAO().insertInvoiceItems(invoiceItems);
 
-                // 提示用户成功
+                // 將 ParsedItem 數據插入到 RefrigeratorIngredient
+                for (ParsedItem item : items) {
+                    RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
+                            0, // 假設 ID 是自動生成的
+                            item.getName(),
+                            Integer.parseInt(item.getQuantity()), // 確保數量是整數
+                            null, // 圖片可以根據需要設置
+                            null, // 類別可以根據需要設置
+                            null, // 購買日期可以根據需要設置
+                            null  // 到期日期可以根據需要設置
+                    );
+                    db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(refrigeratorIngredient);
+                }
+
+                // 提示用戶成功
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "发票和品项已成功保存", Toast.LENGTH_LONG).show();
-                    // 在合适的地方关闭活动或跳转到另一个页面
+                    Toast.makeText(this, "發票和品項已成功保存", Toast.LENGTH_LONG).show();
                     finish();
                 });
             });
 
-            executorService.shutdown(); // 在适当的时候关闭线程池
+            executorService.shutdown(); // 在適當的時候關閉線程池
         }
     }
 
@@ -218,15 +219,34 @@ public class ScanReceiptActivity extends AppCompatActivity {
                 i++;
             }
         }
-        // 返回包含发票日期和品项的对象
+        // 返回包含发票日期和品项列表的ParsedInvoice对象
         return new ParsedInvoice(date, resultItems);
     }
 
-    // 内部类：表示一个解析出的品项
+    // 自定义的解析发票和品项的类
+    private static class ParsedInvoice {
+        private String date;
+        private List<ParsedItem> items;
+
+        public ParsedInvoice(String date, List<ParsedItem> items) {
+            this.date = date;
+            this.items = items;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public List<ParsedItem> getItems() {
+            return items;
+        }
+    }
+
+    // 自定义的品项类
     private static class ParsedItem {
-        private final String name;     // 品项名称
-        private final String quantity; // 数量
-        private final String price;    // 价格
+        private String name;
+        private String quantity;
+        private String price;
 
         public ParsedItem(String name, String quantity, String price) {
             this.name = name;
@@ -246,24 +266,4 @@ public class ScanReceiptActivity extends AppCompatActivity {
             return price;
         }
     }
-
-    // 内部类：表示一个解析出的发票
-    private static class ParsedInvoice {
-        private final String date;           // 发票日期
-        private final List<ParsedItem> items; // 品项列表
-
-        public ParsedInvoice(String date, List<ParsedItem> items) {
-            this.date = date;
-            this.items = items;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public List<ParsedItem> getItems() {
-            return items;
-        }
-    }
-
 }
