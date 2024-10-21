@@ -117,7 +117,9 @@ public class HomeFragment extends Fragment {
                             new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "牛小排", 4, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "高麗菜", 60, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
+                            new RefrigeratorIngredient(0, "高麗菜", 60, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "番茄", 60, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "花椰菜", 60, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }
