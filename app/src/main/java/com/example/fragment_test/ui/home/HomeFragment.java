@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
 
     private void fragmentOfDate() {
         LocalDate now = LocalDate.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM\n.dd");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.\nMM.dd.");
         String dateStr = dateTimeFormatter.format(now);
         binding.date.setText(dateStr);
         DayOfWeek dayOfWeek = now.getDayOfWeek();
