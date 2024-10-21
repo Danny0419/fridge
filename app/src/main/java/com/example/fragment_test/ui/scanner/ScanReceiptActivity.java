@@ -17,6 +17,7 @@ import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.ArrayList;
 import java.util.Collections;
