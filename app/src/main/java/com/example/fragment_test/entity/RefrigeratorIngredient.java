@@ -17,8 +17,8 @@ public class RefrigeratorIngredient extends Ingredient {
     public Integer expiration;
     @ColumnInfo
     public Integer state;
-    @Ignore
-    public Integer savingDay;
+    @ColumnInfo
+    public String savingDay; // 移除 @Ignore
 
     public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration) {
         super(id, name, quantity);
@@ -29,14 +29,16 @@ public class RefrigeratorIngredient extends Ingredient {
     }
 
     @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration, Integer savingDay) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration, String savingDay,Integer state) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;
         this.purchaseDate = purchaseDate;
         this.expiration = expiration;
         this.savingDay = savingDay;
+        this.state = state;
     }
+
 
     @NonNull
     public String getSort() {

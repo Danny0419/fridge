@@ -15,7 +15,7 @@ public interface InvoiceItemDAO {
     @Insert
     void insertInvoiceItems(List<InvoiceItem> items);
 
-    @Query("SELECT * FROM invoice_item WHERE invoice_id = :invoiceId")
+    @Query("SELECT * FROM invoiceitem WHERE invoiceid = :invoiceId")
     LiveData<List<InvoiceItem>> getItemsForInvoice(int invoiceId);
 
 }
