@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<!--    食材與數量-->
+    <include
+        layout="@layout/recipe_detail_ingredients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+<!--    到期提醒-->
+    <LinearLayout
+        android:id="@+id/remind_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center">
+
+<!--        到期提醒數字部分-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="？"
+            android:id="@+id/remind_number"/>
+
+<!--        到期提醒文字部分-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="天後到期"
+            android:id="@+id/remind_text"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
