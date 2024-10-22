@@ -245,13 +245,22 @@ public class ScanReceiptActivity extends AppCompatActivity {
                             executorService.execute(() -> {
                                 try {
                                     // 将获取的资讯存入 RefrigeratorIngredient
+                                    // 处理 invoiceDate 从民国转换为西元日期
+                                    String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
+                                    int year = Integer.parseInt(invoiceDateStr.substring(0, 3)) + 1911; // 提取并转换年份
+                                    int month = Integer.parseInt(invoiceDateStr.substring(3, 5)); // 提取月份
+                                    int day = Integer.parseInt(invoiceDateStr.substring(5, 7)); // 提取日期
+
+                                    // 创建格式化后的日期字符串
+                                    String formattedDate = String.format("%04d/%02d/%02d", year, month, day);
+
                                     RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
                                             0, // 假设 ID 是自动生成的
                                             ingredient.getIngredient_Name(), // 使用 ingredient 的名字
                                             quantity, // 使用 API 请求时的数量
                                             "食材的图片", // 图片可以根据需要设置
                                             ingredient.getIngredients_category(), // 使用 ingredient 的类别
-                                            Integer.parseInt(invoiceDate), // 购买日期
+                                            formattedDate, // 使用格式化后的购买日期
                                             Integer.parseInt(ingredient.getExpiration()) // 到期日期
                                     );
 

@@ -12,7 +12,7 @@ public class RefrigeratorIngredient extends Ingredient {
     @ColumnInfo
     public String sort;
     @ColumnInfo(name = "purchase_date")
-    public Integer purchaseDate;
+    public String purchaseDate;
     @ColumnInfo
     public Integer expiration;
     @ColumnInfo
@@ -20,7 +20,7 @@ public class RefrigeratorIngredient extends Ingredient {
     @Ignore
     public Integer savingDay;
 
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;
@@ -29,7 +29,7 @@ public class RefrigeratorIngredient extends Ingredient {
     }
 
     @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, Integer savingDay) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration, Integer savingDay) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;
