@@ -180,12 +180,15 @@ public class ScanReceiptActivity extends AppCompatActivity {
         String combinedText = combinedInfo.toString().replaceAll("\\s+", "");
         Log.i("QR CODE SCANNER", "合并后的完整信息: " + combinedText);
 
+        // 提取前10个字符作为发票ID
+        String invoiceId = combinedText.substring(0, 10);
+
         // 解析发票信息
         ParsedInvoice parsedInvoice = parseInvoiceData(combinedText);
         invoiceDate = parsedInvoice.getDate();
         items.addAll(parsedInvoice.getItems());
 
-        // 建立要保存的數據
+        // 建立要保存的数据
         if (invoiceDate != null) {
             // 创建后台线程池
             ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -196,31 +199,42 @@ public class ScanReceiptActivity extends AppCompatActivity {
             // 在后台线程中执行插入操作
             String finalInvoiceDate = invoiceDate;
             executorService.execute(() -> {
-                // 插入发票数据
-                Invoice invoice = new Invoice(finalInvoiceDate);
-                long invoiceId = db.invoiceDAO().insertInvoice(invoice);
+                // 检查发票是否已存在
+                Invoice existingInvoice = db.invoiceDAO().getInvoiceById(invoiceId);
+                if (existingInvoice != null) {
+                    // 提示用户发票已被扫描过
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "此发票已被扫描过，请检查！", Toast.LENGTH_LONG).show();
+                    });
+                    return; // 拦截，避免后续处理
+                }
+
+                // 插入发票数据，使用提取的前10个字符作为ID
+                Invoice invoice = new Invoice(invoiceId, finalInvoiceDate);
+                db.invoiceDAO().insertInvoice(invoice);
 
                 // 插入发票品项数据
                 List<InvoiceItem> invoiceItems = new ArrayList<>();
                 for (ParsedItem item : items) {
-                    InvoiceItem invoiceItem = new InvoiceItem((int) invoiceId, item.getName(), item.getQuantity(), item.getPrice());
+                    InvoiceItem invoiceItem = new InvoiceItem(invoiceId, item.getName(), item.getQuantity(), item.getPrice());
                     invoiceItems.add(invoiceItem);
                 }
                 db.invoiceItemDAO().insertInvoiceItems(invoiceItems);
 
-                // 調用 API 獲取 ingredient 資訊，傳入數量和發票日期
+                // 调用 API 获取 ingredient 信息，传入数量和发票日期
                 fetchCombinedIngredients(items, finalInvoiceDate);
 
-                // 提示用戶成功
+                // 提示用户成功
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "發票和品項已成功保存", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "发票和品项已成功保存", Toast.LENGTH_LONG).show();
                     finish();
                 });
             });
 
-            executorService.shutdown(); // 在適當的時候關閉線程池
+            executorService.shutdown(); // 在适当的时候关闭线程池
         }
     }
+
 
     private void fetchCombinedIngredients(List<ParsedItem> items, String invoiceDate) {
         // 获取数据库实例
@@ -231,8 +245,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
 // 循环处理每个品项，调用 API 获取相关的食材信息
         for (ParsedItem item : items) {
-            String productName = item.getName(); // 获取品项名称  //"有機青江菜";
-            int quantity = Integer.parseInt(item.getQuantity()); // 获取品项数量
+            String productName = "有機青江菜"; // 获取品项名称  //"有機青江菜"; item.getName();
+            int quantity = item.getQuantity(); // 获取品项数量
 
             // 使用 RetrofitClient 发送请求
             apiService.getCombinedIngredients(productName).enqueue(new Callback<List<CombinedIngredient>>() {
@@ -378,7 +392,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     String itemQuantity = items[i + 1]; // 数量
                     String itemPrice = items[i + 2];    // 价格
                     // 创建品项对象并添加到列表中
-                    resultItems.add(new ParsedItem(itemName, itemQuantity, itemPrice));
+                    resultItems.add(new ParsedItem(itemName, Integer.parseInt(itemQuantity), Double.parseDouble(itemPrice)));
                     // 跳过已处理的三个部分
                     i += 3;
                 } else {
@@ -416,10 +430,10 @@ public class ScanReceiptActivity extends AppCompatActivity {
     // 自定义的品项类
     private static class ParsedItem {
         private String name;
-        private String quantity;
-        private String price;
+        private int quantity;
+        private double price;
 
-        public ParsedItem(String name, String quantity, String price) {
+        public ParsedItem(String name, int quantity, double price) {
             this.name = name;
             this.quantity = quantity;
             this.price = price;
@@ -429,11 +443,11 @@ public class ScanReceiptActivity extends AppCompatActivity {
             return name;
         }
 
-        public String getQuantity() {
+        public int getQuantity() {
             return quantity;
         }
 
-        public String getPrice() {
+        public double getPrice() {
             return price;
         }
     }

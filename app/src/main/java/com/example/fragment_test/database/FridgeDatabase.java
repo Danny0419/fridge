@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Dao;
 import androidx.room.Database;
 import androidx.room.Insert;
+import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
@@ -69,6 +70,8 @@ public abstract class FridgeDatabase extends RoomDatabase {
     public interface InvoiceDAO {
         @Insert
         long insertInvoice(Invoice invoice);
+        @Query("SELECT * FROM Invoice WHERE id = :invoiceId LIMIT 1")
+        Invoice getInvoiceById(String invoiceId);
     }
 
     @Dao
@@ -77,3 +80,6 @@ public abstract class FridgeDatabase extends RoomDatabase {
         void insertInvoiceItems(List<InvoiceItem> invoiceItems);
     }
 }
+
+
+
