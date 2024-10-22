@@ -147,6 +147,7 @@
             android:layout_marginBottom="11dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expiring_ingredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

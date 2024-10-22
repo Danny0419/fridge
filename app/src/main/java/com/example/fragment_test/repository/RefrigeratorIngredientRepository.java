@@ -146,4 +146,11 @@ public class RefrigeratorIngredientRepository {
                 .stream()
                 .collect(Collectors.toMap(RefrigeratorIngredientVO::getName, o -> o));
     }
+
+    public List<RefrigeratorIngredientDetailVO> getRefrigeratorExpiringIngredients() {
+        LocalDate now = LocalDate.now();
+        String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
+        int today = Integer.parseInt(format);
+        return refrigeratorIngredientDAO.getExpirationDaysLesserThanThreeDaysIngredients(today);
+    }
 }

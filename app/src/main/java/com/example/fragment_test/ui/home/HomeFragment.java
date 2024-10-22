@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.adapter.ExpiringRefrigeratorIngredientsAdapterForHome;
 import com.example.fragment_test.adapter.RecipeAdapterForHome;
 import com.example.fragment_test.adapter.ShoppingListAdapterForHome;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
@@ -60,6 +61,14 @@ public class HomeFragment extends Fragment {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                     binding.shoppingListRecycle.setLayoutManager(layoutManager);
                     binding.shoppingListRecycle.setAdapter(new ShoppingListAdapterForHome(shoppingItemVOS));
+                });
+
+        homeViewModel.loadExpiringRefrigeratorIngredient();
+        homeViewModel.getExpiringIngredients()
+                .observe(getViewLifecycleOwner(), (ingredientDetailVOList) -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    binding.expiringIngredients.setLayoutManager(layoutManager);
+                    binding.expiringIngredients.setAdapter(new ExpiringRefrigeratorIngredientsAdapterForHome(ingredientDetailVOList));
                 });
 
         addToolbar();

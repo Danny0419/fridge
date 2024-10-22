@@ -6,8 +6,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
 import com.example.fragment_test.repository.ScheduleRecipeRepository;
 import com.example.fragment_test.repository.ShoppingListIngredientRepository;
+import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
 import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.List;
@@ -21,14 +23,17 @@ public class HomeViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Recipe>> scheduleRecipesOfToday = new MutableLiveData<>();
     private final MutableLiveData<List<ShoppingItemVO>> shoppingList= new MutableLiveData<>();
+    private final MutableLiveData<List<RefrigeratorIngredientDetailVO>> expiringIngredients = new MutableLiveData<>();
 
     private final ScheduleRecipeRepository scheduleRecipeRepository;
     private final ShoppingListIngredientRepository shoppingListIngredientRepository;
+    private final RefrigeratorIngredientRepository refrigeratorIngredientRepository;
 
     public HomeViewModel(Application application) {
         super(application);
         this.scheduleRecipeRepository = ScheduleRecipeRepository.getInstance(application);
         this.shoppingListIngredientRepository = ShoppingListIngredientRepository.getInstance(application);
+        this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(application);
     }
 
     public void loadScheduleRecipesOfToday(int date) {
@@ -75,11 +80,37 @@ public class HomeViewModel extends AndroidViewModel {
                 });
     }
 
+    public void loadExpiringRefrigeratorIngredient() {
+        Maybe.fromCallable(refrigeratorIngredientRepository::getRefrigeratorExpiringIngredients)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredientDetailVO>>() {
+                    @Override
+                    public void onSuccess(List<RefrigeratorIngredientDetailVO> refrigeratorIngredientDetailVOS) {
+                        expiringIngredients.setValue(refrigeratorIngredientDetailVOS);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public MutableLiveData<List<Recipe>> getScheduleRecipesOfToday() {
         return scheduleRecipesOfToday;
     }
 
     public MutableLiveData<List<ShoppingItemVO>> getShoppingList() {
         return shoppingList;
+    }
+
+    public MutableLiveData<List<RefrigeratorIngredientDetailVO>> getExpiringIngredients() {
+        return expiringIngredients;
     }
 }

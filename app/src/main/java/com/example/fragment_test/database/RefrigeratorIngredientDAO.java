@@ -36,7 +36,7 @@ public interface RefrigeratorIngredientDAO {
 
     @Query(
             """
-            SELECT sum(quantity) as quantity, purchase_date as purchaseDate, expiration, expiration - :today as daysRemaining
+            SELECT name, sum(quantity) as quantity, purchase_date as purchaseDate, expiration, expiration - :today as daysRemaining
             FROM refrigerator
             WHERE name = :name AND expiration >= :today
             GROUP BY purchaseDate, expiration
@@ -53,4 +53,15 @@ public interface RefrigeratorIngredientDAO {
 
     @Update
     void updateRefrigeratorIngredientQuantity(RefrigeratorIngredient ingredient);
+
+    @Query(
+            """
+            SELECT name, sum(quantity) as quantity, purchase_date as purchaseDate, expiration, expiration - :today as daysRemaining
+            FROM refrigerator
+            WHERE expiration >= :today
+            GROUP BY name, purchaseDate, expiration
+            HAVING sum(quantity) > 0 AND daysRemaining <= 3
+            """
+    )
+    List<RefrigeratorIngredientDetailVO> getExpirationDaysLesserThanThreeDaysIngredients(int today);
 }
