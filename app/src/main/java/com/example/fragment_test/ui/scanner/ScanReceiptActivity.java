@@ -102,11 +102,11 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     StringBuilder message = new StringBuilder("Found: " + ingredients.size() + " ingredients\n");
                     for (CombinedIngredient ingredient : ingredients) {
                         message.append("ID: ").append(ingredient.getSupermarket_ingredient_ID()).append(", ")
-                                .append("Name: ").append(ingredient.getIngredient_Name()).append(", ")
-                                .append("Category: ").append(ingredient.getIngredients_category()).append(", ")
+                                .append("Name: ").append(ingredient.getIngredient_Name()).append(", ") //新名字
+                                .append("Category: ").append(ingredient.getIngredients_category()).append(", ") //種類
                                 .append("Unit: ").append(ingredient.getUnit()).append(", ")
                                 .append("Grams: ").append(ingredient.getGrams()).append(", ")
-                                .append("Expiration: ").append(ingredient.getExpiration()).append("\n");
+                                .append("Expiration: ").append(ingredient.getExpiration()).append("\n"); //有效期限
                     }
 
                     Toast.makeText(ScanReceiptActivity.this, message.toString(), Toast.LENGTH_LONG).show();
@@ -205,19 +205,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
                 }
                 db.invoiceItemDAO().insertInvoiceItems(invoiceItems);
 
-                // 將 ParsedItem 數據插入到 RefrigeratorIngredient
-                for (ParsedItem item : items) {
-                    RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
-                            0, // 假設 ID 是自動生成的
-                            item.getName(),
-                            Integer.parseInt(item.getQuantity()), // 確保數量是整數
-                            null, // 圖片可以根據需要設置
-                            null, // 類別可以根據需要設置
-                            null, // 購買日期可以根據需要設置
-                            null  // 到期日期可以根據需要設置
-                    );
-                    db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(refrigeratorIngredient);
-                }
+                // 調用 API 獲取 ingredient 資訊，傳入數量和發票日期
+                fetchCombinedIngredients(items, finalInvoiceDate);
 
                 // 提示用戶成功
                 runOnUiThread(() -> {
@@ -229,6 +218,66 @@ public class ScanReceiptActivity extends AppCompatActivity {
             executorService.shutdown(); // 在適當的時候關閉線程池
         }
     }
+
+    private void fetchCombinedIngredients(List<ParsedItem> items, String invoiceDate) {
+        // 获取数据库实例
+        FridgeDatabase db = FridgeDatabase.getInstance(getApplicationContext());
+
+        // 获取 RetrofitClient 实例
+        ApiService apiService = RetrofitClient.getInstance().getApiService();
+
+// 循环处理每个品项，调用 API 获取相关的食材信息
+        for (ParsedItem item : items) {
+            String productName = "有機青江菜";//item.getName(); // 获取品项名称
+            int quantity = Integer.parseInt(item.getQuantity()); // 获取品项数量
+
+            // 使用 RetrofitClient 发送请求
+            apiService.getCombinedIngredients(productName).enqueue(new Callback<List<CombinedIngredient>>() {
+                @Override
+                public void onResponse(Call<List<CombinedIngredient>> call, Response<List<CombinedIngredient>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        // 成功接收到 API 回应
+                        List<CombinedIngredient> ingredients = response.body();
+
+                        // 获取到期日期
+                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+                        for (CombinedIngredient ingredient : ingredients) {
+                            executorService.execute(() -> {
+                                try {
+                                    // 将获取的资讯存入 RefrigeratorIngredient
+                                    RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
+                                            0, // 假设 ID 是自动生成的
+                                            ingredient.getIngredient_Name(), // 使用 ingredient 的名字
+                                            quantity, // 使用 API 请求时的数量
+                                            "食材的图片", // 图片可以根据需要设置
+                                            ingredient.getIngredients_category(), // 使用 ingredient 的类别
+                                            Integer.parseInt(invoiceDate), // 购买日期
+                                            Integer.parseInt(ingredient.getExpiration()) // 到期日期
+                                    );
+
+                                    // 存入数据库
+                                    db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(refrigeratorIngredient);
+                                } catch (NumberFormatException e) {
+                                    Log.e("DATA ERROR", "Invalid number format: " + e.getMessage());
+                                }
+                            });
+                        }
+                        executorService.shutdown(); // 在适当的时机关闭线程池
+                    } else {
+                        // 处理非预期的响应
+                        Log.i("API RESPONSE", "No matching ingredients found for: " + productName);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<CombinedIngredient>> call, Throwable t) {
+                    // 请求失败处理
+                    Log.e("API ERROR", "Request failed: " + t.getMessage());
+                }
+            });
+        }
+    }
+
 
     private ParsedInvoice parseInvoiceData(String qrText) {
         // 提取发票日期：QR码文本长度大于等于17时，从第11到第17个字符位置提取
