@@ -28,6 +28,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ScanReceiptActivity extends AppCompatActivity {
     //相機掃描
     //private DecoratedBarcodeView barcodeView;
@@ -36,7 +40,6 @@ public class ScanReceiptActivity extends AppCompatActivity {
     private Set<String> recognizedQrCodes = new HashSet<>();
     // 需要识别的QR码数量
     private static final int REQUIRED_QRCODES = 2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +85,45 @@ public class ScanReceiptActivity extends AppCompatActivity {
             Intent intent = new Intent(this, OcrActivity.class);
             startActivity(intent);
         });
+        String productName = "有機青江菜";
+        fetchCombinedIngredients(productName);
     }
+
+    private void fetchCombinedIngredients(String productName) {
+        // 使用 RetrofitClient 發送請求
+        RetrofitClient.getInstance().getApiService().getCombinedIngredients(productName).enqueue(new Callback<List<CombinedIngredient>>() {
+            @Override
+            public void onResponse(Call<List<CombinedIngredient>> call, Response<List<CombinedIngredient>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // 成功接收到 API 回應
+                    List<CombinedIngredient> ingredients = response.body();
+
+                    // 顯示詳細信息
+                    StringBuilder message = new StringBuilder("Found: " + ingredients.size() + " ingredients\n");
+                    for (CombinedIngredient ingredient : ingredients) {
+                        message.append("ID: ").append(ingredient.getSupermarket_ingredient_ID()).append(", ")
+                                .append("Name: ").append(ingredient.getIngredient_Name()).append(", ")
+                                .append("Category: ").append(ingredient.getIngredients_category()).append(", ")
+                                .append("Unit: ").append(ingredient.getUnit()).append(", ")
+                                .append("Grams: ").append(ingredient.getGrams()).append(", ")
+                                .append("Expiration: ").append(ingredient.getExpiration()).append("\n");
+                    }
+
+                    Toast.makeText(ScanReceiptActivity.this, message.toString(), Toast.LENGTH_LONG).show();
+                } else {
+                    // 處理非預期的回應
+                    Toast.makeText(ScanReceiptActivity.this, "No matching ingredients found", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CombinedIngredient>> call, Throwable t) {
+                // 請求失敗處理
+                Toast.makeText(ScanReceiptActivity.this, "請求失敗: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
