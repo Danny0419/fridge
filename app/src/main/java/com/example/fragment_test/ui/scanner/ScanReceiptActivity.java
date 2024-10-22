@@ -231,7 +231,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
 // 循环处理每个品项，调用 API 获取相关的食材信息
         for (ParsedItem item : items) {
-            String productName = "有機青江菜";//item.getName(); // 获取品项名称
+            String productName = item.getName(); // 获取品项名称  //"有機青江菜";
             int quantity = Integer.parseInt(item.getQuantity()); // 获取品项数量
 
             // 使用 RetrofitClient 发送请求
@@ -319,8 +319,34 @@ public class ScanReceiptActivity extends AppCompatActivity {
                         }
                         executorService.shutdown(); // 在适当的时机关闭线程池
                     } else {
-                        // 处理非预期的响应
-                        Log.i("API RESPONSE", "No matching ingredients found for: " + productName);
+                        // 处理非预期的响应，存储缺失的食材信息
+                        Log.i("API RESPONSE", "NXo matching ingredients found for: " + productName);
+                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+                        executorService.execute(() -> {
+                            // 处理 invoiceDate 从民国转换为西元日期
+                            String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
+                            int year = Integer.parseInt(invoiceDateStr.substring(0, 3)) + 1911; // 提取并转换年份
+                            int month = Integer.parseInt(invoiceDateStr.substring(3, 5)); // 提取月份
+                            int day = Integer.parseInt(invoiceDateStr.substring(5, 7)); // 提取日期
+
+                            String purchaseDate = String.format("%04d/%02d/%02d", year, month, day);
+                            // 创建一个默认的 RefrigeratorIngredient 对象，未知字段设置为 null
+                            RefrigeratorIngredient missingIngredient = new RefrigeratorIngredient(
+                                    0, // 假设 ID 是自动生成的
+                                    productName, // 使用查询的产品名
+                                    quantity, // 数量设为 0
+                                    productName+"的圖片", // 图片设为 null
+                                    "其他", // 类别设为 null
+                                    purchaseDate, // 购买日期设为 null
+                                    null, // 保存天数设为 null
+                                    null, // 到期日期设为 null
+                                    null // 剩余天数设为 null
+                            );
+
+                            // 存入数据库
+                            db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
+                        });
+                        executorService.shutdown(); // 在适当的时机关闭线程池
                     }
                 }
 

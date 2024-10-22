@@ -40,7 +40,6 @@ public interface RefrigeratorIngredientDAO {
 
     @Insert
     long[] insertIngredients(List<RefrigeratorIngredient> ingredients);
-
     @Query(
             """
             SELECT sum(quantity) as quantity, purchase_date as purchaseDate, expiration, expiration - :today as daysRemaining
