@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeAdapterForHome;
+import com.example.fragment_test.adapter.ShoppingListAdapterForHome;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
@@ -46,12 +47,20 @@ public class HomeFragment extends Fragment {
 
         homeViewModel.loadScheduleRecipesOfToday(Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(now)));
         homeViewModel.getScheduleRecipesOfToday()
-                        .observe(getViewLifecycleOwner(), (recipes -> {
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                            binding.eatingForToday.setLayoutManager(layoutManager);
-                            binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
-                        }));
+                .observe(getViewLifecycleOwner(), (recipes -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    binding.eatingForToday.setLayoutManager(layoutManager);
+                    binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
+                }));
+
+        homeViewModel.loadShoppingList();
+        homeViewModel.getShoppingList()
+                .observe(getViewLifecycleOwner(), (shoppingItemVOS) -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    binding.shoppingListRecycle.setLayoutManager(layoutManager);
+                    binding.shoppingListRecycle.setAdapter(new ShoppingListAdapterForHome(shoppingItemVOS));
+                });
 
         addToolbar();
 
@@ -76,7 +85,7 @@ public class HomeFragment extends Fragment {
             case SATURDAY -> dOWeek = "六";
             case SUNDAY -> dOWeek = "日";
         }
-        return "星期"+ dOWeek;
+        return "星期" + dOWeek;
     }
 
     private void addToolbar() {

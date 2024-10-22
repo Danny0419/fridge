@@ -105,6 +105,7 @@
             android:layout_marginBottom="11dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shoppingList_recycle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
