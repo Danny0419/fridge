@@ -1,9 +1,14 @@
 package com.example.fragment_test.ui.scanner;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,12 +16,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+
+//import com.example.fragment_test.Manifest;
 import com.example.fragment_test.R;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.ArrayList;
@@ -28,26 +42,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+
 public class ScanReceiptActivity extends AppCompatActivity {
 
     // 用于存储已识别的QR码信息
     private Set<String> recognizedQrCodes = new HashSet<>();
     // 需要识别的QR码数量
     private static final int REQUIRED_QRCODES = 2;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+    private DecoratedBarcodeView barcodeView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_receipt);
 
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setPrompt("Scan a QR code");
-        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.initiateScan();
+        barcodeView = findViewById(R.id.camara);
+        // 相機
+        if (checkCameraPermission()) {
+            //如果相機已授權，則啟動相機
+            startCamera();
+        }
+        else {
+            //如果相機未授權，則請求
+            requestCameraPermission();
+        }
 
         //點擊
         Button goBackBtn=findViewById(R.id.goBackBnt);  //返回按鈕
@@ -77,29 +97,50 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
     }
 
+    //開啟相機
+    private void startCamera() {
+        barcodeView.decodeContinuous(result -> {
+            String scanContent = result.getText();
+            Toast.makeText(ScanReceiptActivity.this, "Scan result: " + scanContent, Toast.LENGTH_LONG).show();
+        });
+    }
+
+    //要求相機權限
+    private void requestCameraPermission() {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+    }
+
+    //    確認相機權限
+    private boolean checkCameraPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //恢復相機
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        // 处理QR码扫描结果
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (scanResult != null) {
-            String contents = scanResult.getContents();
-            if (contents != null) {
-                // 将扫描到的内容添加到集合中
-                recognizedQrCodes.add(contents);
-                // 检查是否已经扫描到所需数量的QR码
-                if (recognizedQrCodes.size() >= REQUIRED_QRCODES) {
-                    // 处理识别到的QR码
-                    handleRecognizedQrCodes(recognizedQrCodes);
-                } else {
-                    // 提示用户已扫描的QR码，并继续扫描
-                    Toast.makeText(this, "Scanned: " + contents, Toast.LENGTH_SHORT).show();
-                    IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-                    intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                    intentIntegrator.initiateScan();
-                }
+    protected void onResume() {
+        super.onResume();
+        barcodeView.resume();
+    }
+
+    //暫停相機
+    @Override
+    protected void onPause() {
+        super.onPause();
+        barcodeView.pause();
+    }
+
+    //    使用者拒絕開啟相機
+    @SuppressLint("MissingSuperCall")
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 用户授予了相机权限，启动相机
+                startCamera();
+            } else {
+                // 用户拒绝了相机权限，显示提示
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleRecognizedQrCodes(Set<String> qrCodes) {
