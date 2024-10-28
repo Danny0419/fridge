@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.ServerAPI.*;
+import com.example.fragment_test.database.FridgeDatabase;
+import com.example.fragment_test.database.RefrigeratorIngredientDAO;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -46,16 +49,22 @@ public class OcrActivity extends AppCompatActivity {
     private TextView textViewItems;
     private RecyclerView recyclerViewItems;
     private ItemAdapter itemAdapter;
+    private String invoiceDate; // 新增欄位儲存發票日期
 
     private TextRecognizer recognizer;
     private ExecutorService apiExecutor;
+
+
+    private FridgeDatabase db;
+    private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr);
-
+        //buttonRecognizeImage.setOnClickListener(v -> openGallery()); //日期用
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
         textViewItems = findViewById(R.id.textViewItems);
@@ -63,6 +72,11 @@ public class OcrActivity extends AppCompatActivity {
 
         recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
         apiExecutor = Executors.newSingleThreadExecutor();
+
+        // 初始化資料庫和 DAO
+        db = FridgeDatabase.getInstance(this);
+        refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
+        //
 
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,19 +127,22 @@ public class OcrActivity extends AppCompatActivity {
             }
         }
 
-        String invoiceDate = extractDate(allLines);
+        // 一次性設定 invoiceDate
+        invoiceDate = extractDate(allLines);
         List<Item> items = extractItems(allLines);
 
         Log.d(TAG, "Invoice Date: " + invoiceDate);
+        textViewDate.setText("發票日期: " + invoiceDate);
+
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
             Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
-            callApiWithProductName(item.getName(), items, i);  // 傳入 items 列表和當前索引
+            callApiWithProductName(item.getName(), items, i, invoiceDate);  // 傳入 items 列表和當前索引
         }
 
-        textViewDate.setText("發票日期: " + invoiceDate);
         itemAdapter.updateItems(items);
     }
+
 
 
 
@@ -211,7 +228,7 @@ public class OcrActivity extends AppCompatActivity {
         return items;
     }
 
-    private void callApiWithProductName(String productName, List<Item> items, int itemIndex) {
+    private void callApiWithProductName(String productName, List<Item> items, int itemIndex,String invoiceDate) {
         // 清除不必要字符
         String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
         apiExecutor.execute(() -> {
@@ -236,6 +253,29 @@ public class OcrActivity extends AppCompatActivity {
 
 
     private void updateUIWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
+        if (itemIndex < items.size()) {
+            Item item = items.get(itemIndex);
+            //String invoiceDate = "2023-10-27"; // 假設的一個日期字串或替換為實際日期來源
+
+            for (CombinedIngredient ingredient : ingredients) {
+                // 使用一個固定的 id 值，例如 0，並將 expiration 轉換為 Integer 型別
+                RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
+                        0,
+                        ingredient.getIngredient_Name(),
+                        Integer.valueOf(ingredient.getGrams()),
+                        null,
+                        ingredient.getIngredients_category(),
+                        invoiceDate,
+                        Integer.valueOf(ingredient.getExpiration()) // 將 expiration 轉換為 Integer
+                );
+
+                // 插入資料到資料庫（需要在背景執行緒中執行）
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    refrigeratorIngredientDAO.insertRefrigeratorIngredient(refrigeratorIngredient);
+                });
+            }
+        }
+
         // 確保只有該商品對應有資料才會顯示
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
@@ -251,6 +291,9 @@ public class OcrActivity extends AppCompatActivity {
             textViewItems.setText(result.toString());
         }
     }
+
+
+
 }
 
 
