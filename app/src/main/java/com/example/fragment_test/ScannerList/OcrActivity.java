@@ -29,15 +29,25 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Response;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 
 public class OcrActivity extends AppCompatActivity {
 
@@ -56,7 +66,7 @@ public class OcrActivity extends AppCompatActivity {
 
 
     private FridgeDatabase db;
-    private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
+   private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
 
 
     @SuppressLint("MissingInflatedId")
@@ -74,9 +84,9 @@ public class OcrActivity extends AppCompatActivity {
         apiExecutor = Executors.newSingleThreadExecutor();
 
         // 初始化資料庫和 DAO
-        db = FridgeDatabase.getInstance(this);
-        refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
-        //
+       db = FridgeDatabase.getInstance(this);
+       refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
+
 
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,10 +139,12 @@ public class OcrActivity extends AppCompatActivity {
 
         // 一次性設定 invoiceDate
         invoiceDate = extractDate(allLines);
+
         List<Item> items = extractItems(allLines);
 
         Log.d(TAG, "Invoice Date: " + invoiceDate);
-        textViewDate.setText("發票日期: " + invoiceDate);
+        String displayDate = extractDate(allLines);
+        textViewDate.setText("發票日期: " + displayDate);
 
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
@@ -151,7 +163,23 @@ public class OcrActivity extends AppCompatActivity {
         for (String line : lines) {
             Matcher matcher = patternDate.matcher(line);
             if (matcher.find()) {
-                return matcher.group().replaceAll("\\s*", "");
+                String dateStr = matcher.group().replaceAll("\\s*", ""); // 如 "2024/11/16"
+                try {
+                    // 解析日期
+                    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    Date date = originalFormat.parse(dateStr);
+
+                    // 格式化為 yyyyMMdd 供儲存至資料庫
+                    SimpleDateFormat targetFormatForDb = new SimpleDateFormat("yyyyMMdd");
+                    invoiceDate = targetFormatForDb.format(date);
+
+                    // 格式化為 yyyy/MM/dd 供顯示給使用者
+                    SimpleDateFormat targetFormatForDisplay = new SimpleDateFormat("yyyy/MM/dd");
+                    return targetFormatForDisplay.format(date);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return "未找到日期";
@@ -255,18 +283,33 @@ public class OcrActivity extends AppCompatActivity {
     private void updateUIWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
-            //String invoiceDate = "2023-10-27"; // 假設的一個日期字串或替換為實際日期來源
+
+            // 明確指定時區
+            LocalDate todayDate = LocalDate.now(ZoneId.of("Asia/Taipei"));
+            String formattedTodayDate = todayDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
             for (CombinedIngredient ingredient : ingredients) {
+                // 將發票日期字串轉換為 LocalDate
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                LocalDate invoiceDateLocal = LocalDate.parse(invoiceDate, formatter);
+
+                // 計算保存期限日期
+                LocalDate expirationDate = invoiceDateLocal.plusDays(ingredient.getExpiration());
+
+                // 格式化為 yyyyMMdd 並轉換為 int 型別
+                int formattedExpirationDate = Integer.parseInt(expirationDate.format(formatter));
+
                 // 使用一個固定的 id 值，例如 0，並將 expiration 轉換為 Integer 型別
                 RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
-                        0,
-                        ingredient.getIngredient_Name(),
-                        Integer.valueOf(ingredient.getGrams()),
-                        null,
-                        ingredient.getIngredients_category(),
-                        invoiceDate,
-                        Integer.valueOf(ingredient.getExpiration()) // 將 expiration 轉換為 Integer
+                        0, // ID
+                        ingredient.getIngredient_Name(), // 名稱
+                        Integer.parseInt(ingredient.getGrams()), //數量 // 重量
+                        "圖片", // 圖片路徑
+                        ingredient.getIngredients_category(), // 種類
+                        invoiceDate, // 發票日期
+                        formattedExpirationDate, // 保存期限 (int 格式)
+                        formattedTodayDate, // 使用格式化的今天日期
+                        null // 狀態(可以根據保存期限計算)
                 );
 
                 // 插入資料到資料庫（需要在背景執行緒中執行）
@@ -276,7 +319,10 @@ public class OcrActivity extends AppCompatActivity {
             }
         }
 
-        // 確保只有該商品對應有資料才會顯示
+
+
+
+    // 確保只有該商品對應有資料才會顯示
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
             StringBuilder result = new StringBuilder(textViewItems.getText());
