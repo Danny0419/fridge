@@ -12,15 +12,16 @@ public class RefrigeratorIngredient extends Ingredient {
     @ColumnInfo
     public String sort;
     @ColumnInfo(name = "purchase_date")
-    public String purchaseDate;
+    public Integer purchaseDate;
     @ColumnInfo
     public Integer expiration;
     @ColumnInfo
     public Integer state;
-    @ColumnInfo
+    //改成ignore
+    @Ignore
     public String savingDay; // 移除 @Ignore
 
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;
@@ -29,7 +30,7 @@ public class RefrigeratorIngredient extends Ingredient {
     }
 
     @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, String purchaseDate, Integer expiration, String savingDay,Integer state) {
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, String savingDay,Integer state) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;

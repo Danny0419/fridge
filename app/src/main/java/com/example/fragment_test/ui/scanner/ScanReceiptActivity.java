@@ -1,8 +1,5 @@
 package com.example.fragment_test.ui.scanner;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,25 +8,26 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.fragment_test.R;
 import com.example.fragment_test.ScannerList.OcrActivity;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -264,50 +262,19 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     // 将获取的资讯存入 RefrigeratorIngredient
                                     // 处理 invoiceDate 从民国转换为西元日期
                                     String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
-                                    int year = Integer.parseInt(invoiceDateStr.substring(0, 3)) + 1911; // 提取并转换年份
-                                    int month = Integer.parseInt(invoiceDateStr.substring(3, 5)); // 提取月份
-                                    int day = Integer.parseInt(invoiceDateStr.substring(5, 7)); // 提取日期
+                                    int date = Integer.parseInt(invoiceDateStr);
 
 // 创建格式化后的日期字符串
-                                    String purchaseDate = String.format("%04d/%02d/%02d", year, month, day);
 
 // 解析保存天数
                                     int expirationDays = Integer.parseInt(ingredient.getExpiration()); // 从 ingredient 中获取保存天数
 
-// 计算到期日期
-                                    Calendar calendar = Calendar.getInstance();
-                                    calendar.set(year, month - 1, day); // 月份从0开始，所以需要减1
-                                    calendar.add(Calendar.DAY_OF_MONTH, expirationDays); // 加上保存天数
-                                    Date expiryDate = calendar.getTime(); // 获取到期日期
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd"); // 设置日期格式
-                                    String savingDay = dateFormat.format(expiryDate); // 格式化到期日期为字符串
 
 // 获取当前日期
                                     Calendar todayCalendar = Calendar.getInstance();
                                     SimpleDateFormat todayFormat = new SimpleDateFormat("yyyy/MM/dd"); // 格式化当前日期
                                     String todayDateStr = todayFormat.format(todayCalendar.getTime());
 
-// 计算 state
-                                    int state;
-                                    if (todayDateStr.equals(savingDay)) {
-                                        state = 0; // 今天过期
-                                    } else {
-                                        // 转换日期字符串为 Date 对象以进行比较
-                                        Date todayDate = todayFormat.parse(todayDateStr);
-                                        Date expiryDateParsed = dateFormat.parse(savingDay);
-
-                                        if (todayDate.before(expiryDateParsed)) {
-                                            // 明天过期
-                                            long diff = expiryDateParsed.getTime() - todayDate.getTime();
-                                            long daysUntilExpiry = diff / (1000 * 60 * 60 * 24); // 转换为天数
-                                            state = (int) daysUntilExpiry;
-                                        } else {
-                                            // 已经过期
-                                            long diff = todayDate.getTime() - expiryDateParsed.getTime();
-                                            long daysPastExpiry = diff / (1000 * 60 * 60 * 24); // 转换为天数
-                                            state = -(int) daysPastExpiry;
-                                        }
-                                    }
 
 // 创建 RefrigeratorIngredient 对象
                                     RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
@@ -316,18 +283,14 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                             quantity, // 使用 API 请求时的数量
                                             "食材的图片", // 图片可以根据需要设置
                                             ingredient.getIngredients_category(), // 使用 ingredient 的类别
-                                            purchaseDate, // 使用格式化后的购买日期
-                                            expirationDays, // 保存天数
-                                            savingDay, // 到期日期
-                                            state // 剩余天数
+                                            date, // 使用格式化后的购买日期
+                                            expirationDays // 保存天数
                                     );
 
                                     // 存入数据库
                                     db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(refrigeratorIngredient);
                                 } catch (NumberFormatException e) {
                                     Log.e("DATA ERROR", "Invalid number format: " + e.getMessage());
-                                } catch (ParseException e) {
-                                    throw new RuntimeException(e);
                                 }
                             });
                         }
@@ -339,11 +302,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
                         executorService.execute(() -> {
                             // 处理 invoiceDate 从民国转换为西元日期
                             String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
-                            int year = Integer.parseInt(invoiceDateStr.substring(0, 3)) + 1911; // 提取并转换年份
-                            int month = Integer.parseInt(invoiceDateStr.substring(3, 5)); // 提取月份
-                            int day = Integer.parseInt(invoiceDateStr.substring(5, 7)); // 提取日期
+                            int date = Integer.parseInt(invoiceDateStr);
 
-                            String purchaseDate = String.format("%04d/%02d/%02d", year, month, day);
                             // 创建一个默认的 RefrigeratorIngredient 对象，未知字段设置为 null
                             RefrigeratorIngredient missingIngredient = new RefrigeratorIngredient(
                                     0, // 假设 ID 是自动生成的
@@ -351,7 +311,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     quantity, // 数量设为 0
                                     productName+"的圖片", // 图片设为 null
                                     "其他", // 类别设为 null
-                                    purchaseDate, // 购买日期设为 null
+                                    date, // 购买日期设为 null
                                     null, // 保存天数设为 null
                                     null, // 到期日期设为 null
                                     null // 剩余天数设为 null
