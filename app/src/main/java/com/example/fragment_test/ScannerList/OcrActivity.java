@@ -299,14 +299,16 @@ public class OcrActivity extends AppCompatActivity {
                 // 格式化為 yyyyMMdd 並轉換為 int 型別
                 int formattedExpirationDate = Integer.parseInt(expirationDate.format(formatter));
 
-                // 使用一個固定的 id 值，例如 0，並將 expiration 轉換為 Integer 型別
+                // 使用一個固定的 id 值，例如 0，並將 invoiceDate 轉換為 int 型別
+                int invoiceDateInt = Integer.parseInt(invoiceDate); // 將 invoiceDate 轉換為 int
+
                 RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
                         0, // ID
                         ingredient.getIngredient_Name(), // 名稱
-                        Integer.parseInt(ingredient.getGrams()), //數量 // 重量
+                        Integer.parseInt(ingredient.getGrams()), // 數量 // 重量
                         "圖片", // 圖片路徑
                         ingredient.getIngredients_category(), // 種類
-                        invoiceDate, // 發票日期
+                        invoiceDateInt, // 將發票日期轉換為 int
                         formattedExpirationDate, // 保存期限 (int 格式)
                         formattedTodayDate, // 使用格式化的今天日期
                         null // 狀態(可以根據保存期限計算)
@@ -318,7 +320,6 @@ public class OcrActivity extends AppCompatActivity {
                 });
             }
         }
-
 
 
 
