@@ -177,7 +177,7 @@ public class FoodManagementFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        String[] stringArray = getActivity().getResources().getStringArray(R.array.foodManagementTabLayoutTag);
+        String[] stringArray = getActivity().getResources().getStringArray(R.array.kinds_of_ingredient);
         for (int i = 0, n = stringArray.length; i < n; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(stringArray[i]));
         }
