@@ -19,10 +19,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.SwipeController;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.databinding.FragmentShoppingListBinding;
 import com.example.fragment_test.databinding.ShoppinglistAlterDialogBinding;
@@ -61,7 +63,13 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             public void onChanged(List<ShoppingItemVO> shoppingIngredients) {
                 layoutManager = new LinearLayoutManager(getContext());
                 shoppingListItemRecycleView.setLayoutManager(layoutManager);
-                shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
+                ShoppingListAdapter adapter = new ShoppingListAdapter(shoppingIngredients, getContext());
+                shoppingListItemRecycleView.setAdapter(adapter);
+
+                // 滑動刪除＆編輯
+                SwipeController swipeController = new SwipeController(requireContext());
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
+                itemTouchHelper.attachToRecyclerView(shoppingListItemRecycleView);
             }
         });
         // 應急用調整彈跳視窗大小
@@ -98,6 +106,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
         dialogCancelBtn.setOnClickListener(this);
         dialogConfirmBtn.setOnClickListener(this);
+
         return binding.getRoot();
     }
 

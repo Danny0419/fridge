@@ -1,6 +1,8 @@
 package com.example.fragment_test.adapter;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +10,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.vo.ShoppingItemVO;
@@ -20,7 +25,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
      List<ShoppingItemVO> shoppingItems;
      Context context;
-
 
     class ShoppingListViewHolder extends RecyclerView.ViewHolder {
 
@@ -64,8 +68,39 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 //        if (1 == state) {
 //            holder.shoppingItemState.setChecked(true);
 //        }
+
+        holder.itemView.findViewById(R.id.btn_edit).setOnClickListener(v -> {
+            // 弹出编辑对话框
+            showEditDialog(position);
+        });
+
+        holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
+            // 弹出确认删除对话框
+            showDeleteDialog(position);
+        });
     }
 
+    private void showEditDialog(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("编辑项")
+                .setMessage("编辑此购物项？")
+                .setPositiveButton("确认", (dialog, which) -> {
+                    // 编辑逻辑
+                })
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void showDeleteDialog(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("确认删除")
+                .setMessage("确定要删除此购物项吗？")
+                .setPositiveButton("删除", (dialog, which) -> {
+                    // 删除逻辑
+                })
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
 
     @Override
     public int getItemCount() {
