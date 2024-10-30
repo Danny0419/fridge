@@ -28,7 +28,8 @@ public class RefrigeratorIngredientRepository {
     private static RefrigeratorIngredientRepository refrigeratorIngredientRepository;
 
     private RefrigeratorIngredientRepository(Context context) {
-        this.refrigeratorIngredientDAO = FridgeDatabase.getInstance(context).refrigeratorDAO();
+        // 确保使用 refrigeratorIngredientDAO 方法
+        this.refrigeratorIngredientDAO = FridgeDatabase.getInstance(context).refrigeratorIngredientDAO();
         this.shoppingListIngredientRepository = ShoppingListIngredientRepository.getInstance(context);
     }
 
@@ -45,7 +46,7 @@ public class RefrigeratorIngredientRepository {
 
         List<Ingredient> collect = ingredients.stream().
                 map(o -> (Ingredient) o)
-                .toList();
+                .collect(Collectors.toList());
 
         shoppingListIngredientRepository.check(collect);
     }

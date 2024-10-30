@@ -1,35 +1,30 @@
 package com.example.fragment_test.entity;
 
-import androidx.room.ColumnInfo;
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-
-@Entity(tableName = "invoice")
+@Entity
 public class Invoice {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull  // 主键必须为非空
+    public String id;
 
-    @ColumnInfo(name = "date")
-    private String date;
+    public String date;
 
-    @Ignore
-    private List<InvoiceItem> items;
-
-    // Constructor
-    public Invoice(String date) {
+    // 构造函数
+    public Invoice(@NonNull String id, String date) {
+        this.id = id;
         this.date = date;
     }
 
-    // Getters and setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Getters 和 Setters
+    @NonNull
+    public String getId() { return id; }
+
+    public void setId(@NonNull String id) { this.id = id; }
 
     public String getDate() { return date; }
-    public void setDate(String date) { this.date = date; }
 
-    public List<InvoiceItem> getItems() { return items; }
-    public void setItems(List<InvoiceItem> items) { this.items = items; }
+    public void setDate(String date) { this.date = date; }
 }
