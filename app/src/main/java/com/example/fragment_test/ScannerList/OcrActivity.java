@@ -43,6 +43,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Response;
+import android.graphics.BitmapFactory;
+import java.io.File;
+import java.io.FileOutputStream;
+
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -66,7 +70,7 @@ public class OcrActivity extends AppCompatActivity {
 
 
     private FridgeDatabase db;
-   private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
+    private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
 
 
     @SuppressLint("MissingInflatedId")
@@ -74,7 +78,33 @@ public class OcrActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr);
-        //buttonRecognizeImage.setOnClickListener(v -> openGallery()); //日期用
+
+        // 初始化視圖和其他組件
+        textViewDate = findViewById(R.id.textViewDate);
+        textViewItems = findViewById(R.id.textViewItems);
+        recyclerViewItems = findViewById(R.id.recyclerViewItems);
+        recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
+        apiExecutor = Executors.newSingleThreadExecutor();
+        db = FridgeDatabase.getInstance(this);
+        refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
+
+        itemAdapter = new ItemAdapter(new ArrayList<>());
+        recyclerViewItems.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewItems.setAdapter(itemAdapter);
+
+        // 處理傳入的圖片
+        String imagePath = getIntent().getStringExtra("image_path");
+        if (imagePath != null) {
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                processImage(bitmap);
+                // 處理完後刪除暫存檔案
+                imageFile.delete();
+            }
+        }
+
+    //buttonRecognizeImage.setOnClickListener(v -> openGallery()); //日期用
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
         textViewItems = findViewById(R.id.textViewItems);
@@ -84,8 +114,8 @@ public class OcrActivity extends AppCompatActivity {
         apiExecutor = Executors.newSingleThreadExecutor();
 
         // 初始化資料庫和 DAO
-       db = FridgeDatabase.getInstance(this);
-       refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
+        db = FridgeDatabase.getInstance(this);
+        refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
 
 
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
@@ -323,7 +353,7 @@ public class OcrActivity extends AppCompatActivity {
 
 
 
-    // 確保只有該商品對應有資料才會顯示
+        // 確保只有該商品對應有資料才會顯示
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
             StringBuilder result = new StringBuilder(textViewItems.getText());
