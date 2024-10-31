@@ -6,105 +6,149 @@ import android.util.Log;
 import com.example.fragment_test.ServerAPI.ApiService;
 import com.example.fragment_test.ServerAPI.Recipe;
 import com.example.fragment_test.ServerAPI.RetrofitClient;
+import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
+import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-
+import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 public class RecipeRecommendation {
+    private static final String TAG = "RecipeRecommendation";
+    private static final int MAX_RETRIES = 3;  // 最大重試次數
+    private static final int RETRY_DELAY_MS = 1000;
+    private static final int COOKING_TIME_THRESHOLD = 60; // 分鐘
+    private static final float MATCH_WEIGHT = 1.5f;
+    private static final float EXPIRY_WEIGHT = 1.2f;
+    private static final float TIME_PENALTY_WEIGHT = 0.5f;
+
+    private static final Set<String> SEASONINGS = new HashSet<>(Arrays.asList(
+            "鹽", "油", "醬油", "蠔油", "米酒", "香油", "烏醋", "糖", "胡椒粉"
+    ));
 
     private List<Recipe> recipes;
     private Context context;
-    private static final Set<String> SEASONINGS = new HashSet<>(Arrays.asList("鹽", "油", "醬油", "蠔油", "米酒", "香油", "烏醋", "糖", "胡椒粉"));
+    private RefrigeratorIngredientRepository repository;
 
-    // 无参构造函数
+    // 建構函數
     public RecipeRecommendation() {
         this.recipes = new ArrayList<>();
     }
 
-    // 初始化方法，调用API获取食谱数据
-    public void init(Context context, InitCallback recommendationActivity) {
+    // 初始化方法
+    public void init(Context context, InitCallback callback) {
         this.context = context;
-        loadRecipesFromAPI(); // 从API加载食谱
+        this.repository = RefrigeratorIngredientRepository.getInstance(context);
+        loadRecipesAndIngredients(callback);
     }
 
-    // 从API加载食谱
-    private void loadRecipesFromAPI() {
+    // 載入食譜和食材數據
+    private void loadRecipesAndIngredients(InitCallback callback) {
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        attemptLoadRecipes(apiService, callback, 0);
+    }
+
+    private void attemptLoadRecipes(ApiService apiService, InitCallback callback, int retryCount) {
         Call<List<Recipe>> call = apiService.getRecipes();
+
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     recipes = response.body();
-                    preprocessRecipes();
+                    loadFridgeIngredients(callback);
+                    Log.i(TAG, "Successfully loaded " + recipes.size() + " recipes");
                 } else {
-                    Log.e("RecipeRecommendation", "API响应错误");
+                    handleLoadError(apiService, callback, retryCount,
+                            new Exception("API response not successful: " + response.code()));
                 }
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.e("RecipeRecommendation", "加载食谱失败: " + t.getMessage(), t); // 增加日志打印错误堆栈
+                Log.e(TAG, "Recipe loading failed: " + t.getMessage(), t);
+                handleLoadError(apiService, callback, retryCount, t);
             }
         });
     }
 
-    // 预处理食谱
-    private void preprocessRecipes() {
-        recipes.forEach(this::preprocessRecipe);
-        Log.d("RecipeRecommendation", "预处理后的食谱数量：" + recipes.size());
+    private void handleLoadError(ApiService apiService, InitCallback callback,
+                                 int retryCount, Throwable error) {
+        if (retryCount < MAX_RETRIES) {
+            Log.w(TAG, "Retrying recipe load attempt " + (retryCount + 1) +
+                    " of " + MAX_RETRIES);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                attemptLoadRecipes(apiService, callback, retryCount + 1);
+            }, RETRY_DELAY_MS);
+        } else {
+            Log.e(TAG, "All retry attempts failed", error);
+            callback.onError("載入食譜失敗: " + error.getMessage() +
+                    "\n請檢查網路連接並重試");
+        }
     }
 
-    // 处理食谱信息
-    private void preprocessRecipe(Recipe recipe) {
-        // 这里可以进一步处理API返回的食谱信息，如提取或转换字段
+    // 載入冰箱食材
+    private void loadFridgeIngredients(InitCallback callback) {
+        Maybe.fromCallable(() -> repository.getRefrigeratorIngredientsSortedBySort())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<Map<String, List<RefrigeratorIngredientVO>>>() {
+                    @Override
+                    public void onSuccess(Map<String, List<RefrigeratorIngredientVO>> ingredientMap) {
+                        Map<String, FridgeIngredient> convertedIngredients = convertToFridgeIngredients(ingredientMap);
+                        callback.onSuccess(convertedIngredients);
+                        Log.i("TAG",convertedIngredients.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError("載入冰箱食材失敗: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        callback.onError("未找到冰箱食材");
+                    }
+                });
     }
 
-    // 获取冰箱中的食材
-    public Map<String, FridgeIngredient> getFridgeIngredients() {
+    // 轉換食材格式
+    private Map<String, FridgeIngredient> convertToFridgeIngredients(
+            Map<String, List<RefrigeratorIngredientVO>> ingredientMap) {
+        Map<String, FridgeIngredient> result = new HashMap<>();
         Calendar today = Calendar.getInstance();
-        Map<String, FridgeIngredient> ingredients = new HashMap<>();
 
-        // 模拟冰箱中的食材
-        ingredients.put("雞蛋", new FridgeIngredient("雞蛋", 10, today, 10));
-        ingredients.put("牛奶", new FridgeIngredient("牛奶", 2000, today, 5));
-        ingredients.put("雞胸肉", new FridgeIngredient("雞胸肉", 500, today, 3));
-        ingredients.put("牛肉", new FridgeIngredient("牛肉", 1000, today, 7));
-        ingredients.put("豬肉", new FridgeIngredient("豬肉", 800, today, 4));
-        ingredients.put("魚片", new FridgeIngredient("魚片", 300, today, 2));
-        ingredients.put("蝦仁", new FridgeIngredient("蝦仁", 200, today, 2));
-        ingredients.put("豆腐", new FridgeIngredient("豆腐", 400, today, 3));
-        ingredients.put("麵條", new FridgeIngredient("麵條", 500, today, 180));
-        ingredients.put("米飯", new FridgeIngredient("米飯", 1000, today, 2));
-        ingredients.put("馬鈴薯", new FridgeIngredient("馬鈴薯", 500, today, 30));
-        ingredients.put("紅蘿蔔", new FridgeIngredient("紅蘿蔔", 300, today, 20));
-        ingredients.put("洋蔥", new FridgeIngredient("洋蔥", 200, today, 15));
-        ingredients.put("花椰菜", new FridgeIngredient("花椰菜", 400, today, 7));
-        ingredients.put("菠菜", new FridgeIngredient("菠菜", 250, today, 5));
-        ingredients.put("青椒", new FridgeIngredient("青椒", 200, today, 10));
-        ingredients.put("玉米", new FridgeIngredient("玉米", 300, today, 15));
-        ingredients.put("茄子", new FridgeIngredient("茄子", 300, today, 7));
-        ingredients.put("豆芽", new FridgeIngredient("豆芽", 200, today, 3));
-        ingredients.put("蘑菇", new FridgeIngredient("蘑菇", 150, today, 5));
-        ingredients.put("牛蒡", new FridgeIngredient("牛蒡", 100, today, 7));
-        ingredients.put("蒟蒻", new FridgeIngredient("蒟蒻", 200, today, 14));
-
-        return ingredients;
+        for (List<RefrigeratorIngredientVO> ingredients : ingredientMap.values()) {
+            for (RefrigeratorIngredientVO vo : ingredients) {
+                result.put(vo.getName(), new FridgeIngredient(
+                        vo.getName(),
+                        vo.sumQuantity,
+                        today,
+                        calculateDaysToExpiry(today.getTime())
+                ));
+            }
+        }
+        return result;
     }
 
-    // 获取推荐食谱
+    // 計算到期天數
+    private int calculateDaysToExpiry(Date expirationDate) {
+        if (expirationDate == null) return Integer.MAX_VALUE;
+        return (int) ((expirationDate.getTime() - System.currentTimeMillis())
+                / (1000 * 60 * 60 * 24));
+    }
+
+    // 獲取推薦食譜
     public List<Recommendation> getRecommendations(Map<String, FridgeIngredient> fridgeIngredients) {
         return recipes.stream()
                 .map(recipe -> new Recommendation(recipe, calculateScores(recipe, fridgeIngredients)))
@@ -113,84 +157,153 @@ public class RecipeRecommendation {
                 .collect(Collectors.toList());
     }
 
-    public interface InitCallback {
-        void onSuccess(Map<String, FridgeIngredient> fridgeIngredients);
-
-        void onError(String errorMessage);
-    }
-
-    // 计算评分
-    private Map<String, Float> calculateScores(Recipe recipe, Map<String, FridgeIngredient> fridgeIngredients) {
-        long matchedIngredientsCount = recipe.getIngredients().stream()
-                .filter(ingredient -> {
-                    if (SEASONINGS.contains(ingredient.getIngredient_name())) return false;
-                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getIngredient_name());
-                    return fridgeIngredient != null && Float.parseFloat(ingredient.getIngredient_need()) <= fridgeIngredient.getQuantity();
-                })
-                .count();
-
-        double rareIngredientWeight = recipe.getIngredients().stream()
-                .filter(ingredient -> {
-                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getIngredient_name());
-                    return fridgeIngredient != null && Float.parseFloat(ingredient.getIngredient_need()) <= fridgeIngredient.getQuantity();
-                })
-                .mapToDouble(ingredient -> calculateIngredientWeight(ingredient.getIngredient_name()))
-                .sum();
-
-        float matchRate = (float) (matchedIngredientsCount * rareIngredientWeight) /
-                recipe.getIngredients().stream().filter(ingredient -> !SEASONINGS.contains(ingredient.getIngredient_name())).count();
-        float matchScore = matchRate * 3;
-
-        float totalExpiryScore = (float) recipe.getIngredients().stream()
-                .filter(ingredient -> !SEASONINGS.contains(ingredient.getIngredient_name()))
-                .mapToInt(ingredient -> {
-                    FridgeIngredient fridgeIngredient = fridgeIngredients.get(ingredient.getIngredient_name());
-                    return fridgeIngredient != null ? calculateExpiryScore(fridgeIngredient.getExpiryDays()) : 0;
-                })
-                .sum();
-
-        float averageExpiryScore = matchedIngredientsCount > 0 ? totalExpiryScore / matchedIngredientsCount : 0;
-        float smoothedExpiryScore = smoothFactor(averageExpiryScore, matchedIngredientsCount);
-
-        float combinedScore = (float) ((matchScore * 2.5f) + smoothedExpiryScore + rareIngredientWeight * 1.2f);
+    // 計算評分
+    private Map<String, Float> calculateScores(Recipe recipe,
+                                               Map<String, FridgeIngredient> fridgeIngredients) {
+        List<IngredientMatch> matches = calculateIngredientMatches(recipe, fridgeIngredients);
+        float matchScore = calculateMatchScore(matches, recipe);
+        float expiryScore = calculateExpiryScore(matches);
+        float finalScore = calculateFinalScore(
+                matchScore,
+                expiryScore,
+                30,
+                "簡易"
+        );
 
         Map<String, Float> scores = new HashMap<>();
         scores.put("matchScore", matchScore);
-        scores.put("expiryScore", smoothedExpiryScore);
-        scores.put("combinedScore", combinedScore);
-
+        scores.put("expiryScore", expiryScore);
+        scores.put("combinedScore", finalScore);
         return scores;
     }
 
-    private float smoothFactor(float score, long ingredientCount) {
-        return (float) (score / Math.sqrt(ingredientCount + 1));
+    private float parseIngredientAmount(String amount) {
+        // 去除所有的非数字和小数点字符
+        String numericValue = amount.replaceAll("[^\\d.]", "");
+        try {
+            return Float.parseFloat(numericValue);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0f; // 默认返回0
+        }
     }
 
-    private double calculateIngredientWeight(String ingredientName) {
-        Map<String, Double> rarityMap = new HashMap<>();
-        rarityMap.put("魚子", 1.5);
-        rarityMap.put("松露", 2.0);
-        rarityMap.put("牛肝菌", 1.7);
-        return rarityMap.getOrDefault(ingredientName, 1.0);
+    // 計算食材匹配情況
+    private List<IngredientMatch> calculateIngredientMatches(Recipe recipe,
+                                                             Map<String, FridgeIngredient> fridgeIngredients) {
+        return recipe.getIngredients().stream()
+                .filter(ingredient -> !SEASONINGS.contains(ingredient.getIngredient_name()))
+                .map(ingredient -> {
+                    FridgeIngredient fridgeIngredient =
+                            fridgeIngredients.get(ingredient.getIngredient_name());
+                    if (fridgeIngredient == null) {
+                        return new IngredientMatch(ingredient.getIngredient_name(), 0, 0, 0);
+                    }
+
+                    // 使用 parseIngredientAmount 方法来解析所需数量
+                    float neededAmount = parseIngredientAmount(ingredient.getIngredient_need());
+                    float availableAmount = fridgeIngredient.getQuantity();
+                    float ratio = availableAmount / neededAmount;
+                    float matchScore = calculateMatchScoreByRatio(ratio);
+
+                    return new IngredientMatch(
+                            ingredient.getIngredient_name(),
+                            matchScore,
+                            fridgeIngredient.getExpiryDays(),
+                            ratio
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
-    private int calculateExpiryScore(long daysRemaining) {
-        if (daysRemaining > 7) return 1;
-        if (daysRemaining > 3) return 2;
-        return 3;
+
+    // 根據比例計算匹配分數
+    private float calculateMatchScoreByRatio(float ratio) {
+        if (ratio >= 1.0) return 2.0f;
+        if (ratio >= 0.8) return 1.6f;
+        if (ratio >= 0.6) return 1.2f;
+        if (ratio >= 0.4) return 0.8f;
+        if (ratio >= 0.2) return 0.4f;
+        return 0f;
     }
 
+    // 計算總匹配分數
+    private float calculateMatchScore(List<IngredientMatch> matches, Recipe recipe) {
+        float totalScore = matches.stream()
+                .map(match -> match.matchScore)
+                .reduce(0f, Float::sum);
+
+        int totalRequiredIngredients = (int) recipe.getIngredients().stream()
+                .filter(i -> !SEASONINGS.contains(i.getIngredient_name()))
+                .count();
+
+        return totalRequiredIngredients > 0 ? totalScore / totalRequiredIngredients : 0;
+    }
+
+    // 計算過期分數
+    private float calculateExpiryScore(List<IngredientMatch> matches) {
+        if (matches.isEmpty()) return 0;
+        return matches.stream()
+                .map(match -> calculateExpiryScoreByDays(match.expiryDays))
+                .reduce(0f, Float::sum) / matches.size();
+    }
+
+    // 根據剩餘天數計算過期分數
+    private float calculateExpiryScoreByDays(long days) {
+        if (days <= 1) return 2.0f;
+        if (days <= 3) return 1.6f;
+        if (days <= 7) return 1.2f;
+        if (days <= 14) return 0.6f;
+        return 0f;
+    }
+
+    // 計算最終分數
+    private float calculateFinalScore(float matchScore, float expiryScore,
+                                      int cookingTime, String difficulty) {
+        float baseScore = (matchScore * MATCH_WEIGHT) + (expiryScore * EXPIRY_WEIGHT);
+        float timeDeduction = (cookingTime / (float)COOKING_TIME_THRESHOLD) * TIME_PENALTY_WEIGHT;
+        float difficultyMultiplier = getDifficultyMultiplier(difficulty);
+
+        return (baseScore - timeDeduction) * difficultyMultiplier;
+    }
+
+    // 取得難度乘數
+    private float getDifficultyMultiplier(String difficulty) {
+        return switch (difficulty.toLowerCase()) {
+            case "困難" -> 0.85f;  // 扣15%
+            case "簡易" -> 1.1f;   // 加10%
+            default -> 1.0f;     // 中等難度不變
+        };
+    }
+
+    // 內部類：食材匹配資訊
+    private static class IngredientMatch {
+        final String name;
+        final float matchScore;
+        final long expiryDays;
+        final float ratio;
+
+        IngredientMatch(String name, float matchScore, long expiryDays, float ratio) {
+            this.name = name;
+            this.matchScore = matchScore;
+            this.expiryDays = expiryDays;
+            this.ratio = ratio;
+        }
+    }
+
+    // 內部類：冰箱食材
     public static class FridgeIngredient {
-        private String name;
-        private float quantity;
-        private long expiryDays;
+        private final String name;
+        private final float quantity;
+        private final long expiryDays;
 
         public FridgeIngredient(String name, float quantity, Calendar today, int daysToAdd) {
             this.name = name;
             this.quantity = quantity;
             Calendar expiryDate = (Calendar) today.clone();
             expiryDate.add(Calendar.DAY_OF_YEAR, daysToAdd);
-            this.expiryDays = (expiryDate.getTimeInMillis() - today.getTimeInMillis()) / (1000 * 60 * 60 * 24);
+            this.expiryDays = (expiryDate.getTimeInMillis() - today.getTimeInMillis())
+                    / (1000 * 60 * 60 * 24);
         }
 
         public String getName() { return name; }
@@ -198,11 +311,12 @@ public class RecipeRecommendation {
         public long getExpiryDays() { return expiryDays; }
     }
 
+    // 內部類：推薦結果
     public static class Recommendation {
-        private Recipe recipe;
-        private float matchScore;
-        private float expiryScore;
-        private float combinedScore;
+        private final Recipe recipe;
+        private final float matchScore;
+        private final float expiryScore;
+        private final float combinedScore;
 
         public Recommendation(Recipe recipe, Map<String, Float> scores) {
             this.recipe = recipe;
@@ -215,5 +329,11 @@ public class RecipeRecommendation {
         public float getMatchScore() { return matchScore; }
         public float getExpiryScore() { return expiryScore; }
         public float getCombinedScore() { return combinedScore; }
+    }
+
+    // 接口：初始化回調
+    public interface InitCallback {
+        void onSuccess(Map<String, FridgeIngredient> fridgeIngredients);
+        void onError(String errorMessage);
     }
 }
