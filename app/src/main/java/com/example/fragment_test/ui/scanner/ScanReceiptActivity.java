@@ -28,7 +28,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.ScannerList.OcrActivity;
-import com.example.fragment_test.ServerAPI.ApiService;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
@@ -184,19 +183,19 @@ public class ScanReceiptActivity extends AppCompatActivity {
     }
 
     //    使用者拒絕開啟相機
-    @SuppressLint("MissingSuperCall")
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 用户授予了相机权限，启动相机
-                startCamera();
-            } else {
-                // 用户拒绝了相机权限，显示提示
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//    @SuppressLint("MissingSuperCall")
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // 用户授予了相机权限，启动相机
+//                startCamera();
+//            } else {
+//                // 用户拒绝了相机权限，显示提示
+//                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     private void handleRecognizedQrCodes(Set<String> qrCodes) {
         // 合并QR码信息并解析发票和品项
@@ -343,7 +342,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     );
 
                                     // 存入数据库
-                                    db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(refrigeratorIngredient);
+                                    db.refrigeratorIngredientDAO().insertIngredient(refrigeratorIngredient);
                                 } catch (NumberFormatException e) {
                                     Log.e("DATA ERROR", "Invalid number format: " + e.getMessage());
                                 }
@@ -367,13 +366,12 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     productName+"的圖片", // 图片设为 null
                                     "其他", // 类别设为 null
                                     date, // 购买日期设为 null
-                                    null, // 保存天数设为 null
                                     null, // 到期日期设为 null
-                                    null // 剩余天数设为 null
+                                    "克"
                             );
 
                             // 存入数据库
-                            db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
+                            db.refrigeratorIngredientDAO().insertIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
                         });
                         executorService.shutdown(); // 在适当的时机关闭线程池
                     }

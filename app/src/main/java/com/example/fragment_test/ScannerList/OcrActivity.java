@@ -310,13 +310,13 @@ public class OcrActivity extends AppCompatActivity {
                         ingredient.getIngredients_category(), // 種類
                         invoiceDateInt, // 將發票日期轉換為 int
                         formattedExpirationDate, // 保存期限 (int 格式)
-                        formattedTodayDate, // 使用格式化的今天日期
-                        null // 狀態(可以根據保存期限計算)
+                        "克"
+
                 );
 
                 // 插入資料到資料庫（需要在背景執行緒中執行）
                 Executors.newSingleThreadExecutor().execute(() -> {
-                    refrigeratorIngredientDAO.insertRefrigeratorIngredient(refrigeratorIngredient);
+                    refrigeratorIngredientDAO.insertIngredient(refrigeratorIngredient);
                 });
             }
         }
