@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/recipeImg"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -15,6 +15,7 @@
             android:layout_weight="2"
             android:fontFamily="@font/regular"
             android:gravity="center"
+            android:src="@drawable/photo"
             />
 
         <TextView
