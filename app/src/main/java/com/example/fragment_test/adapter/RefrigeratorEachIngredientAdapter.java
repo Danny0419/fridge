@@ -3,6 +3,7 @@ package com.example.fragment_test.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
 
     class RefrigeratorKindViewHolder extends RecyclerView.ViewHolder {
 
-        TextView ingredientImg;
+        ImageView ingredientImg;
         TextView ingredientName;
         TextView ingredientExpr;
         TextView ingredientQuan;
@@ -50,7 +51,7 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorKindViewHolder holder, int position) {
         RefrigeratorIngredientVO ingredient = kindOfIngredient.get(position);
-        holder.ingredientImg.setText(ingredient.img);
+
         holder.ingredientName.setText(ingredient.name);
         holder.ingredientExpr.setText("保存期限："+ ingredient.earlyEx + "~" + ingredient.lastEx);
         holder.ingredientQuan.setText(Integer.toString(ingredient.sumQuantity));
