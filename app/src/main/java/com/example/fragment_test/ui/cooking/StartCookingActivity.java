@@ -62,7 +62,7 @@ public class StartCookingActivity extends AppCompatActivity {
 
         RecipeIntroductionBinding recipeIntroduction = activityStartCookingBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(scheduleRecipe.recipe.name);
-        recipeIntroduction.recipeImg.setText(scheduleRecipe.recipe.img);
+//        recipeIntroduction.recipeImg.setText(scheduleRecipe.recipe.img);
         recipeIntroduction.recipeServing.setText(Integer.toString(scheduleRecipe.recipe.serving));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);

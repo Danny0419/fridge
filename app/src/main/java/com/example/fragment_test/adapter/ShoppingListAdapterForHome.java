@@ -37,7 +37,7 @@ public class ShoppingListAdapterForHome extends RecyclerView.Adapter <ShoppingLi
     @NonNull
     @Override
     public ShoppingItemViewHolderForHome onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_shopping_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_shopping_list_container, parent, false);
         return new ShoppingItemViewHolderForHome(view);
     }
 
