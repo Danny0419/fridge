@@ -1,20 +1,18 @@
 package com.example.fragment_test.adapter;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.vo.ShoppingItemVO;
@@ -23,13 +21,15 @@ import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
-     List<ShoppingItemVO> shoppingItems;
-     Context context;
+    List<ShoppingItemVO> shoppingItems;
+    Context context;
 
     class ShoppingListViewHolder extends RecyclerView.ViewHolder {
 
         TextView position, shoppingItemName, shoppingItemSort, shoppingItemQuantity;
         CheckBox shoppingItemState;
+        ImageButton editBtn, deleteBtn;
+
         ShoppingListViewHolder(View view) {
             super(view);
             position = view.findViewById(R.id.position);
@@ -37,6 +37,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             shoppingItemSort = view.findViewById(R.id.shoppingItemSort);
             shoppingItemQuantity = view.findViewById(R.id.shoppingItemQuantity);
             shoppingItemState = view.findViewById(R.id.shoppingItemState);
+            editBtn = view.findViewById(R.id.btn_edit);
+            deleteBtn = view.findViewById(R.id.btn_delete);
         }
     }
 
@@ -69,15 +71,12 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 //            holder.shoppingItemState.setChecked(true);
 //        }
 
-        holder.itemView.findViewById(R.id.btn_edit).setOnClickListener(v -> {
-            // 弹出编辑对话框
-            showEditDialog(position);
-        });
+         holder.itemView.setOnClickListener(view -> {
+             Log.e("測試", "a");
+         });
+        holder.editBtn.setOnClickListener(view -> showEditDialog(position));
 
-        holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
-            // 弹出确认删除对话框
-            showDeleteDialog(position);
-        });
+        holder.deleteBtn.setOnClickListener(view -> showDeleteDialog(position));
     }
 
     private void showEditDialog(int position) {
