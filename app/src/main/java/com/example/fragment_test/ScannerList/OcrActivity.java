@@ -66,7 +66,7 @@ public class OcrActivity extends AppCompatActivity {
 
 
     private FridgeDatabase db;
-   private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
+    private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
 
 
     @SuppressLint("MissingInflatedId")
@@ -84,8 +84,8 @@ public class OcrActivity extends AppCompatActivity {
         apiExecutor = Executors.newSingleThreadExecutor();
 
         // 初始化資料庫和 DAO
-       db = FridgeDatabase.getInstance(this);
-       refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
+        db = FridgeDatabase.getInstance(this);
+        refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
 
 
         buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
@@ -323,7 +323,7 @@ public class OcrActivity extends AppCompatActivity {
 
 
 
-    // 確保只有該商品對應有資料才會顯示
+        // 確保只有該商品對應有資料才會顯示
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
             StringBuilder result = new StringBuilder(textViewItems.getText());
