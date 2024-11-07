@@ -41,7 +41,7 @@ public interface RefrigeratorIngredientDAO {
             WHERE name = :name AND expiration >= :today
             """
     )
-    List<RefrigeratorIngredient> getIngredientByName(String name, int today);
+    List<RefrigeratorIngredient> getIngredientsByName(String name, int today);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertIngredient(RefrigeratorIngredient ingredient);
@@ -62,4 +62,13 @@ public interface RefrigeratorIngredientDAO {
             """
     )
     List<RefrigeratorIngredientDetailVO> getExpirationDaysLesserThanThreeDaysIngredients(int today);
+
+    @Query(
+            """
+            SELECT *
+            FROM refrigerator
+            WHERE name = :name AND purchase_date = :purchaseDate AND expiration = :expiration
+            """
+    )
+    RefrigeratorIngredient getIngredientByName(String name, int purchaseDate, int expiration);
 }
