@@ -101,11 +101,15 @@ public class RefrigeratorIngredientRepository {
         refrigeratorIngredientDAO.insertIngredient(ingredient);
     }
 
-    public List<RefrigeratorIngredientDetailVO> searchRefrigeratorIngredientDetail(RefrigeratorIngredientVO refrigeratorIngredientVO) {
+    public List<RefrigeratorIngredient> searchRefrigeratorIngredientDetail(RefrigeratorIngredientVO refrigeratorIngredientVO) {
         LocalDate now = LocalDate.now();
         String format = DateTimeFormatter.BASIC_ISO_DATE.format(now);
         int today = Integer.parseInt(format);
-        return refrigeratorIngredientDAO.getIngredientByName(refrigeratorIngredientVO.name, today);
+        List<RefrigeratorIngredient> ingredientByName = refrigeratorIngredientDAO.getIngredientByName(refrigeratorIngredientVO.name, today);
+        ingredientByName.forEach(ingredient -> {
+            ingredient.setDaysRemaining(ingredient.expiration - today);
+        });
+        return ingredientByName;
     }
 
     public List<RefrigeratorIngredient> getRefrigeratorIngredients() {

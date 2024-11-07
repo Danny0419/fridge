@@ -9,13 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
 
 import java.util.List;
 
 public class RefrigeratorIngredientDetailAdapter extends RecyclerView.Adapter<RefrigeratorIngredientDetailAdapter.RefrigeratorIngredientDetailViewHolder> {
 
-    List<RefrigeratorIngredientDetailVO> ingredientDetailVOList;
+    List<RefrigeratorIngredient> ingredientDetailVOList;
 
     class RefrigeratorIngredientDetailViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,13 +39,13 @@ public class RefrigeratorIngredientDetailAdapter extends RecyclerView.Adapter<Re
         return new RefrigeratorIngredientDetailViewHolder(view);
     }
 
-    public RefrigeratorIngredientDetailAdapter(List<RefrigeratorIngredientDetailVO> ingredientDetailVOList) {
+    public RefrigeratorIngredientDetailAdapter(List<RefrigeratorIngredient> ingredientDetailVOList) {
         this.ingredientDetailVOList = ingredientDetailVOList;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorIngredientDetailViewHolder holder, int position) {
-        RefrigeratorIngredientDetailVO ingredient = ingredientDetailVOList.get(position);
+        RefrigeratorIngredient ingredient = ingredientDetailVOList.get(position);
         holder.ingredientQuantity.setText("" + ingredient.quantity);
         holder.ingredientPurchaseDate.setText("" + ingredient.purchaseDate);
         holder.ingredientExpiration.setText("" + ingredient.expiration);
