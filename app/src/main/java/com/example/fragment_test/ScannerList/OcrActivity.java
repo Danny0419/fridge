@@ -86,15 +86,7 @@ public class OcrActivity extends AppCompatActivity {
         // 初始化資料庫和 DAO
         db = FridgeDatabase.getInstance(this);
         refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
-
-
-        buttonRecognizeImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 openGallery();
-            }
-        });
-
         itemAdapter = new ItemAdapter(new ArrayList<>());
         recyclerViewItems.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewItems.setAdapter(itemAdapter);
