@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -162,6 +163,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -298,7 +300,6 @@ public class ScanReceiptActivity extends AppCompatActivity {
         }
     }
 
-
     private void fetchCombinedIngredients(List<ParsedItem> items, String invoiceDate) {
         // 获取数据库实例
         FridgeDatabase db = FridgeDatabase.getInstance(getApplicationContext());
@@ -397,7 +398,6 @@ public class ScanReceiptActivity extends AppCompatActivity {
             });
         }
     }
-
 
     private ParsedInvoice parseInvoiceData(String qrText) {
         // 提取发票日期：QR码文本长度大于等于17时，从第11到第17个字符位置提取
