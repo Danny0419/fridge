@@ -477,4 +477,3 @@ public class ScanReceiptActivity extends AppCompatActivity {
         }
     }
 }
-
