@@ -70,7 +70,10 @@ public class ScheduleAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.eachDayText.setText(dates[position].getDayOfWeek().toString());
+//        viewHolder.eachDayText.setText(dates[position].getDayOfWeek().toString());
+        DateTimeFormatter dayOfWeekFormatter = DateTimeFormatter.ofPattern("EEE");
+        viewHolder.eachDayText.setText(dates[position].format(dayOfWeekFormatter).toUpperCase());
+
         Optional<List<RecipeWithScheduledId>> dayScheduleRecipesOpt = Optional.ofNullable(scheduleRecipes.get(dates[position].getDayOfWeek()));
         List<RecipeWithScheduledId> dayScheduleRecipes = dayScheduleRecipesOpt.orElse(new ArrayList<>());
 
