@@ -49,7 +49,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        holder.recipeImg.setText(recipe.img);
+//        holder.recipeImg.setText(recipe.img);
         holder.recipeName.setText(recipe.name);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         holder.itemView.setOnClickListener(view -> listener.onClick(position, recipe));

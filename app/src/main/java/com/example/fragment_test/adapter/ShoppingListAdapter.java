@@ -1,7 +1,6 @@
 package com.example.fragment_test.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +70,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 //            holder.shoppingItemState.setChecked(true);
 //        }
 
-         holder.itemView.setOnClickListener(view -> {
-             Log.e("測試", "a");
-         });
         holder.editBtn.setOnClickListener(view -> showEditDialog(position));
 
         holder.deleteBtn.setOnClickListener(view -> showDeleteDialog(position));

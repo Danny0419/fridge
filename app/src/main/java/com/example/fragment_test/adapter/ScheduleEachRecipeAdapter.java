@@ -24,8 +24,8 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
 
         public ScheduleEachRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.recipeTitle = itemView.findViewById(R.id.recipe_img);
-            this.recipeImg = itemView.findViewById(R.id.recipe_title);
+            this.recipeTitle = itemView.findViewById(R.id.recipe_title);
+//            this.recipeImg = itemView.findViewById(R.id.recipe_img);
         }
     }
 
@@ -48,7 +48,7 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
     @Override
     public void onBindViewHolder(@NonNull ScheduleEachRecipeViewHolder holder, int position) {
         RecipeWithScheduledId recipeWithScheduledId = recipes.get(position);
-        holder.recipeImg.setText(recipeWithScheduledId.recipe.img);
+//        holder.recipeImg.setText(recipeWithScheduledId.recipe.img);
         holder.recipeTitle.setText(recipeWithScheduledId.recipe.name);
         holder.itemView.setOnClickListener((v) -> onClickListener.onClick(recipeWithScheduledId));
     }

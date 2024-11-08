@@ -28,7 +28,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
         public RecipeIngredientViewHolder(@NonNull View itemView) {
             super(itemView);
-            ingredientImg = itemView.findViewById(R.id.ingredientImg);
+//            ingredientImg = itemView.findViewById(R.id.ingredientImg);
             ingredientName = itemView.findViewById(R.id.ingredientName);
         }
     }
@@ -42,7 +42,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientViewHolder holder, int position) {
-        holder.ingredientImg.setText(ingredients.get(position).img);
+//        holder.ingredientImg.setText(ingredients.get(position).img);
         holder.ingredientName.setText(ingredients.get(position).name);
     }
 
