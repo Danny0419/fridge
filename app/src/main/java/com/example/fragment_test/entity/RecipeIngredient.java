@@ -20,6 +20,11 @@ public class RecipeIngredient extends Ingredient implements Parcelable {
     public Integer rId;
 
     @Ignore
+    public RecipeIngredient(@NonNull String name, int quantity) {
+        super(name, quantity);
+    }
+
+    @Ignore
     public RecipeIngredient(@NonNull String name, int quantity, String img, Integer rId) {
         super(name, quantity);
         this.img = img;

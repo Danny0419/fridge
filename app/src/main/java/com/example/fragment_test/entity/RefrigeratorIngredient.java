@@ -20,6 +20,11 @@ public class RefrigeratorIngredient extends Ingredient {
     @Ignore
     public Integer savingDay;
 
+    @Ignore
+    public RefrigeratorIngredient(@NonNull String name, int quantity) {
+        super(name, quantity);
+    }
+
     public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
         super(id, name, quantity);
         this.img = img;

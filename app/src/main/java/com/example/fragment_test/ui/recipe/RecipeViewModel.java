@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fragment_test.RecipeRecommend.RecipeRecommendation;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
@@ -14,7 +15,6 @@ import com.example.fragment_test.repository.PreparedRecipeRepository;
 import com.example.fragment_test.repository.RecipeRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
@@ -30,34 +30,49 @@ public class RecipeViewModel extends AndroidViewModel {
     private final MutableLiveData<List<RecipeIngredient>> recipeIngredients = new MutableLiveData<>();
     private final RecipeRepository recipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
+    private final RecipeRecommendation recipeRecommendation;
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
         this.recipeRepository = RecipeRepository.getInstance(application);
         this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(application);
+        this.recipeRecommendation = new RecipeRecommendation();
     }
 
-    public void loadRecommendRecipes() {
-        Maybe.fromCallable(recipeRepository::recommendRecipes)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<Optional<List<Recipe>>>() {
-                    @Override
-                    public void onSuccess(Optional<List<Recipe>> recipes) {
-                        recipes.ifPresent(RecipeViewModel.this.recipes::setValue);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
+//    public void loadRecommendRecipes() {
+//        recipeRecommendation.init(getApplication(), new RecipeRecommendation.InitCallback() {
+//            @Override
+//            public void onSuccess(Map<String, RecipeRecommendation.FridgeIngredient> fridgeIngredients) {
+//                recipeRecommendation.getRecommendations(fridgeIngredients);
+//            }
+//
+//            @Override
+//            public void onError(String errorMessage) {
+//                Log.e("RecommendationActivity", "Error initializing RecipeRecommendation: " + errorMessage);
+//            }
+//        });
+//    }
+//        Maybe.fromCallable(recipeRepository::recommendRecipes)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DisposableMaybeObserver<Optional<List<Recipe>>>() {
+//                    @Override
+//                    public void onSuccess(Optional<List<Recipe>> recipes) {
+//
+//                        recipes.ifPresent(RecipeViewModel.this.recipes::setValue);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
 
     public void addInterestingRecipe(Recipe recipe) {
         Completable.fromAction(() -> preparedRecipeRepository.addInterestingRecipe(recipe))

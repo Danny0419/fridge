@@ -1,17 +1,28 @@
 package com.example.fragment_test.RecipeRecommend;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.example.fragment_test.ServerAPI.ApiService;
 import com.example.fragment_test.ServerAPI.Recipe;
 import com.example.fragment_test.ServerAPI.RetrofitClient;
 import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
-import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
 import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
@@ -19,9 +30,6 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 public class RecipeRecommendation {
     private static final String TAG = "RecipeRecommendation";
@@ -107,7 +115,7 @@ public class RecipeRecommendation {
                     public void onSuccess(Map<String, List<RefrigeratorIngredientVO>> ingredientMap) {
                         Map<String, FridgeIngredient> convertedIngredients = convertToFridgeIngredients(ingredientMap);
                         callback.onSuccess(convertedIngredients);
-                        Log.i("TAG",convertedIngredients.toString());
+                        Log.i("TAG", convertedIngredients.toString());
                     }
 
                     @Override
@@ -261,7 +269,7 @@ public class RecipeRecommendation {
     private float calculateFinalScore(float matchScore, float expiryScore,
                                       int cookingTime, String difficulty) {
         float baseScore = (matchScore * MATCH_WEIGHT) + (expiryScore * EXPIRY_WEIGHT);
-        float timeDeduction = (cookingTime / (float)COOKING_TIME_THRESHOLD) * TIME_PENALTY_WEIGHT;
+        float timeDeduction = (cookingTime / (float) COOKING_TIME_THRESHOLD) * TIME_PENALTY_WEIGHT;
         float difficultyMultiplier = getDifficultyMultiplier(difficulty);
 
         return (baseScore - timeDeduction) * difficultyMultiplier;
@@ -293,9 +301,15 @@ public class RecipeRecommendation {
 
     // 內部類：冰箱食材
     public static class FridgeIngredient {
-        private final String name;
-        private final float quantity;
-        private final long expiryDays;
+        private String name;
+        private float quantity;
+        private long expiryDays;
+
+        public FridgeIngredient(String name, float quantity, long expiryDays) {
+            this.name = name;
+            this.quantity = quantity;
+            this.expiryDays = expiryDays;
+        }
 
         public FridgeIngredient(String name, float quantity, Calendar today, int daysToAdd) {
             this.name = name;
@@ -306,9 +320,25 @@ public class RecipeRecommendation {
                     / (1000 * 60 * 60 * 24);
         }
 
-        public String getName() { return name; }
-        public float getQuantity() { return quantity; }
-        public long getExpiryDays() { return expiryDays; }
+        public String getName() {
+            return name;
+        }
+
+        public float getQuantity() {
+            return quantity;
+        }
+
+        public long getExpiryDays() {
+            return expiryDays;
+        }
+
+        public void setQuantity(float quantity) {
+            this.quantity = quantity;
+        }
+
+        public void setExpiryDays(long expiryDays) {
+            this.expiryDays = expiryDays;
+        }
     }
 
     // 內部類：推薦結果
@@ -325,15 +355,27 @@ public class RecipeRecommendation {
             this.combinedScore = scores.get("combinedScore");
         }
 
-        public Recipe getRecipe() { return recipe; }
-        public float getMatchScore() { return matchScore; }
-        public float getExpiryScore() { return expiryScore; }
-        public float getCombinedScore() { return combinedScore; }
+        public Recipe getRecipe() {
+            return recipe;
+        }
+
+        public float getMatchScore() {
+            return matchScore;
+        }
+
+        public float getExpiryScore() {
+            return expiryScore;
+        }
+
+        public float getCombinedScore() {
+            return combinedScore;
+        }
     }
 
     // 接口：初始化回調
     public interface InitCallback {
         void onSuccess(Map<String, FridgeIngredient> fridgeIngredients);
+
         void onError(String errorMessage);
     }
 }
