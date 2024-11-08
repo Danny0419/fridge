@@ -164,4 +164,8 @@ public class RefrigeratorIngredientRepository {
         int today = Integer.parseInt(format);
         return refrigeratorIngredientDAO.getExpirationDaysLesserThanThreeDaysIngredients(today);
     }
+
+    public void editIngredientQuantity(RefrigeratorIngredient refrigeratorIngredient) {
+        refrigeratorIngredientDAO.updateRefrigeratorIngredientQuantity(refrigeratorIngredient);
+    }
 }

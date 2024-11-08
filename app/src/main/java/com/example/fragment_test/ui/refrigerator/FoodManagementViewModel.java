@@ -99,4 +99,21 @@ public class FoodManagementViewModel extends AndroidViewModel {
                     }
                 });
     }
+
+    public void editIngredientQuantity(RefrigeratorIngredient refrigeratorIngredient) {
+        Completable.fromAction(() -> repository.editIngredientQuantity(refrigeratorIngredient))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        loadRefrigeratorIngredients();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
 }

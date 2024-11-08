@@ -33,7 +33,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            recipeImg = itemView.findViewById(R.id.recipeImg);
+//            recipeImg = itemView.findViewById(R.id.recipeImg);
             recipeName = itemView.findViewById(R.id.recipeName);
             needs = itemView.findViewById(R.id.need_ingredients);
         }
