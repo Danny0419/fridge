@@ -117,6 +117,23 @@ public class ShoppingListViewModel extends AndroidViewModel {
                 });
     }
 
+    public void editShoppingItem(ShoppingItemVO shoppingItemVO, int editedQuantity) {
+        Completable.fromAction(() -> repository.editShoppingItem(shoppingItemVO, editedQuantity))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        loadShoppingList();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
     public void deleteShoppingItem(ShoppingItemVO shoppingItemVO) {
         Completable.fromAction(() -> repository.deleteShoppingItem(shoppingItemVO))
                 .subscribeOn(Schedulers.io())

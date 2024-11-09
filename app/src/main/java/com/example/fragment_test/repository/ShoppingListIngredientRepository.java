@@ -105,4 +105,14 @@ public class ShoppingListIngredientRepository {
                 0)
         );
     }
+
+    public void editShoppingItem(ShoppingItemVO shoppingItemVO, int editedQuantity) {
+        int quantity = shoppingDAO.getShoppingItemQuantityByName(shoppingItemVO.name);
+        shoppingDAO.insertShoppingIngredient(new ShoppingIngredient(0,
+                shoppingItemVO.name,
+                shoppingItemVO.sort,
+                editedQuantity - quantity,
+                0)
+        );
+    }
 }

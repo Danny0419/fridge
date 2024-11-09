@@ -90,7 +90,8 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         shoppingItemEditDialogBinding.cancelButton.setOnClickListener(view -> dialog.dismiss());
 
         shoppingItemEditDialogBinding.editButton.setOnClickListener(view -> {
-//            mViewModel.editShoppingItem(shoppingItemVO);
+            mViewModel.editShoppingItem(shoppingItemVO, Integer.parseInt(shoppingItemEditDialogBinding.quantity.getText().toString()));
+            dialog.dismiss();
         });
 
         shoppingItemEditDialogBinding.deleteButton.setOnClickListener(view -> {

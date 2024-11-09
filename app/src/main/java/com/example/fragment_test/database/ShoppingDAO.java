@@ -46,4 +46,13 @@ public interface ShoppingDAO {
             """
     )
     List<ShoppingItemVO> getAllSumOfQuaGreaterThanZeroShoppingIngredientsGroupByName();
+
+    @Query(
+            """
+            SELECT sum(quantity)
+            FROM shopping_list
+            WHERE name = :name
+            """
+    )
+    int getShoppingItemQuantityByName(String name);
 }
