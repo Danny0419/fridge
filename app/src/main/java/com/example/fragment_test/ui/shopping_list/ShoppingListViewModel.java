@@ -25,8 +25,8 @@ import io.reactivex.schedulers.Schedulers;
 public class ShoppingListViewModel extends AndroidViewModel {
     private ShoppingListIngredientRepository repository;
     private MutableLiveData<List<ShoppingItemVO>> currShoppingList = new MutableLiveData<>();
-    private MutableLiveData<List<String>> allSorts =new MutableLiveData<>();
-    private MutableLiveData<List<String>> allSortOfIngredientsName =new MutableLiveData<>();
+    private MutableLiveData<List<String>> allSorts = new MutableLiveData<>();
+    private MutableLiveData<List<String>> allSortOfIngredientsName = new MutableLiveData<>();
 
     public ShoppingListViewModel(@NonNull Application application) {
         super(application);
@@ -108,6 +108,23 @@ public class ShoppingListViewModel extends AndroidViewModel {
                     @Override
                     public void onSuccess(List<String> names) {
                         allSortOfIngredientsName.setValue(names);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    public void deleteShoppingItem(ShoppingItemVO shoppingItemVO) {
+        Completable.fromAction(() -> repository.deleteShoppingItem(shoppingItemVO))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        loadShoppingList();
                     }
 
                     @Override

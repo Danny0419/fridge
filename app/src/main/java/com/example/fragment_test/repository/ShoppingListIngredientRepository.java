@@ -96,4 +96,13 @@ public class ShoppingListIngredientRepository {
     public Single<List<String>> getSortOfIngredientsName(String sort) {
         return shoppingService.getSortOfIngredientsName(sort);
     }
+
+    public void deleteShoppingItem(ShoppingItemVO shoppingItemVO) {
+        shoppingDAO.insertShoppingIngredient(new ShoppingIngredient(0,
+                shoppingItemVO.name,
+                shoppingItemVO.sort,
+                -shoppingItemVO.sumOfQuantity,
+                0)
+        );
+    }
 }
