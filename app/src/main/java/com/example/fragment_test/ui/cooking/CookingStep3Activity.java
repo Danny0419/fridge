@@ -3,18 +3,21 @@ package com.example.fragment_test.ui.cooking;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fragment_test.MainActivity2;
+import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.ActivityCookingStep3Binding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 
 public class CookingStep3Activity extends AppCompatActivity {
     private ActivityCookingStep3Binding activityCookingStep3Binding;
     private CookingViewModel viewModel;
+    private TextView title;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -38,6 +41,8 @@ public class CookingStep3Activity extends AppCompatActivity {
             startActivity(intent1);
         });
 
-
+        //未測試
+        title=findViewById(R.id.stepTitle);
+        title.setText("食材消耗確認");
     }
 }

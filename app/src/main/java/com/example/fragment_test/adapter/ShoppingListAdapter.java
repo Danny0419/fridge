@@ -64,7 +64,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.position.setText(Integer.toString(position));
         holder.shoppingItemName.setText(shoppingItems.get(position).name);
         holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
-        holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).sumOfQuantity));
+        holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).sumOfQuantity)+" g");
 //        Integer state = shoppingItems.get(position).getState();
 //        if (1 == state) {
 //            holder.shoppingItemState.setChecked(true);

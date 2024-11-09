@@ -49,7 +49,7 @@ public class ExpiringRefrigeratorIngredientsAdapterForHome extends RecyclerView.
     public void onBindViewHolder(@NonNull ExpiringRefrigeratorIngredientsViewHolderForHome holder, int position) {
         RefrigeratorIngredientDetailVO refrigeratorIngredient = refrigeratorIngredients.get(position);
         holder.ingredientName.setText(refrigeratorIngredient.name);
-        holder.ingredientQuantity.setText(refrigeratorIngredient.quantity + "");
+        holder.ingredientQuantity.setText(refrigeratorIngredient.quantity + " g");
         holder.remindNumber.setText(refrigeratorIngredient.daysRemaining + "");
     }
 

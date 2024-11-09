@@ -91,11 +91,15 @@ public class ScheduleFragment extends Fragment {
 
     private void setAWeek() {
         LocalDate today = LocalDate.now();
-        aWeek[today.getDayOfWeek().getValue() - 1] = today;
-        for (int i = 1; i < 7; i++) {
-            LocalDate date = today.plusDays(i);
-            aWeek[date.getDayOfWeek().getValue() - 1] = date;
+//        aWeek[today.getDayOfWeek().getValue() - 1] = today;
+        int todayIndex = today.getDayOfWeek().getValue() - 1;
+        for (int i = 0; i < 7; i++) {
+            aWeek[i] = today.plusDays(i);
         }
+//        for (int i = 1; i < 7; i++) {
+//            LocalDate date = today.plusDays(i);
+//            aWeek[date.getDayOfWeek().getValue() - 1] = date;
+//        }
     }
 
     @SuppressLint("ResourceAsColor")
