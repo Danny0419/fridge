@@ -13,4 +13,8 @@
     <color name="warnRed">#F15D5D</color>
     <color name="warnYellow">#FFC734</color>
     <color name="underLineGray">#F0EBEB</color>
+    <color name="selectRed">#FF5C5C</color>
+    <color name="tabBackgroundPink">#80FFDBDB</color>
+    <color name="tabStrokeGray">#C8C7C7</color>
+
 </resources>
