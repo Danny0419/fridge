@@ -7,9 +7,9 @@
 
     <Button
         android:id="@+id/buttonRecognizeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="開啟相簿選取圖片" />
+        android:layout_width="377dp"
+        android:layout_height="80dp"
+        android:text="掃描結果" />
 
 
 
