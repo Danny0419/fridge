@@ -70,13 +70,13 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
         holder.daysRemaining.setText("  " + (ingredient.earlyEx - today)+"天  ");
 
         //快過期提醒顏色
-        if((ingredient.earlyEx - today)<=3){
+        if ((ingredient.earlyEx - today) <= 3) {
             //如果小於3天，則背景變紅色、文字變白色
-            holder.daysRemaining.setBackgroundColor(ContextCompat.getColor(context, R.color.warnRed));
+            holder.daysRemaining.setBackgroundResource(R.drawable.warn_red_rectangle);
             holder.daysRemaining.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else if ((ingredient.earlyEx - today)<=7) {
-            //如果小於7天，則背景變黃橙色、文字變白色
-            holder.daysRemaining.setBackgroundColor(ContextCompat.getColor(context, R.color.warnYellow));
+        } else if ((ingredient.earlyEx - today) <= 7) {
+            //如果小於3天，則背景變黃色、文字變白色
+            holder.daysRemaining.setBackgroundResource(R.drawable.warn_yellow_rectangle);
             holder.daysRemaining.setTextColor(ContextCompat.getColor(context, R.color.white));
         }
     }
