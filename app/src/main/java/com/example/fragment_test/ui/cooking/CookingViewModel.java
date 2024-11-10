@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.repository.CookingRepository;
 
@@ -18,7 +19,7 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class CookingViewModel extends AndroidViewModel {
-    private final MutableLiveData<Boolean> areIngredientSufficient = new MutableLiveData<>();
+    private final SingleLiveData<Boolean> areIngredientSufficient = new SingleLiveData<>();
     private final CookingRepository cookingRepository;
     public CookingViewModel(@NonNull Application application) {
         super(application);

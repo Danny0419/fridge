@@ -81,7 +81,6 @@ public class StartCookingActivity extends AppCompatActivity {
         cookingViewModel.getAreIngredientSufficient()
                 .observe(this, aBoolean -> {
                     if (aBoolean) {
-                        cookingViewModel.getAreIngredientSufficient().setValue(false);
                         Intent intent = new Intent(this, CookingStep1Activity.class);
                         intent.putExtra("cookingRecipe", scheduleRecipe);
                         startActivity(intent);

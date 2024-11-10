@@ -1,7 +1,5 @@
 package com.example.fragment_test.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +19,11 @@ import java.util.List;
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
     List<ShoppingItemVO> shoppingItems;
-    Context context;
+    ShoppingItemEditedListener shoppingItemEditedListener;
+
+    public interface ShoppingItemEditedListener {
+        void shoppingItemEdited(ShoppingItemVO shoppingItemVO);
+    }
 
     class ShoppingListViewHolder extends RecyclerView.ViewHolder {
 
@@ -42,9 +43,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public ShoppingListAdapter(List<ShoppingItemVO> shoppingItems, Context context) {
+    public ShoppingListAdapter(List<ShoppingItemVO> shoppingItems) {
         this.shoppingItems = shoppingItems;
-        this.context = context;
     }
 
     @NonNull
@@ -57,52 +57,29 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public void onBindViewHolder(@NonNull ShoppingListViewHolder holder, int position) {
         if (position % 2 != 0) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
         } else {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.pink));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pink));
         }
 
+        ShoppingItemVO shoppingItemVO = shoppingItems.get(position);
         holder.position.setText(Integer.toString(position));
-        holder.shoppingItemName.setText(shoppingItems.get(position).name);
-        holder.shoppingItemSort.setText(shoppingItems.get(position).sort);
-        holder.shoppingItemQuantity.setText(Integer.toString(shoppingItems.get(position).sumOfQuantity)+" g");
-//        Integer state = shoppingItems.get(position).getState();
-//        if (1 == state) {
-//            holder.shoppingItemState.setChecked(true);
-//        }
+        holder.shoppingItemName.setText(shoppingItemVO.name);
+        holder.shoppingItemSort.setText(shoppingItemVO.sort);
+        holder.shoppingItemQuantity.setText(shoppingItemVO.sumOfQuantity + " g");
 
-         holder.itemView.setOnClickListener(view -> {
-             Log.e("測試", "a");
-         });
-        holder.editBtn.setOnClickListener(view -> showEditDialog(position));
+        holder.itemView
+                .setOnClickListener(view -> this.shoppingItemEditedListener.shoppingItemEdited(shoppingItemVO));
 
-        holder.deleteBtn.setOnClickListener(view -> showDeleteDialog(position));
-    }
 
-    private void showEditDialog(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("编辑项")
-                .setMessage("编辑此购物项？")
-                .setPositiveButton("确认", (dialog, which) -> {
-                    // 编辑逻辑
-                })
-                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
-    private void showDeleteDialog(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("确认删除")
-                .setMessage("确定要删除此购物项吗？")
-                .setPositiveButton("删除", (dialog, which) -> {
-                    // 删除逻辑
-                })
-                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                .show();
     }
 
     @Override
     public int getItemCount() {
         return shoppingItems.size();
+    }
+
+    public void setShoppingItemEditedListener(ShoppingItemEditedListener shoppingItemEditedListener) {
+        this.shoppingItemEditedListener = shoppingItemEditedListener;
     }
 }

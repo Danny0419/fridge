@@ -19,6 +19,8 @@ public class RefrigeratorIngredient extends Ingredient {
     public String unit;
     @Ignore
     public Integer savingDay;
+    @Ignore
+    public int daysRemaining;
 
     public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, String unit) {
         super(id, name, quantity);
@@ -41,5 +43,9 @@ public class RefrigeratorIngredient extends Ingredient {
     @NonNull
     public String getSort() {
         return sort;
+    }
+
+    public void setDaysRemaining(int daysRemaining) {
+        this.daysRemaining = daysRemaining;
     }
 }

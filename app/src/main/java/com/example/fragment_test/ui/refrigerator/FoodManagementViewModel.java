@@ -3,14 +3,12 @@ package com.example.fragment_test.ui.refrigerator;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-//import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
-import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FoodManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<Map<String, List<RefrigeratorIngredientVO>>> refrigeratorIngredients = new MutableLiveData<>();
-    private final MutableLiveData<List<RefrigeratorIngredientDetailVO>> ingredientDetails = new MutableLiveData<>();
+    private final MutableLiveData<List<RefrigeratorIngredient>> ingredientDetails = new MutableLiveData<>();
     private final RefrigeratorIngredientRepository repository;
 
     public FoodManagementViewModel(@NonNull Application application) {
@@ -76,7 +74,7 @@ public class FoodManagementViewModel extends AndroidViewModel {
         return refrigeratorIngredients;
     }
 
-    public MutableLiveData<List<RefrigeratorIngredientDetailVO>> getIngredientDetails() {
+    public MutableLiveData<List<RefrigeratorIngredient>> getIngredientDetails() {
         return ingredientDetails;
     }
 
@@ -84,9 +82,9 @@ public class FoodManagementViewModel extends AndroidViewModel {
         Maybe.fromCallable(() -> repository.searchRefrigeratorIngredientDetail(refrigeratorIngredient))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredientDetailVO>>() {
+                .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredient>>() {
                     @Override
-                    public void onSuccess(List<RefrigeratorIngredientDetailVO> refrigeratorIngredientDetailVOS) {
+                    public void onSuccess(List<RefrigeratorIngredient> refrigeratorIngredientDetailVOS) {
                         ingredientDetails.setValue(refrigeratorIngredientDetailVOS);
                     }
 
@@ -97,6 +95,23 @@ public class FoodManagementViewModel extends AndroidViewModel {
 
                     @Override
                     public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void editIngredientQuantity(RefrigeratorIngredient refrigeratorIngredient) {
+        Completable.fromAction(() -> repository.editIngredientQuantity(refrigeratorIngredient))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        loadRefrigeratorIngredients();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
 
                     }
                 });

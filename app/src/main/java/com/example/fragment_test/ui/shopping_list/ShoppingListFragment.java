@@ -19,14 +19,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
-import com.example.fragment_test.SwipeController;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.databinding.FragmentShoppingListBinding;
+import com.example.fragment_test.databinding.ShoppingItemEditDialogBinding;
 import com.example.fragment_test.databinding.ShoppinglistAlterDialogBinding;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.example.fragment_test.vo.ShoppingItemVO;
@@ -63,13 +62,18 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             public void onChanged(List<ShoppingItemVO> shoppingIngredients) {
                 layoutManager = new LinearLayoutManager(getContext());
                 shoppingListItemRecycleView.setLayoutManager(layoutManager);
-                ShoppingListAdapter adapter = new ShoppingListAdapter(shoppingIngredients, getContext());
+                ShoppingListAdapter adapter = new ShoppingListAdapter(shoppingIngredients);
+                adapter.setShoppingItemEditedListener(shoppingItem -> {
+                    ShoppingItemEditDialogBinding shoppingItemEditDialogBinding = ShoppingItemEditDialogBinding.inflate(getLayoutInflater());
+                    dialog.setContentView(shoppingItemEditDialogBinding.getRoot());
+                    setShoppingEditDialogAttribute(shoppingItem, shoppingItemEditDialogBinding);
+                    dialog.show();
+
+                    setShoppingEditDialogBtnOnClickListener(shoppingItem, shoppingItemEditDialogBinding, dialog);
+                });
                 shoppingListItemRecycleView.setAdapter(adapter);
 
-                // 滑動刪除＆編輯
-//                SwipeController swipeController = new SwipeController(requireContext());
-//                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
-//                itemTouchHelper.attachToRecyclerView(shoppingListItemRecycleView);
+
             }
         });
         // 應急用調整彈跳視窗大小
@@ -80,6 +84,26 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
 
         return view;
+    }
+
+    private void setShoppingEditDialogBtnOnClickListener(ShoppingItemVO shoppingItemVO, ShoppingItemEditDialogBinding shoppingItemEditDialogBinding, Dialog dialog) {
+        shoppingItemEditDialogBinding.cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        shoppingItemEditDialogBinding.editButton.setOnClickListener(view -> {
+            mViewModel.editShoppingItem(shoppingItemVO, Integer.parseInt(shoppingItemEditDialogBinding.quantity.getText().toString()));
+            dialog.dismiss();
+        });
+
+        shoppingItemEditDialogBinding.deleteButton.setOnClickListener(view -> {
+            mViewModel.deleteShoppingItem(shoppingItemVO);
+            dialog.dismiss();
+        });
+    }
+
+    private void setShoppingEditDialogAttribute(ShoppingItemVO shoppingItem, ShoppingItemEditDialogBinding shoppingItemEditDialogBinding) {
+        shoppingItemEditDialogBinding.name.setText(shoppingItem.name);
+        shoppingItemEditDialogBinding.sort.setText(shoppingItem.sort);
+        shoppingItemEditDialogBinding.quantity.setText(shoppingItem.sumOfQuantity + "");
     }
 
     private View initialize(LayoutInflater inflater, ViewGroup container) {

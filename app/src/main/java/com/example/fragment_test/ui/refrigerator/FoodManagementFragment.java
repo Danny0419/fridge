@@ -108,7 +108,12 @@ public class FoodManagementFragment extends Fragment {
                             .observe(getViewLifecycleOwner(), (ingredientVOS) -> {
                                 RecyclerView refrigeratorItemDetail = refrigeratorItemDetailDialogBinding.refrigeratorItemDetail;
                                 refrigeratorItemDetail.setLayoutManager(new LinearLayoutManager(getContext()));
-                                refrigeratorItemDetail.setAdapter(new RefrigeratorIngredientDetailAdapter(ingredientVOS));
+                                RefrigeratorIngredientDetailAdapter refrigeratorIngredientDetailAdapter = new RefrigeratorIngredientDetailAdapter(ingredientVOS);
+                                refrigeratorIngredientDetailAdapter.setTextChangedListener((o, q) -> {
+                                    o.setQuantity(q);
+                                    viewModel.editIngredientQuantity(o);
+                                });
+                                refrigeratorItemDetail.setAdapter(refrigeratorIngredientDetailAdapter);
                                 ingredientDetail.show();
                             });
                 });
