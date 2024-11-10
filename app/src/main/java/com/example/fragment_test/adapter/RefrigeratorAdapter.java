@@ -1,5 +1,7 @@
 package com.example.fragment_test.adapter;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.utils.DividerItemDecoration;
 import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
 import java.util.ArrayList;
@@ -55,9 +59,16 @@ public class RefrigeratorAdapter extends RecyclerView.Adapter<RefrigeratorAdapte
         List<RefrigeratorIngredientVO> kindOfIngredient = refrigeratorMap.get(kinds.get(position));
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         holder.kindOfIngredientContainer.setLayoutManager(layoutManager);
-        RefrigeratorEachIngredientAdapter ingredientAdapter = new RefrigeratorEachIngredientAdapter((kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
+
+        //設定列表加下底線(最後一行除外)
+        holder.kindOfIngredientContainer.addItemDecoration(new DividerItemDecoration(context, context.getResources().getColor(R.color.underLineGray), context.getResources().getDimensionPixelSize(R.dimen.divider_height)));
+//        holder.kindOfIngredientContainer.addItemDecoration(new DividerItemDecoration(context));
+
+        RefrigeratorEachIngredientAdapter ingredientAdapter = new RefrigeratorEachIngredientAdapter(context,(kindOfIngredient != null ? kindOfIngredient : new ArrayList<>()));
         ingredientAdapter.setOnClickListener(onClickListener);
         holder.kindOfIngredientContainer.setAdapter(ingredientAdapter);
+
+
     }
 
     public interface OnClickListener {

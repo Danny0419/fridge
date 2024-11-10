@@ -67,9 +67,9 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 shoppingListItemRecycleView.setAdapter(adapter);
 
                 // 滑動刪除＆編輯
-                SwipeController swipeController = new SwipeController(requireContext());
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
-                itemTouchHelper.attachToRecyclerView(shoppingListItemRecycleView);
+//                SwipeController swipeController = new SwipeController(requireContext());
+//                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
+//                itemTouchHelper.attachToRecyclerView(shoppingListItemRecycleView);
             }
         });
         // 應急用調整彈跳視窗大小

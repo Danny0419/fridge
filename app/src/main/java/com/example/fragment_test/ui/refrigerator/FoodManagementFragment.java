@@ -1,6 +1,7 @@
 package com.example.fragment_test.ui.refrigerator;
 
 import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
+import static com.example.fragment_test.utils.setListBackground.setListUnderLine;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.example.fragment_test.adapter.RefrigeratorAdapter;
 import com.example.fragment_test.adapter.RefrigeratorIngredientDetailAdapter;
 import com.example.fragment_test.databinding.FragmentRefrigeratorBinding;
 import com.example.fragment_test.databinding.RefrigeratorItemDetailDialogBinding;
+import com.example.fragment_test.utils.DividerItemDecoration;
 import com.google.android.material.tabs.TabLayout;
 
 /**
@@ -115,8 +117,9 @@ public class FoodManagementFragment extends Fragment {
                         tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
                 });
 
-                //設定奇偶行數背景顏色
-                setListBackgroundColor(ingredientContainer,requireContext());
+                //設定列表加下底線(最後一行除外)
+//            ingredientContainer.addItemDecoration(new DividerItemDecoration(getContext()));
+
         });
 
 

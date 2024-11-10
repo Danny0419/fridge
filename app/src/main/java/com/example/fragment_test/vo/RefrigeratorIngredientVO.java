@@ -38,4 +38,15 @@ public class RefrigeratorIngredientVO {
     public String getSort() {
         return sort;
     }
+
+    public String getLastEx(){
+        String stringLastEx = String.valueOf(lastEx);
+
+        String year = stringLastEx.substring(2, 4);
+        String month = stringLastEx.substring(4, 6);
+        String day = stringLastEx.substring(6, 8);
+
+        stringLastEx = year + "/" + month + "/" + day;
+        return stringLastEx;
+    }
 }
