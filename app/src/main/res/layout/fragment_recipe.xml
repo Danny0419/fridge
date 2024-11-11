@@ -21,8 +21,8 @@
                 android:layout_weight="1"
                 android:text="@string/RecipePageTitleForName"
                 android:gravity="center"
-                android:fontFamily="@font/bold"
-                android:textSize="24dp"/>
+                android:fontFamily="@font/regular"
+                android:textSize="20dp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -30,8 +30,8 @@
                 android:layout_weight="1"
                 android:text="所需食材"
                 android:gravity="center"
-                android:fontFamily="@font/bold"
-                android:textSize="24dp"/>
+                android:fontFamily="@font/regular"
+                android:textSize="20dp"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

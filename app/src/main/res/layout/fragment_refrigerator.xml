@@ -19,10 +19,9 @@
             app:tabBackground="@drawable/tab_background"
             app:tabIndicatorColor="@color/selectRed"
             app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="@color/black"
-            app:tabTextColor="@color/black"
             app:tabMode="fixed"
-            app:tabGravity="fill"/>
+            app:tabGravity="fill"
+            app:tabTextAppearance="@style/CustomTabTextAppearance"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/kinds_of_ingredient_container"
