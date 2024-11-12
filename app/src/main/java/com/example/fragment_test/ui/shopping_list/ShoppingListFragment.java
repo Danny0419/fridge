@@ -36,9 +36,11 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
     private FragmentShoppingListBinding binding;
     private ShoppinglistAlterDialogBinding dialogBinding;
+    private ShoppingItemEditDialogBinding shoppingItemEditDialogBinding;
     private ShoppingListViewModel mViewModel;
     private RecyclerView shoppingListItemRecycleView;
-    private Dialog dialog;
+    private Dialog addItemDialog;
+    private Dialog editItemDialog;
     private RecyclerView.LayoutManager layoutManager;
 
     public static ShoppingListFragment newInstance() {
@@ -50,6 +52,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ShoppingListViewModel.class);
         mViewModel.loadShoppingList();
+
     }
 
     @Override
@@ -57,6 +60,10 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
 
         View view = initialize(inflater, container);
+
+        // 應急用調整彈跳視窗大小
+
+
         mViewModel.getCurrShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingItemVO>>() {
             @Override
             public void onChanged(List<ShoppingItemVO> shoppingIngredients) {
@@ -64,39 +71,30 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 shoppingListItemRecycleView.setLayoutManager(layoutManager);
                 ShoppingListAdapter adapter = new ShoppingListAdapter(shoppingIngredients);
                 adapter.setShoppingItemEditedListener(shoppingItem -> {
-                    ShoppingItemEditDialogBinding shoppingItemEditDialogBinding = ShoppingItemEditDialogBinding.inflate(getLayoutInflater());
-                    dialog.setContentView(shoppingItemEditDialogBinding.getRoot());
                     setShoppingEditDialogAttribute(shoppingItem, shoppingItemEditDialogBinding);
-                    dialog.show();
+                    editItemDialog.show();
 
-                    setShoppingEditDialogBtnOnClickListener(shoppingItem, shoppingItemEditDialogBinding, dialog);
+                    setShoppingEditDialogBtnOnClickListener(shoppingItem, shoppingItemEditDialogBinding);
                 });
                 shoppingListItemRecycleView.setAdapter(adapter);
 
 
             }
         });
-        // 應急用調整彈跳視窗大小
-        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-        layoutParams.width = 1000;
-        layoutParams.height = 1020;
-        dialog.getWindow().setAttributes(layoutParams);
-
-
         return view;
     }
 
-    private void setShoppingEditDialogBtnOnClickListener(ShoppingItemVO shoppingItemVO, ShoppingItemEditDialogBinding shoppingItemEditDialogBinding, Dialog dialog) {
-        shoppingItemEditDialogBinding.cancelButton.setOnClickListener(view -> dialog.dismiss());
+    private void setShoppingEditDialogBtnOnClickListener(ShoppingItemVO shoppingItemVO, ShoppingItemEditDialogBinding shoppingItemEditDialogBinding) {
+        shoppingItemEditDialogBinding.cancelButton.setOnClickListener(view -> editItemDialog.dismiss());
 
         shoppingItemEditDialogBinding.editButton.setOnClickListener(view -> {
             mViewModel.editShoppingItem(shoppingItemVO, Integer.parseInt(shoppingItemEditDialogBinding.quantity.getText().toString()));
-            dialog.dismiss();
+            editItemDialog.dismiss();
         });
 
         shoppingItemEditDialogBinding.deleteButton.setOnClickListener(view -> {
             mViewModel.deleteShoppingItem(shoppingItemVO);
-            dialog.dismiss();
+            editItemDialog.dismiss();
         });
     }
 
@@ -109,6 +107,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     private View initialize(LayoutInflater inflater, ViewGroup container) {
 
         binding = FragmentShoppingListBinding.inflate(inflater, container, false);
+        shoppingItemEditDialogBinding = ShoppingItemEditDialogBinding.inflate(getLayoutInflater());
         shoppingListItemRecycleView = binding.getRoot().findViewById(R.id.shoppingListItemRecyclerview);
         layoutManager = new LinearLayoutManager(getContext());
 
@@ -123,10 +122,22 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         Button dialogCancelBtn = dialogBinding.cancelButton;
         Button dialogConfirmBtn = dialogBinding.confirmButton;
 
+        addItemDialog = new Dialog(getContext());
+        addItemDialog.setContentView(dialogBinding.getRoot());
+        addItemDialog.setCancelable(false);
+        WindowManager.LayoutParams layoutParams = addItemDialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1020;
+        addItemDialog.getWindow().setAttributes(layoutParams);
 
-        dialog = new Dialog(getContext());
-        dialog.setContentView(dialogBinding.getRoot());
-        dialog.setCancelable(false);
+        editItemDialog = new Dialog(getContext());
+        editItemDialog.setContentView(shoppingItemEditDialogBinding.getRoot());
+        editItemDialog.setCancelable(false);
+        WindowManager.LayoutParams layoutParams1 = editItemDialog.getWindow().getAttributes();
+//        layoutParams1.width = 1000;
+//        layoutParams1.height = 1020;
+        editItemDialog.getWindow().setAttributes(layoutParams);
+
 
         dialogCancelBtn.setOnClickListener(this);
         dialogConfirmBtn.setOnClickListener(this);
@@ -142,11 +153,11 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             mViewModel.getAllSorts()
                     .observe(getViewLifecycleOwner(), strings -> {
                         initialSpinner(dialogBinding.sortSpinner, dialogBinding.nameSpinner, strings);
-                        dialog.show();
+                        addItemDialog.show();
                     });
         } else if (clickedId == R.id.cancel_button) {
             dialogBinding.quantity.setText("");
-            dialog.dismiss();
+            addItemDialog.dismiss();
 
         } else if (clickedId == R.id.confirm_button) {
             try {
@@ -157,7 +168,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
                 mViewModel.addShoppingItem(ingredient);
                 dialogBinding.quantity.setText("");
-                dialog.dismiss();
+                addItemDialog.dismiss();
             } catch (NumberFormatException e) {
                 Toast.makeText(getContext(), "請輸入數量", Toast.LENGTH_SHORT).show();
             }
