@@ -174,7 +174,7 @@ public class RecipeRecommendation {
         float finalScore = calculateFinalScore(
                 matchScore,
                 expiryScore,
-                30,
+                recipe.getCooking_time(),
                 "簡易"
         );
 

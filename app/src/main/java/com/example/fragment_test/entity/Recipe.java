@@ -59,6 +59,10 @@ public class Recipe implements Parcelable {
         this.ingredients = ingredients;
     }
 
+    public Recipe() {
+
+    }
+
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;
     }

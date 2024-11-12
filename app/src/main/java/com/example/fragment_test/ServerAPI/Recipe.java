@@ -6,6 +6,7 @@ public class Recipe {
     private int recipe_id;
     private String recipe_name;
     private List<Ingredient> ingredients;
+    private int cooking_time;
     private String image;
     private int serving;
 
@@ -35,6 +36,14 @@ public class Recipe {
 
         public void setIngredient_need(String ingredient_need) {this.ingredient_need = ingredient_need;}
         // Getter and Setter methods
+    }
+
+    public int getCooking_time() {
+        return cooking_time;
+    }
+
+    public void setCooking_time(int cooking_time) {
+        this.cooking_time = cooking_time;
     }
 
     public String getImage() { return image; }
