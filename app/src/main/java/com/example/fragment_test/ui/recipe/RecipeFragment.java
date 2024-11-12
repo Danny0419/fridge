@@ -149,9 +149,13 @@ public class RecipeFragment extends Fragment {
                         List<RecipeIngredient> ingredients = new ArrayList<>();
                         recipe.getIngredients()
                                 .forEach(o1 -> {
-                                    String ingredientNeed = o1.getIngredient_need();
-                                    String quantity = ingredientNeed.substring(0, ingredientNeed.length() - 1);
-                                    ingredients.add(new RecipeIngredient(o1.getIngredient_name(), Integer.parseInt(quantity)));
+                                    try {
+                                        String ingredientNeed = o1.getIngredient_need();
+                                        String quantity = ingredientNeed.substring(0, ingredientNeed.length() - 1);
+                                        ingredients.add(new RecipeIngredient(o1.getIngredient_name(), Integer.parseInt(quantity)));
+                                    } catch (Exception e) {
+
+                                    }
                                 });
                         r.setIngredients(ingredients);
                         return r;
