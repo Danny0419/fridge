@@ -3,40 +3,114 @@ package com.example.fragment_test.ui.home;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fragment_test.database.FridgeDatabase;
-import com.example.fragment_test.database.InvoiceDAO;
-import com.example.fragment_test.database.InvoiceItemDAO;
-import com.example.fragment_test.entity.InvoiceWithItems;
+import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.repository.RefrigeratorIngredientRepository;
+import com.example.fragment_test.repository.ScheduleRecipeRepository;
+import com.example.fragment_test.repository.ShoppingListIngredientRepository;
+import com.example.fragment_test.vo.RefrigeratorIngredientDetailVO;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.schedulers.Schedulers;
+
 public class HomeViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<String> mText;
-    private final LiveData<List<InvoiceWithItems>> invoiceWithItemsList;
+    private final MutableLiveData<List<Recipe>> scheduleRecipesOfToday = new MutableLiveData<>();
+    private final MutableLiveData<List<ShoppingItemVO>> shoppingList= new MutableLiveData<>();
+    private final MutableLiveData<List<RefrigeratorIngredientDetailVO>> expiringIngredients = new MutableLiveData<>();
+
+    private final ScheduleRecipeRepository scheduleRecipeRepository;
+    private final ShoppingListIngredientRepository shoppingListIngredientRepository;
+    private final RefrigeratorIngredientRepository refrigeratorIngredientRepository;
 
     public HomeViewModel(Application application) {
         super(application);
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-
-        // 获取数据库实例
-        FridgeDatabase db = FridgeDatabase.getInstance(application);
-        InvoiceDAO invoiceDAO = db.invoiceDAO();
-        InvoiceItemDAO invoiceItemDAO = db.invoiceItemDAO();
-
-        // 查询所有发票及其品项
-        invoiceWithItemsList = invoiceDAO.getAllInvoicesWithItems();
+        this.scheduleRecipeRepository = ScheduleRecipeRepository.getInstance(application);
+        this.shoppingListIngredientRepository = ShoppingListIngredientRepository.getInstance(application);
+        this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void loadScheduleRecipesOfToday(int date) {
+        Maybe.fromCallable(() ->scheduleRecipeRepository.getSpecificDateScheduledRecipes(date))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<Recipe>>() {
+                    @Override
+                    public void onSuccess(List<Recipe> recipes) {
+                        scheduleRecipesOfToday.setValue(recipes);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
-    public LiveData<List<InvoiceWithItems>> getInvoiceWithItemsList() {
-        return invoiceWithItemsList;
+    public void loadShoppingList() {
+        Maybe.fromCallable(shoppingListIngredientRepository::getShoppingList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<ShoppingItemVO>>() {
+                    @Override
+                    public void onSuccess(List<ShoppingItemVO> shoppingItemVOS) {
+                        shoppingList.setValue(shoppingItemVOS);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void loadExpiringRefrigeratorIngredient() {
+        Maybe.fromCallable(refrigeratorIngredientRepository::getRefrigeratorExpiringIngredients)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<RefrigeratorIngredientDetailVO>>() {
+                    @Override
+                    public void onSuccess(List<RefrigeratorIngredientDetailVO> refrigeratorIngredientDetailVOS) {
+                        expiringIngredients.setValue(refrigeratorIngredientDetailVOS);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public MutableLiveData<List<Recipe>> getScheduleRecipesOfToday() {
+        return scheduleRecipesOfToday;
+    }
+
+    public MutableLiveData<List<ShoppingItemVO>> getShoppingList() {
+        return shoppingList;
+    }
+
+    public MutableLiveData<List<RefrigeratorIngredientDetailVO>> getExpiringIngredients() {
+        return expiringIngredients;
     }
 }

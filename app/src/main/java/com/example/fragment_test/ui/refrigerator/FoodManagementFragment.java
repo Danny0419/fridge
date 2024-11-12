@@ -1,6 +1,7 @@
 package com.example.fragment_test.ui.refrigerator;
 
 import static com.example.fragment_test.utils.setListBackground.setListBackgroundColor;
+import static com.example.fragment_test.utils.setListBackground.setListUnderLine;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.example.fragment_test.adapter.RefrigeratorAdapter;
 import com.example.fragment_test.adapter.RefrigeratorIngredientDetailAdapter;
 import com.example.fragment_test.databinding.FragmentRefrigeratorBinding;
 import com.example.fragment_test.databinding.RefrigeratorItemDetailDialogBinding;
+import com.example.fragment_test.utils.DividerItemDecoration;
 import com.google.android.material.tabs.TabLayout;
 
 /**
@@ -106,7 +108,12 @@ public class FoodManagementFragment extends Fragment {
                             .observe(getViewLifecycleOwner(), (ingredientVOS) -> {
                                 RecyclerView refrigeratorItemDetail = refrigeratorItemDetailDialogBinding.refrigeratorItemDetail;
                                 refrigeratorItemDetail.setLayoutManager(new LinearLayoutManager(getContext()));
-                                refrigeratorItemDetail.setAdapter(new RefrigeratorIngredientDetailAdapter(ingredientVOS));
+                                RefrigeratorIngredientDetailAdapter refrigeratorIngredientDetailAdapter = new RefrigeratorIngredientDetailAdapter(ingredientVOS);
+                                refrigeratorIngredientDetailAdapter.setTextChangedListener((o, q) -> {
+                                    o.setQuantity(q);
+                                    viewModel.editIngredientQuantity(o);
+                                });
+                                refrigeratorItemDetail.setAdapter(refrigeratorIngredientDetailAdapter);
                                 ingredientDetail.show();
                             });
                 });
@@ -115,8 +122,9 @@ public class FoodManagementFragment extends Fragment {
                         tabLayout.setScrollPosition(layoutManager.findFirstVisibleItemPosition(), 0, true);
                 });
 
-                //設定奇偶行數背景顏色
-                setListBackgroundColor(ingredientContainer,requireContext());
+                //設定列表加下底線(最後一行除外)
+//            ingredientContainer.addItemDecoration(new DividerItemDecoration(getContext()));
+
         });
 
 
@@ -177,7 +185,7 @@ public class FoodManagementFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        String[] stringArray = getActivity().getResources().getStringArray(R.array.foodManagementTabLayoutTag);
+        String[] stringArray = getActivity().getResources().getStringArray(R.array.kinds_of_ingredient);
         for (int i = 0, n = stringArray.length; i < n; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(stringArray[i]));
         }

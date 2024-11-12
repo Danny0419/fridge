@@ -8,9 +8,21 @@
     tools:context=".ui.cooking.CookingStep1Activity">
 
     <include
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/recipe_introduction"/>
+        android:id="@+id/recipe_introduction"
+        layout="@layout/recipe_introduction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <include
+        android:id="@+id/recipe_steps"
+        layout="@layout/recipe_steps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_introduction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

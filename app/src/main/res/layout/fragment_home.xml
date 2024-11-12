@@ -29,6 +29,7 @@
             android:fontFamily="@font/bold"
             android:layout_marginBottom="12dp"/>
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/eatingForToday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -104,6 +105,7 @@
             android:layout_marginBottom="11dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shoppingList_recycle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -145,6 +147,7 @@
             android:layout_marginBottom="11dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expiring_ingredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

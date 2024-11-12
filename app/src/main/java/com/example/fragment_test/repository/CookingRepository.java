@@ -46,7 +46,7 @@ public class CookingRepository {
             List<RefrigeratorIngredient> ingredients = refrigeratorIngredientsSortedByName.get(usedIngredient.name);
             int usedIngredientQuantity = usedIngredient.quantity;
             for (int j = 0; usedIngredientQuantity > 0 && j < ingredients.size(); j++) {
-                RefrigeratorIngredient ingredient = ingredients.get(i);
+                RefrigeratorIngredient ingredient = ingredients.get(j);
                 int ingredientQuantity = ingredient.quantity;
 
                 int diff = ingredientQuantity - usedIngredientQuantity;

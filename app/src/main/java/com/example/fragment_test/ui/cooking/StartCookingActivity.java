@@ -62,7 +62,7 @@ public class StartCookingActivity extends AppCompatActivity {
 
         RecipeIntroductionBinding recipeIntroduction = activityStartCookingBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(scheduleRecipe.recipe.name);
-        recipeIntroduction.recipeImg.setText(scheduleRecipe.recipe.img);
+//        recipeIntroduction.recipeImg.setText(scheduleRecipe.recipe.img);
         recipeIntroduction.recipeServing.setText(Integer.toString(scheduleRecipe.recipe.serving));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
@@ -81,7 +81,6 @@ public class StartCookingActivity extends AppCompatActivity {
         cookingViewModel.getAreIngredientSufficient()
                 .observe(this, aBoolean -> {
                     if (aBoolean) {
-                        cookingViewModel.getAreIngredientSufficient().setValue(false);
                         Intent intent = new Intent(this, CookingStep1Activity.class);
                         intent.putExtra("cookingRecipe", scheduleRecipe);
                         startActivity(intent);

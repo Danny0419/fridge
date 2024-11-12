@@ -13,6 +13,8 @@
 
 
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <queries>
         <package android:name="com.google.zxing.client.android" />
     </queries>

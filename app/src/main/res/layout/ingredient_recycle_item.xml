@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="石材圖片"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:src="@drawable/photo"/>
 
     <TextView
         android:layout_width="match_parent"

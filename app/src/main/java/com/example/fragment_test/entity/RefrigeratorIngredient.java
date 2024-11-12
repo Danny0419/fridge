@@ -16,15 +16,22 @@ public class RefrigeratorIngredient extends Ingredient {
     @ColumnInfo
     public Integer expiration;
     @ColumnInfo
-    public Integer state;
+    public String unit;
     @Ignore
     public Integer savingDay;
-
     @Ignore
-    public RefrigeratorIngredient(@NonNull String name, int quantity) {
-        super(name, quantity);
+    public int daysRemaining;
+
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, String unit) {
+        super(id, name, quantity);
+        this.img = img;
+        this.sort = sort;
+        this.purchaseDate = purchaseDate;
+        this.expiration = expiration;
+        this.unit = unit;
     }
 
+    @Ignore
     public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
         super(id, name, quantity);
         this.img = img;
@@ -33,18 +40,12 @@ public class RefrigeratorIngredient extends Ingredient {
         this.expiration = expiration;
     }
 
-    @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, Integer savingDay) {
-        super(id, name, quantity);
-        this.img = img;
-        this.sort = sort;
-        this.purchaseDate = purchaseDate;
-        this.expiration = expiration;
-        this.savingDay = savingDay;
-    }
-
     @NonNull
     public String getSort() {
         return sort;
+    }
+
+    public void setDaysRemaining(int daysRemaining) {
+        this.daysRemaining = daysRemaining;
     }
 }
