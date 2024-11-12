@@ -3,11 +3,14 @@ package com.example.fragment_test.repository;
 import android.content.Context;
 
 import com.example.fragment_test.RecipeRecommend.RecipeRecommendation;
+import com.example.fragment_test.ServerAPI.RetrofitClient;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.Step;
+import com.example.fragment_test.service.RecipeService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ public class RecipeRepository {
     private final RecipeDAO recipeDAO;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final RefrigeratorIngredientRepository refrigeratorIngredientRepository;
+    private RecipeService recipeService;
     private final RecipeRecommendation recipeRecommendation;
 
     private RecipeRepository(Context context) {
@@ -27,6 +31,7 @@ public class RecipeRepository {
         this.recipeIngredientRepository = RecipeIngredientRepository.getInstance(context);
         this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(context);
         this.recipeRecommendation = new RecipeRecommendation();
+        this.recipeService = RetrofitClient.getRetrofitInstance().create(RecipeService.class);
     }
 
     public static RecipeRepository getInstance(Context context) {
@@ -86,5 +91,9 @@ public class RecipeRepository {
 
     public List<RecipeIngredient> getRecipeIngredients(int id) {
         return recipeIngredientRepository.getRecipeIngredientsByRId(id);
+    }
+
+    public List<Step> getRecipeSteps(Recipe recipe) {
+        return recipeService.getRecipeSteps(recipe.id);
     }
 }

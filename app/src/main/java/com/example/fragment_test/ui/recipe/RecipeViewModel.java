@@ -11,6 +11,7 @@ import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
+import com.example.fragment_test.entity.Step;
 import com.example.fragment_test.repository.PreparedRecipeRepository;
 import com.example.fragment_test.repository.RecipeRepository;
 
@@ -29,6 +30,7 @@ public class RecipeViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
     private final SingleLiveData<List<RecipeIngredient>> recipeIngredients = new SingleLiveData<>();
+    private final SingleLiveData<List<Step>> recipeSteps = new SingleLiveData<>();
     private final RecipeRepository recipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
 
@@ -158,11 +160,37 @@ public class RecipeViewModel extends AndroidViewModel {
                 });
     }
 
+    public void loadRecipeSteps(Recipe recipe) {
+        Maybe.fromCallable(() -> recipeRepository.getRecipeSteps(recipe))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<Step>>() {
+                    @Override
+                    public void onSuccess(List<Step> steps) {
+                        recipeSteps.setValue(steps);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public MutableLiveData<List<Recipe>> getRecipes() {
         return recipes;
     }
 
     public MutableLiveData<List<RecipeIngredient>> getRecipeIngredients() {
         return recipeIngredients;
+    }
+
+    public SingleLiveData<List<Step>> getRecipeSteps() {
+        return recipeSteps;
     }
 }
