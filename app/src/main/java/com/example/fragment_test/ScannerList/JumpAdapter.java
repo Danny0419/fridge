@@ -42,7 +42,7 @@ public class JumpAdapter extends RecyclerView.Adapter<JumpAdapter.ViewHolder> {
                     itemName.setText(ingredient.getIngredient_Name());  // 顯示轉換後的名稱
                     itemSort.setText(ingredient.getIngredients_category());
                     itemExpiration.setText(String.valueOf(ingredient.getExpiration()) + " 天");
-                    itemQuantity.setText(item.getQuantity());
+                    itemQuantity.setText(ingredient.getGrams());
 
                     // 設定該項目為可見
                     itemView.setVisibility(View.VISIBLE);
