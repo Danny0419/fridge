@@ -119,10 +119,10 @@ public class HomeFragment extends Fragment {
                     LocalDate threeDaysLater = now.plusDays(3);
                     String threeDaysLaterStr = DateTimeFormatter.BASIC_ISO_DATE.format(threeDaysLater);
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "牛排", 3,"牛排照片" , "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "牛小排", 4, "牛小排照片", "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "高麗菜", 60, "牛小排照片", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
+                            new RefrigeratorIngredient(0, "高麗菜", 60, "broccoli", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "番茄", 60, "牛小排照片", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
                             new RefrigeratorIngredient(0, "花椰菜", 60, "牛小排照片", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
                     );
