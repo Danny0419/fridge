@@ -94,4 +94,16 @@ public class Recipe implements Parcelable {
         parcel.writeTypedList(steps);
         parcel.writeTypedList(ingredients);
     }
+
+    //每三行換一次行
+    public StringBuilder setName() {
+        StringBuilder formattedName = new StringBuilder();
+        for (int i = 0; i < name.length(); i++) {
+            formattedName.append(name.charAt(i));
+            if ((i + 1) % 3 == 0 && i != name.length() - 1) {
+                formattedName.append("\n");
+            }
+        }
+        return formattedName;
+    }
 }

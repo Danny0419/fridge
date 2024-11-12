@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="午餐想吃......"
+            android:text="今天想吃......"
             android:textSize="24dp"
             android:background="@drawable/text_under_line"
             android:fontFamily="@font/bold"
