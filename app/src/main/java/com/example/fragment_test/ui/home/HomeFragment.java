@@ -17,79 +17,86 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.adapter.ExpiringRefrigeratorIngredientsAdapterForHome;
+import com.example.fragment_test.adapter.RecipeAdapterForHome;
+import com.example.fragment_test.adapter.ShoppingListAdapterForHome;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
-import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private Dialog dialog;
-    private ScanIngredientConfirmBinding scanIngredientConfirmBinding;
+
+    private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-//
-//        // 观察 Invoice 列表和其项，并更新 UI
-//        homeViewModel.getInvoiceWithItemsList().observe(getViewLifecycleOwner(), invoiceWithItemsList -> {
-//            StringBuilder allInvoices = new StringBuilder();
-//            for (InvoiceWithItems invoiceWithItems : invoiceWithItemsList) {
-//                Invoice invoice = invoiceWithItems.invoice;
-//                allInvoices.append("\n")
-//                        .append("Invoice ID: ").append(invoice.getId()).append("，")
-//                        .append("Date: ").append(invoice.getDate()).append("\n");
-//
-//                // 显示发票下的所有品项
-//                for (InvoiceItem item : invoiceWithItems.items) {
-//                    allInvoices.append("    Item Name: ").append(item.getName()).append("\n")
-//                            .append("    Quantity: ").append(item.getQuantity()).append("，")
-//                            .append("    Price: ").append(item.getPrice()).append("\n");
-//                }
-//            }
-//            textView.setText(allInvoices.toString());
-//        });
-//
+        LocalDate now = LocalDate.now();
+
+        fragmentOfDate(now);
+
+        homeViewModel.loadScheduleRecipesOfToday(Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(now)));
+        homeViewModel.getScheduleRecipesOfToday()
+                .observe(getViewLifecycleOwner(), (recipes -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    binding.eatingForToday.setLayoutManager(layoutManager);
+                    binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
+                }));
+
+        homeViewModel.loadShoppingList();
+        homeViewModel.getShoppingList()
+                .observe(getViewLifecycleOwner(), (shoppingItemVOS) -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    binding.shoppingListRecycle.setLayoutManager(layoutManager);
+                    binding.shoppingListRecycle.setAdapter(new ShoppingListAdapterForHome(shoppingItemVOS));
+                });
+
+        homeViewModel.loadExpiringRefrigeratorIngredient();
+        homeViewModel.getExpiringIngredients()
+                .observe(getViewLifecycleOwner(), (ingredientDetailVOList) -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    binding.expiringIngredients.setLayoutManager(layoutManager);
+                    binding.expiringIngredients.setAdapter(new ExpiringRefrigeratorIngredientsAdapterForHome(ingredientDetailVOList));
+                });
+
         addToolbar();
-//
-//        binding.testButton.setOnClickListener(this);
-//        setupDialog(inflater, container);
 
-        return root;
+        return binding.getRoot();
     }
 
-//    private void setupDialog(LayoutInflater inflater, ViewGroup container) {
-//        scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(inflater, container, false);
-//        dialog = new Dialog(getContext());
-//        dialog.setContentView(scanIngredientConfirmBinding.getRoot());
-//        dialog.setCancelable(false);
-//
-//        Button continueButton = scanIngredientConfirmBinding.continueButton;
-//        Button confirmButton = scanIngredientConfirmBinding.confirmButton;
-//
-//        continueButton.setOnClickListener(this);
-//        confirmButton.setOnClickListener(this);
-//
-//        // 應急用調整彈跳視窗大小
-//        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-//        layoutParams.width = 1000;
-//        layoutParams.height = 1020;
-//        dialog.getWindow().setAttributes(layoutParams);
-//    }
+    private void fragmentOfDate(LocalDate now) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.\nMM.dd.");
+        String dateStr = dateTimeFormatter.format(now);
+        binding.date.setText(dateStr);
+        DayOfWeek dayOfWeek = now.getDayOfWeek();
+        binding.weekDate.setText(convertDayOfWeekToChiStr(dayOfWeek));
+    }
+
+    public String convertDayOfWeekToChiStr(DayOfWeek dayOfWeek) {
+        String dOWeek = "一";
+        switch (dayOfWeek) {
+            case TUESDAY -> dOWeek = "二";
+            case WEDNESDAY -> dOWeek = "三";
+            case THURSDAY -> dOWeek = "四";
+            case FRIDAY -> dOWeek = "五";
+            case SATURDAY -> dOWeek = "六";
+            case SUNDAY -> dOWeek = "日";
+        }
+        return "星期" + dOWeek;
+    }
 
     private void addToolbar() {
         FragmentActivity fragmentActivity = requireActivity();

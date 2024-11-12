@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
@@ -27,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
 public class RecipeViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
-    private final MutableLiveData<List<RecipeIngredient>> recipeIngredients = new MutableLiveData<>();
+    private final SingleLiveData<List<RecipeIngredient>> recipeIngredients = new SingleLiveData<>();
     private final RecipeRepository recipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
 

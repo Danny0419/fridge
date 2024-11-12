@@ -3,6 +3,7 @@ package com.example.fragment_test.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,12 +21,12 @@ public class MealsPrepareScheduleEachRecipeAdapter extends RecyclerView.Adapter<
 
     class ScheduleEachRecipeViewHolder extends RecyclerView.ViewHolder {
         TextView recipeTitle;
-        TextView recipeImg;
+        ImageView recipeImg;
 
         public ScheduleEachRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.recipeTitle = itemView.findViewById(R.id.recipe_img);
-            this.recipeImg = itemView.findViewById(R.id.recipe_title);
+            this.recipeTitle = itemView.findViewById(R.id.recipe_title);
+            this.recipeImg = itemView.findViewById(R.id.recipe_img);
         }
     }
 
@@ -48,7 +49,7 @@ public class MealsPrepareScheduleEachRecipeAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ScheduleEachRecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        holder.recipeImg.setText(recipe.img);
+//        holder.recipeImg.setText(recipe.img);
         holder.recipeTitle.setText(recipe.name);
         holder.itemView.setOnClickListener((v) -> onClickListener.onClick(date, recipe));
     }

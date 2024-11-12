@@ -55,7 +55,6 @@ public class ShoppingListIngredientRepository {
         Map<String, ShoppingItemVO> shoppingItems = shoppingDAO.getAllSumOfQuaGreaterThanZeroShoppingIngredientsGroupByName()
                 .stream()
                 .collect(Collectors.toMap(ShoppingItemVO::getName, o -> o));
-        flag:
         for (Ingredient ingredient :
                 ingredients) {
             Optional<ShoppingItemVO> shoppingItem = Optional.ofNullable(shoppingItems.get(ingredient.name));
@@ -66,7 +65,7 @@ public class ShoppingListIngredientRepository {
                     shoppingDAO.insertShoppingIngredient(
                             new ShoppingIngredient(0,
                                     ingredient.name,
-                                    "新增",
+                                    item.sort,
                                     -buyQuantity,
                                     0
                             )
@@ -75,7 +74,7 @@ public class ShoppingListIngredientRepository {
                     shoppingDAO.insertShoppingIngredient(
                             new ShoppingIngredient(0,
                                     ingredient.name,
-                                    "新增",
+                                    item.sort,
                                     -max,
                                     0
                             )
@@ -95,5 +94,24 @@ public class ShoppingListIngredientRepository {
 
     public Single<List<String>> getSortOfIngredientsName(String sort) {
         return shoppingService.getSortOfIngredientsName(sort);
+    }
+
+    public void deleteShoppingItem(ShoppingItemVO shoppingItemVO) {
+        shoppingDAO.insertShoppingIngredient(new ShoppingIngredient(0,
+                shoppingItemVO.name,
+                shoppingItemVO.sort,
+                -shoppingItemVO.sumOfQuantity,
+                0)
+        );
+    }
+
+    public void editShoppingItem(ShoppingItemVO shoppingItemVO, int editedQuantity) {
+        int quantity = shoppingDAO.getShoppingItemQuantityByName(shoppingItemVO.name);
+        shoppingDAO.insertShoppingIngredient(new ShoppingIngredient(0,
+                shoppingItemVO.name,
+                shoppingItemVO.sort,
+                editedQuantity - quantity,
+                0)
+        );
     }
 }
