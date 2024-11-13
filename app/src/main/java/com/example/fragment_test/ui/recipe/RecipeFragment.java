@@ -143,7 +143,7 @@ public class RecipeFragment extends Fragment {
                         com.example.fragment_test.ServerAPI.Recipe recipe = o.getRecipe();
                         Recipe r = new Recipe(recipe.getRecipe_id()
                                 , recipe.getRecipe_name()
-                                , recipe.getImage()
+                                , recipe.getPicture()
                                 , recipe.getServing()
                         );
                         List<RecipeIngredient> ingredients = new ArrayList<>();
