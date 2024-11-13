@@ -42,7 +42,7 @@ public class RecommendationAdapter extends ArrayAdapter<RecipeRecommendation.Rec
             matchScore.setText(String.format("Match Score: %.2f", recommendation.getMatchScore()));
             expiryScore.setText(String.format("Expiry Score: %.2f", recommendation.getExpiryScore()));
             combinedScore.setText(String.format("Combined Score: %.2f", recommendation.getCombinedScore()));
-            Log.i("TAG", recommendation.getRecipe().getRecipe_name()+recommendation.getCombinedScore());
+            Log.i("TAG", recommendation.getRecipe().getPicture());
         }
 
         return convertView;
