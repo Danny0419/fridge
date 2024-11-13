@@ -178,6 +178,23 @@ public class RecipeViewModel extends AndroidViewModel {
                 });
     }
 
+    public void setRecipePic(List<Recipe> recipes) {
+        Completable.fromAction(() -> recipeRepository.setRecipePic(recipes))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        RecipeViewModel.this.recipes.setValue(recipes);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
     public MutableLiveData<List<Recipe>> getRecipes() {
         return recipes;
     }

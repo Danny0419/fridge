@@ -16,14 +16,14 @@ public interface RecipeDAO {
     long insertRecipe(Recipe recipe);
 
     @Query("""
-            SELECT id, name, img, serving, collected
+            SELECT id, name, src, serving, collected
             FROM recipes
             WHERE name = :name
             """)
     Recipe queryRecipeByName(String name);
 
     @Query("""
-            SELECT id, name, img, serving, collected
+            SELECT id, name, src, serving, collected
             FROM recipes
             WHERE id = :id
             """)
@@ -33,7 +33,7 @@ public interface RecipeDAO {
     void updateRecipe(Recipe recipe);
 
     @Query("""
-            SELECT id, name, img, serving, collected
+            SELECT id, name, src, serving, collected
             FROM recipes
             WHERE collected = 1
             """)

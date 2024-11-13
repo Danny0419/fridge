@@ -161,22 +161,25 @@ public class RecipeFragment extends Fragment {
                         return r;
                     })
                     .collect(Collectors.toList());
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recipeRecyclerView.setLayoutManager(linearLayoutManager);
-            RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+            mViewModel.setRecipePic(recipes);
+            mViewModel.getRecipes()
+                    .observe(this, r -> {
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                        recipeRecyclerView.setLayoutManager(linearLayoutManager);
+                        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
                         recipeAdapter.setListener((position, recipe) -> {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("recipe", recipe);
                             try {
                                 navController.navigate(R.id.navigation_recipe_detail, bundle);
-                            }catch (RuntimeException e) {
+                            } catch (RuntimeException e) {
                                 Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
                             }
-
-
                         });
                         recipeRecyclerView.setAdapter(recipeAdapter);
+                    });
+
         } else {
             Log.e("RecommendationActivity", "No recommendations found.");
         }

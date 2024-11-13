@@ -1,5 +1,6 @@
 package com.example.fragment_test.entity;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,11 +20,13 @@ public class Recipe implements Parcelable {
     @ColumnInfo
     public String name;
     @ColumnInfo
-    public String img;
+    public String src;
     @ColumnInfo
     public int serving;
     @ColumnInfo
     public int collected;
+    @Ignore
+    public Bitmap pic;
 
     @Ignore
     public List<Step> steps;
@@ -31,17 +34,17 @@ public class Recipe implements Parcelable {
     public List<RecipeIngredient> ingredients;
 
     @Ignore
-    public Recipe(int id, String name, String img, int serving) {
+    public Recipe(int id, String name, String src, int serving) {
         this.id = id;
         this.name = name;
-        this.img = img;
+        this.src = src;
         this.serving = serving;
     }
 
-    public Recipe(int id, String name, String img, int serving, int collected) {
+    public Recipe(int id, String name, String src, int serving, int collected) {
         this.id = id;
         this.name = name;
-        this.img = img;
+        this.src = src;
         this.serving = serving;
         this.collected = collected;
         steps = new ArrayList<>();
@@ -49,10 +52,10 @@ public class Recipe implements Parcelable {
     }
 
     @Ignore
-    public Recipe(int id, String name, String img, int serving, int collected,List<Step> steps, List<RecipeIngredient> ingredients) {
+    public Recipe(int id, String name, String src, int serving, int collected, List<Step> steps, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.name = name;
-        this.img = img;
+        this.src = src;
         this.serving = serving;
         this.collected = collected;
         this.steps = steps;
@@ -74,7 +77,7 @@ public class Recipe implements Parcelable {
     protected Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        img = in.readString();
+        src = in.readString();
         serving = in.readInt();
         collected = in.readInt();
         steps = in.createTypedArrayList(Step.CREATOR);
@@ -102,7 +105,7 @@ public class Recipe implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(name);
-        parcel.writeString(img);
+        parcel.writeString(src);
         parcel.writeInt(serving);
         parcel.writeInt(collected);
         parcel.writeTypedList(steps);
@@ -119,5 +122,9 @@ public class Recipe implements Parcelable {
             }
         }
         return formattedName;
+    }
+
+    public void setPic(Bitmap pic) {
+        this.pic = pic;
     }
 }

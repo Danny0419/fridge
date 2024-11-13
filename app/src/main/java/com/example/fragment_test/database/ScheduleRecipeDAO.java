@@ -31,7 +31,7 @@ public interface ScheduleRecipeDAO {
     List<ScheduleRecipe> queryIsNotDoneScheduleRecipesByDate(Integer date);
 
     @Query("""
-            SELECT r.id, r.name, r.img, r.serving, r.collected, s_r.id as sRId, s_r.day_of_week as dayOfWeek
+            SELECT r.id, r.name, r.src, r.serving, r.collected, s_r.id as sRId, s_r.day_of_week as dayOfWeek
             FROM schedule_recipes s_r join recipes r
             on s_r.r_id = r.id
             WHERE date >= :today AND status = 0
@@ -46,7 +46,7 @@ public interface ScheduleRecipeDAO {
 
     @Query(
             """
-            SELECT r.id, r.name, r.img, r.serving, r.collected
+            SELECT r.id, r.name, r.src, r.serving, r.collected
             FROM schedule_recipes s_r join recipes r
             ON s_r.r_id = r.id
             WHERE s_r.date = :date AND s_r.status = 0
