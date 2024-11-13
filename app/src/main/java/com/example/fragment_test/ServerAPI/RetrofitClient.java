@@ -1,11 +1,15 @@
 package com.example.fragment_test.ServerAPI;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,40 +20,51 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
+    private static final String TAG = "RetrofitClient";
     private static Retrofit retrofit;
     private static final String BASE_URL = "http://120.125.83.32:5000/";
+    private static final int CACHE_SIZE = 10 * 1024 * 1024; // 10 MB
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
-            // 配置 OkHttpClient
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(60, TimeUnit.SECONDS) // 增加连接超时
-                    .readTimeout(60, TimeUnit.SECONDS) // 增加读取超时
-                    .writeTimeout(60, TimeUnit.SECONDS) // 增加写入超时
-                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)) // 日志拦截器
-                    .addInterceptor(new RetryInterceptor(3)) // 添加重试机制，最多重试3次
-                    .build();
-
-            // 创建 Gson 对象并设置为宽松模式
-            Gson gson = new GsonBuilder()
-                    .setLenient() // 宽松模式，允许解析宽松的 JSON
-                    .create();
-
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create(gson)) // 使用宽松的 Gson 解析器
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build();
-
+            synchronized (RetrofitClient.class) {
+                if (retrofit == null) {
+                    retrofit = buildRetrofit();
+                }
+            }
         }
         return retrofit;
     }
 
-    // 定义 RetryInterceptor，处理重试逻辑
+    private static Retrofit buildRetrofit() {
+        // 配置 OkHttpClient
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(90, TimeUnit.SECONDS)
+                .readTimeout(90, TimeUnit.SECONDS)
+                .writeTimeout(90, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(10, 5, TimeUnit.MINUTES))
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(new RetryInterceptor(3))
+                .addInterceptor(new ErrorLoggingInterceptor()) // 新增錯誤日誌攔截器
+                .addNetworkInterceptor(new CacheInterceptor())
+                .build();
+
+        // 創建 Gson 對象並設置為寬鬆模式
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+    }
+
+    // 改進的 RetryInterceptor
     private static class RetryInterceptor implements Interceptor {
-        private int maxRetries;
-        private int retryCount = 0;
+        private final int maxRetries;
 
         public RetryInterceptor(int maxRetries) {
             this.maxRetries = maxRetries;
@@ -58,22 +73,90 @@ public class RetrofitClient {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
-            Response response = null;
-            boolean responseOK = false;
+            IOException exception = null;
 
-            // 重试逻辑
-            while (retryCount < maxRetries && !responseOK) {
+            for (int retryCount = 0; retryCount <= maxRetries; retryCount++) {
                 try {
-                    response = chain.proceed(request);
-                    responseOK = response.isSuccessful(); // 如果成功，退出循环
-                } catch (Exception e) {
-                    retryCount++;
-                    if (retryCount >= maxRetries) {
-                        throw e; // 达到最大重试次数，抛出异常
+                    Response response = chain.proceed(request);
+                    if (response.isSuccessful()) {
+                        return response;
+                    } else if (retryCount == maxRetries) {
+                        return response; // 返回最後一次的錯誤響應
+                    }
+
+                    // 關閉之前的響應
+                    response.close();
+
+                } catch (IOException e) {
+                    exception = e;
+                    Log.w(TAG, "Retry attempt " + retryCount + " failed", e);
+
+                    if (retryCount == maxRetries) {
+                        throw exception;
+                    }
+
+                    // 在重試之前等待一段時間
+                    try {
+                        Thread.sleep(1000L * (retryCount + 1));
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw new IOException("Retry interrupted", ie);
                     }
                 }
             }
-            return response;
+
+            throw new IOException("Unexpected retry loop exit");
         }
+    }
+
+    // 新增的錯誤日誌攔截器
+    private static class ErrorLoggingInterceptor implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            long startTime = System.nanoTime();
+
+            try {
+                Response response = chain.proceed(request);
+                long endTime = System.nanoTime();
+                double duration = (endTime - startTime) / 1e6; // 轉換為毫秒
+
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.format("HTTP %d Error for %s (%.1fms)%nBody: %s",
+                            response.code(),
+                            request.url(),
+                            duration,
+                            response.peekBody(4096).string()));
+                }
+
+                return response;
+            } catch (IOException e) {
+                Log.e(TAG, String.format("Network Error for %s: %s",
+                        request.url(),
+                        e.getMessage()), e);
+                throw e;
+            }
+        }
+    }
+
+    // 改進的緩存攔截器
+    private static class CacheInterceptor implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            Response response = chain.proceed(request);
+
+            // 設置緩存控制
+            return response.newBuilder()
+                    .header("Cache-Control", "public, max-age=300")  // 在線緩存 5 分鐘
+                    .header("Cache-Control", "public, only-if-cached, max-stale=604800")  // 離線緩存 7 天
+                    .removeHeader("Pragma")  // 移除可能影響緩存的舊頭
+                    .build();
+        }
+    }
+
+    // 清除 Retrofit 實例的方法，用於需要重置連接時
+    public static void clearInstance() {
+        retrofit = null;
     }
 }

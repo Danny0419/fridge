@@ -30,6 +30,14 @@ public class Recipe implements Parcelable {
     @Ignore
     public List<RecipeIngredient> ingredients;
 
+    @Ignore
+    public Recipe(int id, String name, String img, int serving) {
+        this.id = id;
+        this.name = name;
+        this.img = img;
+        this.serving = serving;
+    }
+
     public Recipe(int id, String name, String img, int serving, int collected) {
         this.id = id;
         this.name = name;
@@ -51,6 +59,13 @@ public class Recipe implements Parcelable {
         this.ingredients = ingredients;
     }
 
+    public void setIngredients(List<RecipeIngredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
 
     protected Recipe(Parcel in) {
         id = in.readInt();
@@ -73,11 +88,6 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
-
-    public void setIngredients(List<RecipeIngredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
 
     @Override
     public int describeContents() {

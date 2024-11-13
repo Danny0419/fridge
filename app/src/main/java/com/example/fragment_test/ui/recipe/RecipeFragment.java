@@ -1,6 +1,7 @@
 package com.example.fragment_test.ui.recipe;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +16,6 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,17 +23,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.RecipeRecommend.RecipeRecommendation;
 import com.example.fragment_test.adapter.RecipeAdapter;
 import com.example.fragment_test.databinding.FragmentRecipeBinding;
 import com.example.fragment_test.entity.Recipe;
+import com.example.fragment_test.entity.RecipeIngredient;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RecipeFragment extends Fragment {
 
     private FragmentRecipeBinding binding;
     private RecipeViewModel mViewModel;
     private RecyclerView recipeRecyclerView;
+    private RecipeRecommendation recipeRecommendation;
     private boolean isCollectionSelected = false;
 
     public static RecipeFragment newInstance() {
@@ -44,7 +50,8 @@ public class RecipeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(RecipeViewModel.class);
-        mViewModel.loadRecommendRecipes();
+//        mViewModel.loadRecommendRecipes();
+        recipeRecommendation = new RecipeRecommendation();
     }
 
     @Override
@@ -91,14 +98,73 @@ public class RecipeFragment extends Fragment {
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
 
-        mViewModel.getRecipes()
-                .observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
-                    @Override
-                    public void onChanged(List<Recipe> recipes) {
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                        recipeRecyclerView.setLayoutManager(linearLayoutManager);
-                        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipeRecommendation.init(getContext(), new RecipeRecommendation.InitCallback() {
+            @Override
+            public void onSuccess(Map<String, RecipeRecommendation.FridgeIngredient> fridgeIngredients) {
+                getRecommendationsAndUpdateUI(fridgeIngredients, navController);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
+
+//        mViewModel.getRecipes()
+//                .observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
+//                    @Override
+//                    public void onChanged(List<Recipe> recipes) {
+//                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//                        recipeRecyclerView.setLayoutManager(linearLayoutManager);
+//                        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+//                        recipeAdapter.setListener((position, recipe) -> {
+//                            Bundle bundle = new Bundle();
+//                            bundle.putParcelable("recipe", recipe);
+//                            try {
+//                                navController.navigate(R.id.navigation_recipe_detail, bundle);
+//                            }catch (RuntimeException e) {
+//                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//
+//                        });
+//                        recipeRecyclerView.setAdapter(recipeAdapter);
+//                    }
+//                });
+        return binding.getRoot();
+    }
+
+    private void getRecommendationsAndUpdateUI(Map<String, RecipeRecommendation.FridgeIngredient> fridgeIngredients, NavController navController) {
+        List<RecipeRecommendation.Recommendation> recommendations = recipeRecommendation.getRecommendations(fridgeIngredients);
+        if (recommendations != null && !recommendations.isEmpty()) {
+            List<Recipe> recipes = recommendations.stream()
+                    .map(o -> {
+                        com.example.fragment_test.ServerAPI.Recipe recipe = o.getRecipe();
+                        Recipe r = new Recipe(recipe.getRecipe_id()
+                                , recipe.getRecipe_name()
+                                , recipe.getImage()
+                                , recipe.getServing()
+                        );
+                        List<RecipeIngredient> ingredients = new ArrayList<>();
+                        recipe.getIngredients()
+                                .forEach(o1 -> {
+                                    try {
+                                        String ingredientNeed = o1.getIngredient_need();
+                                        String quantity = ingredientNeed.substring(0, ingredientNeed.length() - 1);
+                                        ingredients.add(new RecipeIngredient(o1.getIngredient_name(), Integer.parseInt(quantity)));
+                                    } catch (Exception e) {
+
+                                    }
+                                });
+                        r.setIngredients(ingredients);
+                        return r;
+                    })
+                    .collect(Collectors.toList());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recipeRecyclerView.setLayoutManager(linearLayoutManager);
+            RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
                         recipeAdapter.setListener((position, recipe) -> {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("recipe", recipe);
@@ -111,8 +177,8 @@ public class RecipeFragment extends Fragment {
 
                         });
                         recipeRecyclerView.setAdapter(recipeAdapter);
-                    }
-                });
-        return binding.getRoot();
+        } else {
+            Log.e("RecommendationActivity", "No recommendations found.");
+        }
     }
 }
