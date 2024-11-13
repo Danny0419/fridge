@@ -31,13 +31,20 @@
                 android:id="@+id/recipe_introduction"
                 layout="@layout/recipe_introduction"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
-            <include
-                android:id="@+id/recipe_steps"
-                layout="@layout/recipe_steps"
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                app:cardElevation="5dp">
+                <include
+                    android:id="@+id/recipe_steps"
+                    layout="@layout/recipe_steps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
