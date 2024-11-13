@@ -105,20 +105,26 @@ public class RecipeRepository {
         return recipeService.getRecipeSteps(recipe.id);
     }
 
-    public void setRecipePic(List<Recipe> recipes) {
-        recipes.forEach(recipe -> {
-            try {
-                URL url = new URL(recipe.src);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                recipe.setPic(BitmapFactory.decodeStream(inputStream));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    public void setRecipesPic(List<Recipe> recipes) {
+        recipes.forEach(this::catchImageFromNet);
 
+    }
+
+    public void setRecipePic(Recipe recipe) {
+        catchImageFromNet(recipe);
+    }
+
+    public void catchImageFromNet(Recipe recipe) {
+        try {
+            URL url = new URL(recipe.src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            recipe.setPic(BitmapFactory.decodeStream(inputStream));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -57,9 +57,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Optional<Recipe> recipeOptional = Optional.ofNullable(bundle.getParcelable("recipe"));
         Recipe recipe = recipeOptional.orElseThrow(RuntimeException::new);
 
+        recipeViewModel.setRecipePic(recipe);
         RecipeIntroductionBinding recipeIntroduction = activityRecipeDetailBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(recipe.name);
-//        recipeIntroduction.recipeImg.setText(recipe.img);
+        recipeViewModel.getRecipeDetail()
+                        .observe(this, r -> {
+                            recipeIntroduction.recipeImg.setImageBitmap(recipe.pic);
+                        });
+
         recipeIntroduction.recipeServing.setText(Integer.toString(recipe.serving));
 
         recipeViewModel.loadRecipeSteps(recipe);

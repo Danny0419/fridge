@@ -32,6 +32,7 @@ public class RecipeViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
     private final SingleLiveData<List<RecipeIngredient>> recipeIngredients = new SingleLiveData<>();
     private final SingleLiveData<List<Step>> recipeSteps = new SingleLiveData<>();
+    private final SingleLiveData<Recipe> recipeDetail = new SingleLiveData<>();
     private final RecipeRepository recipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
 
@@ -178,14 +179,31 @@ public class RecipeViewModel extends AndroidViewModel {
                 });
     }
 
-    public void setRecipePic(List<Recipe> recipes) {
-        Completable.fromAction(() -> recipeRepository.setRecipePic(recipes))
+    public void setRecipesPic(List<Recipe> recipes) {
+        Completable.fromAction(() -> recipeRepository.setRecipesPic(recipes))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
                         RecipeViewModel.this.recipes.setValue(recipes);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    public void setRecipePic(Recipe recipe) {
+        Completable.fromAction(() -> recipeRepository.setRecipePic(recipe))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        RecipeViewModel.this.recipeDetail.setValue(recipe);
                     }
 
                     @Override
@@ -205,5 +223,9 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public SingleLiveData<List<Step>> getRecipeSteps() {
         return recipeSteps;
+    }
+
+    public SingleLiveData<Recipe> getRecipeDetail() {
+        return recipeDetail;
     }
 }
