@@ -20,7 +20,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/food_prepare_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:minHeight="214dp"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="25dp"
+        android:background="@color/pink">
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

@@ -63,15 +63,13 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
 
         ShoppingItemVO shoppingItemVO = shoppingItems.get(position);
-        holder.position.setText(Integer.toString(position));
+        holder.position.setText(Integer.toString(position+1));
         holder.shoppingItemName.setText(shoppingItemVO.name);
         holder.shoppingItemSort.setText(shoppingItemVO.sort);
         holder.shoppingItemQuantity.setText(shoppingItemVO.sumOfQuantity + " g");
 
         holder.itemView
                 .setOnClickListener(view -> this.shoppingItemEditedListener.shoppingItemEdited(shoppingItemVO));
-
-
     }
 
     @Override

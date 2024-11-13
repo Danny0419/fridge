@@ -80,7 +80,7 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
         dayOfWeekInt = DayOfWeek.valueOf(intent.getStringExtra("dayOfWeek")).getValue();
 
         String dayOfWeek = intent.getStringExtra("dayOfWeek");
-        mealsPrepareDialogBinding.scheduleItem.eachDayText.setText(dayOfWeek);
+//        mealsPrepareDialogBinding.scheduleItem.eachDayText.setText(dayOfWeek);
 
         viewModel.loadSchedules(date);
         viewModel.loadPreparedRecipes();

@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="214dp"
+        android:paddingBottom="20dp"
         android:id="@+id/meal_today"
         >
         <TextView
@@ -18,8 +19,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/text_under_line"
             android:fontFamily="@font/bold"
-            android:text="mon"
-            android:textSize="24dp"
+            android:text="點選下方圖片加入規劃"
+            android:textSize="20dp"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="20dp"
             android:layout_alignParentStart="true"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:background="@color/dark_pink"
             android:fontFamily="@font/regular"
-            android:text=" 點我選擇要吃甚麼叭 "
+            android:text=" 點我開始規劃叭 "
             android:textSize="16dp"
             android:layout_marginRight="14dp"
             android:layout_marginTop="14dp"

@@ -125,7 +125,7 @@ public class ScheduleFragment extends Fragment {
                             try {
                                 navController.navigate(R.id.navigation_start_cooking, bundle);
                             }catch (RuntimeException e) {
-                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "請再嘗試一次", Toast.LENGTH_SHORT).show();
                             }
                         });
                     });
