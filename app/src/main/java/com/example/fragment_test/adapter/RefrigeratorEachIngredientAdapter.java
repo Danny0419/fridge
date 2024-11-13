@@ -1,6 +1,7 @@
 package com.example.fragment_test.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,14 @@ public class RefrigeratorEachIngredientAdapter extends RecyclerView.Adapter<Refr
     @Override
     public void onBindViewHolder(@NonNull RefrigeratorKindViewHolder holder, int position) {
         RefrigeratorIngredientVO ingredient = kindOfIngredient.get(position);
+        String imageName = ingredient.img; // 假设此方法返回 "broccoli"
+        // 动态获取资源 ID
+        int resId = holder.itemView.getContext().getResources().getIdentifier(
+                imageName, "drawable", holder.itemView.getContext().getPackageName());
 
+        if (resId != 0) { // 如果找到资源 ID
+            holder.ingredientImg.setImageResource(resId);
+        }
         holder.ingredientName.setText(ingredient.name);
 //        holder.ingredientExpr.setText("保存期限："+ ingredient.earlyEx + "~" + ingredient.lastEx);
         holder.ingredientExpr.setText("有效日期："+ ingredient.getLastEx());
