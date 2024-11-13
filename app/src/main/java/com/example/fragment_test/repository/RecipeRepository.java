@@ -66,7 +66,7 @@ public class RecipeRepository {
                     com.example.fragment_test.ServerAPI.Recipe recipe = o.getRecipe();
                     Recipe r = new Recipe(recipe.getRecipe_id()
                             , recipe.getRecipe_name()
-                            , recipe.getImage()
+                            , recipe.getPicture()
                             , recipe.getServing()
                     );
                     List<RecipeIngredient> ingredients = new ArrayList<>();
@@ -111,7 +111,6 @@ public class RecipeRepository {
                 URL url = new URL(recipe.src);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
-
                 InputStream inputStream = connection.getInputStream();
                 recipe.setPic(BitmapFactory.decodeStream(inputStream));
             } catch (MalformedURLException e) {
