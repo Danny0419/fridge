@@ -10,11 +10,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeDetailIngredientAdapter;
+import com.example.fragment_test.adapter.RecipeDetailStepsAdapter;
 import com.example.fragment_test.databinding.ActivityStartCookingBinding;
 import com.example.fragment_test.databinding.RecipeIntroductionBinding;
+import com.example.fragment_test.databinding.RecipeStepsBinding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.ui.recipe.RecipeViewModel;
 
@@ -42,6 +45,7 @@ public class StartCookingActivity extends AppCompatActivity {
         Optional<RecipeWithScheduledId> recipeOptional = Optional.ofNullable(bundle.getParcelable("scheduleRecipe", RecipeWithScheduledId.class));
         scheduleRecipe = recipeOptional.orElseThrow(RuntimeException::new);
 
+        recipeViewModel.loadRecipeSteps(scheduleRecipe.recipe);
 
         // toolbar setting
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.recipe_detail_toolbar);
@@ -69,6 +73,16 @@ public class StartCookingActivity extends AppCompatActivity {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recipeIntroduction.recipeIngredients.setLayoutManager(gridLayoutManager);
         recipeIntroduction.recipeIngredients.setAdapter(new RecipeDetailIngredientAdapter(scheduleRecipe.recipe.ingredients));
+
+
+        RecipeStepsBinding recipeStepsBinding = activityStartCookingBinding.recipeSteps;
+        recipeViewModel.getRecipeSteps()
+                        .observe(this, steps -> {
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
+                            recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                        });
 
         recipeIntroduction.collectBnt.setOnClickListener(view -> {
             recipeViewModel.collectAndUnCollectRecipe(scheduleRecipe.recipe);

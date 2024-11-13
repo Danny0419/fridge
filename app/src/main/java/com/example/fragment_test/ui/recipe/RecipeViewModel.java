@@ -24,6 +24,7 @@ import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class RecipeViewModel extends AndroidViewModel {
@@ -161,10 +162,10 @@ public class RecipeViewModel extends AndroidViewModel {
     }
 
     public void loadRecipeSteps(Recipe recipe) {
-        Maybe.fromCallable(() -> recipeRepository.getRecipeSteps(recipe))
+        recipeRepository.getRecipeSteps(recipe)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<List<Step>>() {
+                .subscribe(new DisposableSingleObserver<List<Step>>() {
                     @Override
                     public void onSuccess(List<Step> steps) {
                         recipeSteps.setValue(steps);
@@ -172,11 +173,6 @@ public class RecipeViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
 
                     }
                 });

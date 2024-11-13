@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeDetailIngredientAdapter;
+import com.example.fragment_test.adapter.RecipeDetailStepsAdapter;
 import com.example.fragment_test.databinding.ActivityRecipeDetailBinding;
 import com.example.fragment_test.databinding.RecipeIntroductionBinding;
 import com.example.fragment_test.databinding.RecipeStepsBinding;
@@ -67,14 +68,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
         recipeIntroduction.recipeIngredients.setLayoutManager(gridLayoutManager);
         recipeIntroduction.recipeIngredients.setAdapter(new RecipeDetailIngredientAdapter(recipe.ingredients));
 
-        RecipeStepsBinding recipeSteps = activityRecipeDetailBinding.recipeSteps;
+        RecipeStepsBinding recipeStepsBinding = activityRecipeDetailBinding.recipeSteps;
         recipeViewModel.getRecipeSteps()
-                        .observe(this, steps -> {
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            recipeSteps.recipeSteps.setLayoutManager(layoutManager);
-
-                        });
+                .observe(this, steps -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
+                    recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                });
 
         recipeIntroduction.collectBnt.setOnClickListener(view -> {
             recipeViewModel.collectAndUnCollectRecipe(recipe);

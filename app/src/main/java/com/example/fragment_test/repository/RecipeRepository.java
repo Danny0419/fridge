@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.reactivex.Single;
+
 public class RecipeRepository {
     private static RecipeRepository recipeRepository;
     private final RecipeDAO recipeDAO;
@@ -93,7 +95,7 @@ public class RecipeRepository {
         return recipeIngredientRepository.getRecipeIngredientsByRId(id);
     }
 
-    public List<Step> getRecipeSteps(Recipe recipe) {
+    public Single<List<Step>> getRecipeSteps(Recipe recipe) {
         return recipeService.getRecipeSteps(recipe.id);
     }
 }
