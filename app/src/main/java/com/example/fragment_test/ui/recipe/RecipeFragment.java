@@ -144,7 +144,7 @@ public class RecipeFragment extends Fragment {
                         Recipe r = new Recipe(recipe.getRecipe_id()
                                 , recipe.getRecipe_name()
                                 , recipe.getPicture()
-                                , recipe.getServing()
+                                , recipe.getServings()
                         );
                         List<RecipeIngredient> ingredients = new ArrayList<>();
                         recipe.getIngredients()
