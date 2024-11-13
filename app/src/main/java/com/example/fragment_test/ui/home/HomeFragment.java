@@ -1,6 +1,5 @@
 package com.example.fragment_test.ui.home;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -120,25 +119,33 @@ public class HomeFragment extends Fragment {
                     LocalDate threeDaysLater = now.plusDays(3);
                     String threeDaysLaterStr = DateTimeFormatter.BASIC_ISO_DATE.format(threeDaysLater);
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient(0, "豬五花肉", 500, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(1, "火鍋牛肉片", 500, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(2, "雞腿肉", 1000, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(3, "高麗菜", 100, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(4, "青江菜", 200, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(5, "洋蔥", 200, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(6, "紅蘿蔔", 300, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(6, "白蘿蔔", 300, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(7, "玉米", 300, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(8, "菠菜", 250, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(9, "蛋", 10, "牛小排照片", "蛋豆魚肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(9, "花椰菜", 100, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(9, "番茄", 100, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
+                            new RefrigeratorIngredient(1, "豬五花肉", 500, "porkpieces", "豬肉", Integer.parseInt(date),someDaysLater(3)),
+                            new RefrigeratorIngredient(2, "火鍋牛肉片", 500, "hotpotslicedbeef", "牛肉", Integer.parseInt(date),someDaysLater(3)),
+                            new RefrigeratorIngredient(3, "雞腿肉", 500, "chickenthigh", "禽類", Integer.parseInt(date),someDaysLater(3)),
+                            new RefrigeratorIngredient(4, "高麗菜", 100, "cabbage", "葉菜花菜", Integer.parseInt(date),someDaysLater(7)),
+                            new RefrigeratorIngredient(5, "青江菜", 200, "spooncabbage", "葉菜花菜", Integer.parseInt(date),someDaysLater(5)),
+                            new RefrigeratorIngredient(6, "洋蔥", 200, "onion", "根莖類", Integer.parseInt(date),someDaysLater(14)),
+                            new RefrigeratorIngredient(7, "紅蘿蔔", 300, "carrot", "根莖類", Integer.parseInt(date),someDaysLater(14)),
+                            new RefrigeratorIngredient(8, "白蘿蔔", 300, "whiteradish", "根莖類", Integer.parseInt(date),someDaysLater(10)),
+                            new RefrigeratorIngredient(9, "玉米", 300, "corn", "蔬菜類", Integer.parseInt(date),someDaysLater(7)),
+                            new RefrigeratorIngredient(10, "菠菜", 250, "spinach", "葉菜花菜", Integer.parseInt(date),someDaysLater(4)),
+                            new RefrigeratorIngredient(11, "蛋", 10, "egg", "禽類", Integer.parseInt(date),someDaysLater(21)),
+                            new RefrigeratorIngredient(12, "花椰菜", 100, "broccoli", "葉菜花菜", Integer.parseInt(date),someDaysLater(5)),
+                            new RefrigeratorIngredient(13, "番茄", 100, "tomato", "葉菜花菜", Integer.parseInt(date),someDaysLater(5)),
+                            new RefrigeratorIngredient(14, "小黃瓜", 250, "cucumber", "豆菜與瓜菜", Integer.parseInt(date),someDaysLater(5)),
+                            new RefrigeratorIngredient(15, "蘑菇", 250, "mushroom", "蕈菇類", Integer.parseInt(date),someDaysLater(5))
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
+    }
+
+    public Integer someDaysLater(int day){
+        LocalDate now = LocalDate.now();
+        String plusDay = DateTimeFormatter.BASIC_ISO_DATE.format(now.plusDays(day));
+        return Integer.parseInt(plusDay);
     }
 
     @Override

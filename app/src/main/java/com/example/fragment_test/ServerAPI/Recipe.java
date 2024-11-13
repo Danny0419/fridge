@@ -26,6 +26,7 @@ public class Recipe {
     public static class Ingredient {
         private String ingredient_name;
         private String ingredient_need;
+        private String ingredient_category;
 
 
         public String getIngredient_name() {return ingredient_name;}
@@ -35,6 +36,15 @@ public class Recipe {
         public String getIngredient_need() {return ingredient_need;}
 
         public void setIngredient_need(String ingredient_need) {this.ingredient_need = ingredient_need;}
+
+        public String getIngredient_category() {
+            return ingredient_category;
+        }
+
+        public void setIngredient_category(String ingredient_category) {
+            this.ingredient_category = ingredient_category;
+        }
+
         // Getter and Setter methods
     }
 

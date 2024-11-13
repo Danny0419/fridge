@@ -39,7 +39,6 @@ public class RecommendationActivity extends AppCompatActivity {
 
     private void getRecommendationsAndUpdateUI(Map<String, RecipeRecommendation.FridgeIngredient> fridgeIngredients) {
         List<RecipeRecommendation.Recommendation> recommendations = recipeRecommendation.getRecommendations(fridgeIngredients);
-
         if (recommendations != null && !recommendations.isEmpty()) {
             adapter = new RecommendationAdapter(this, recommendations);
             listView.setAdapter(adapter);
