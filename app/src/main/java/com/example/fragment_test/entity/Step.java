@@ -13,26 +13,26 @@ import androidx.room.PrimaryKey;
 public class Step implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public int stepId;
     @ColumnInfo(name = "r_id")
     public int rId;
     @ColumnInfo
-    public int order;
+    public int stepNum;
     @ColumnInfo
-    public String content;
+    public String stepDetail;
 
-    public Step(int id, int rId, int order, String content) {
-        this.id = id;
+    public Step(int stepId, int rId, int stepNum, String stepDetail) {
+        this.stepId = stepId;
         this.rId = rId;
-        this.order = order;
-        this.content = content;
+        this.stepNum = stepNum;
+        this.stepDetail = stepDetail;
     }
 
     protected Step(Parcel in) {
-        id = in.readInt();
+        stepId = in.readInt();
         rId = in.readInt();
-        order = in.readInt();
-        content = in.readString();
+        stepNum = in.readInt();
+        stepDetail = in.readString();
     }
 
     public static final Creator<Step> CREATOR = new Creator<Step>() {
@@ -55,10 +55,10 @@ public class Step implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
 
-        parcel.writeInt(id);
+        parcel.writeInt(stepId);
         parcel.writeInt(rId);
-        parcel.writeInt(order);
-        parcel.writeString(content);
+        parcel.writeInt(stepNum);
+        parcel.writeString(stepDetail);
     }
 
 }

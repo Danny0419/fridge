@@ -41,10 +41,12 @@ public class PreparedRecipeRepository {
 
     public void addInterestingRecipe(Recipe recipe) {
         recipeRepository.storeRecipe(recipe);
+        recipe.ingredients
+                .forEach(recipeIngredient -> recipeIngredient.rId = recipe.id);
         recipeIngredientRepository.addRecipeIngredients(recipe.ingredients);
         PreparedRecipe preparedRecipe = new PreparedRecipe(0, recipe.id, null, 0);
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
-        addNotSufficientIngredientsToShoppingList(recipe.ingredients.stream().map(o -> (Ingredient)o).toList());
+        addNotSufficientIngredientsToShoppingList(recipe.ingredients.stream().map(o -> (Ingredient) o).toList());
 
     }
 
