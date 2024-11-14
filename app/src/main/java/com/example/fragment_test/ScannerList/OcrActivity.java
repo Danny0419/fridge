@@ -1,6 +1,7 @@
 package com.example.fragment_test.ScannerList;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,10 +19,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fragment_test.MainActivity2;
 import com.example.fragment_test.R;
 import com.example.fragment_test.ServerAPI.*;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RefrigeratorIngredientDAO;
+import com.example.fragment_test.databinding.ActivityOcrBinding;
+import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -33,6 +38,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,49 +50,52 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 
 public class OcrActivity extends AppCompatActivity {
-
     private static final String TAG = "OcrActivity";
     private static final int PICK_IMAGE_REQUEST = 1;
+    private ScanIngredientConfirmBinding scanIngredientConfirmBinding;
+    private ActivityOcrBinding activityOcrBinding;
 
     private Button buttonRecognizeImage;
     private TextView textViewDate;
     private TextView textViewItems;
     private RecyclerView recyclerViewItems;
     private ItemAdapter itemAdapter;
-    private String invoiceDate; // 新增欄位儲存發票日期
+    private String invoiceDate;
 
     private TextRecognizer recognizer;
     private ExecutorService apiExecutor;
 
-
     private FridgeDatabase db;
     private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
 
+    // 新增用於追蹤API調用的變數
+    private int apiCallsCompleted = 0;
+    private List<CombinedIngredient> allMatchedIngredients = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr);
-        //buttonRecognizeImage.setOnClickListener(v -> openGallery()); //日期用
+
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
         textViewItems = findViewById(R.id.textViewItems);
         recyclerViewItems = findViewById(R.id.recyclerViewItems);
 
+        scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(getLayoutInflater());
+
         recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
         apiExecutor = Executors.newSingleThreadExecutor();
 
-        // 初始化資料庫和 DAO
         db = FridgeDatabase.getInstance(this);
         refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
-                openGallery();
+
+        openGallery();
+
         itemAdapter = new ItemAdapter(new ArrayList<>());
         recyclerViewItems.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewItems.setAdapter(itemAdapter);
@@ -129,60 +138,48 @@ public class OcrActivity extends AppCompatActivity {
             }
         }
 
-        // 一次性設定 invoiceDate
         invoiceDate = extractDate(allLines);
-
         List<Item> items = extractItems(allLines);
 
-        Log.d(TAG, "Invoice Date: " + invoiceDate);
-        String displayDate = extractDate(allLines);
-        textViewDate.setText("發票日期: " + displayDate);
+        // 重置計數器和列表
+        apiCallsCompleted = 0;
+        allMatchedIngredients = new ArrayList<>(Collections.nCopies(items.size(), null));
 
+        // 為每個項目調用API
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
-            Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
-            callApiWithProductName(item.getName(), items, i, invoiceDate);  // 傳入 items 列表和當前索引
+            Log.d(TAG, "Processing item: " + item.getName());
+            callApiWithProductName(item.getName(), items, i, invoiceDate);
         }
 
         itemAdapter.updateItems(items);
     }
-
-
-
 
     private String extractDate(List<String> lines) {
         Pattern patternDate = Pattern.compile("\\b\\d{4}\\s*/\\s*\\d{2}\\s*/\\s*\\d{2}\\b");
         for (String line : lines) {
             Matcher matcher = patternDate.matcher(line);
             if (matcher.find()) {
-                String dateStr = matcher.group().replaceAll("\\s*", ""); // 如 "2024/11/16"
+                String dateStr = matcher.group().replaceAll("\\s*", "");
                 try {
-                    // 解析日期
                     SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy/MM/dd");
                     Date date = originalFormat.parse(dateStr);
-
-                    // 格式化為 yyyyMMdd 供儲存至資料庫
                     SimpleDateFormat targetFormatForDb = new SimpleDateFormat("yyyyMMdd");
-                    invoiceDate = targetFormatForDb.format(date);
-
-                    // 格式化為 yyyy/MM/dd 供顯示給使用者
-                    SimpleDateFormat targetFormatForDisplay = new SimpleDateFormat("yyyy/MM/dd");
-                    return targetFormatForDisplay.format(date);
-
+                    return targetFormatForDb.format(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
         }
-        return "未找到日期";
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
     private List<Item> extractItems(List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Pattern patternItem = Pattern.compile("^[\\*\\+#](\\d+)\\s*(.+)");
-        Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");
-        Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$");
-        Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)");
+        Pattern patternItem = Pattern.compile("^([\\*\\+#]\\d+|66)\\s*(.+)"); //商品
+        Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");   //價錢
+        Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$"); //數量
+        Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)"); //單一價錢
         Pattern patternFullItem = Pattern.compile("\\$(\\d+)\\s*[\\*\\+](\\d+)\\s*(\\d+)TX");
 
         Item currentItem = null;
@@ -248,31 +245,147 @@ public class OcrActivity extends AppCompatActivity {
         return items;
     }
 
-    private void callApiWithProductName(String productName, List<Item> items, int itemIndex,String invoiceDate) {
-        // 清除不必要字符
+    private void callApiWithProductName(String productName, List<Item> items, int itemIndex, String invoiceDate) {
         String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
+
         apiExecutor.execute(() -> {
             ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
             Call<List<CombinedIngredient>> call = apiService.getCombinedIngredients(cleanedProductName);
-            Response<List<CombinedIngredient>> response = null;
+
             try {
-                response = call.execute();
+                Response<List<CombinedIngredient>> response = call.execute();
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    List<CombinedIngredient> ingredients = response.body();
-                    // 更新 UI，只傳有回應資料的商品
-                    runOnUiThread(() -> updateUIWithIngredients(ingredients, items, itemIndex));
+                    List<CombinedIngredient> responseIngredients = response.body();
+
+                    synchronized (this) {
+                        if (!responseIngredients.isEmpty()) {
+                            allMatchedIngredients.set(itemIndex, responseIngredients.get(0));
+                            Log.d(TAG, "API Success for item " + itemIndex + ": " + responseIngredients.get(0).getIngredient_Name());
+                        }
+
+                        updateDBWithIngredients(responseIngredients, items, itemIndex);
+                        apiCallsCompleted++;
+
+                        Log.d(TAG, "API calls completed: " + apiCallsCompleted + "/" + items.size());
+
+                        if (apiCallsCompleted == items.size()) {
+                            runOnUiThread(() -> showFinalDialog(items, allMatchedIngredients));
+                        }
+                    }
                 } else {
-                    Log.d(TAG, "無法獲取商品信息: " + productName);
+                    handleApiFailure(items, itemIndex);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.d(TAG, "API 呼叫失敗: " + e.getMessage());
+                handleApiFailure(items, itemIndex);
             }
         });
     }
 
+    private void handleApiFailure(List<Item> items, int itemIndex) {
+        synchronized (this) {
+            apiCallsCompleted++;
+            Log.d(TAG, "API call failed for item " + itemIndex + ". Total completed: " + apiCallsCompleted + "/" + items.size());
+            if (apiCallsCompleted == items.size()) {
+                runOnUiThread(() -> showFinalDialog(items, allMatchedIngredients));
+            }
+        }
+    }
 
-    private void updateUIWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
+    private void showFinalDialog(List<Item> items, List<CombinedIngredient> matchedIngredients) {
+        Dialog dialog = new Dialog(OcrActivity.this);
+        ScanIngredientConfirmBinding dialogBinding = ScanIngredientConfirmBinding.inflate(getLayoutInflater());
+        dialog.setContentView(dialogBinding.getRoot());
+
+        JumpAdapter jumpAdapter = new JumpAdapter(items, matchedIngredients);
+        dialogBinding.shoppingListItemRecyclerview.setAdapter(jumpAdapter);
+        dialogBinding.shoppingListItemRecyclerview.setLayoutManager(new LinearLayoutManager(OcrActivity.this));
+
+        dialogBinding.continueButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            openGallery();
+        });
+
+        dialogBinding.confirmButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(OcrActivity.this, MainActivity2.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // 應急用調整彈跳視窗大小
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1020;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        dialog.show();
+
+    }
+//    private void callApiWithProductName(String productName, List<Item> items, int itemIndex, String invoiceDate) {
+//        // 清除不必要字符
+//        String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
+//
+//        apiExecutor.execute(() -> {
+//            ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+//            Call<List<CombinedIngredient>> call = apiService.getCombinedIngredients(cleanedProductName);
+//
+//            try {
+//                Response<List<CombinedIngredient>> response = call.execute();
+//                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+//                    List<CombinedIngredient> ingredients = response.body();
+//
+//                    // 更新 UI 和顯示對話框
+//                    runOnUiThread(() -> {
+//                        // 更新 UI
+//                        updateUIWithIngredients(ingredients, items, itemIndex);
+//                        // 初始化並顯示對話框
+//                        showIngredientDialog(ingredients);
+//                    });
+//                    updateDBWithIngredients(ingredients, items, itemIndex);
+//                } else {
+//                    Log.d(TAG, "無法獲取商品信息: " + productName);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                Log.d(TAG, "API 呼叫失敗: " + e.getMessage());
+//            }
+//        });
+//    }
+//
+//    // 顯示對話框的獨立方法
+//    private void showIngredientDialog(List<CombinedIngredient> ingredients) {
+//        // 確認當前的 Activity 上下文
+//        Dialog dialog = new Dialog(OcrActivity.this);
+//
+//        // 使用 ViewBinding 或 DataBinding 初始化佈局
+//        ScanIngredientConfirmBinding binding = ScanIngredientConfirmBinding.inflate(getLayoutInflater());
+//        dialog.setContentView(binding.getRoot());
+//
+//        // 將資料綁定到對話框的 UI 元件
+//        binding.getRoot(); // 假設在佈局中有一個 setIngredients 方法來綁定資料
+//
+//        // 顯示對話框
+//        dialog.show();
+//    }
+//
+////     更新 UI 資料的邏輯
+//    private void updateUIWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
+//        // 這裡可以對 UI 中的其他元件進行更新，例如在清單中顯示成分或更新產品狀態
+//        jumpAdapter = new JumpAdapter(items);
+//        Log.i("TAG",items.toString());
+////        items.get(itemIndex).getChangedName();//轉換後名稱
+////        ingredients.get(itemIndex).getIngredients_category();//種類
+////        items.get(itemIndex).getQuantity();//數量
+////        items.get(itemIndex).getExpiration();//保存期限
+//        // 假設你有一個 RecyclerView 或 ListView，可以在此處通知資料更新
+//
+//        jumpAdapter.notifyItemChanged(itemIndex);
+//    }
+
+
+
+    private void updateDBWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
 
@@ -280,59 +393,111 @@ public class OcrActivity extends AppCompatActivity {
             LocalDate todayDate = LocalDate.now(ZoneId.of("Asia/Taipei"));
             String formattedTodayDate = todayDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-            for (CombinedIngredient ingredient : ingredients) {
-                // 將發票日期字串轉換為 LocalDate
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-                LocalDate invoiceDateLocal = LocalDate.parse(invoiceDate, formatter);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                    LocalDate invoiceDateLocal = LocalDate.parse(invoiceDate, formatter);
 
-                // 計算保存期限日期
-                LocalDate expirationDate = invoiceDateLocal.plusDays(ingredient.getExpiration());
+                    for (CombinedIngredient ingredient : ingredients) {
+                        try {
+                            // 計算保存期限日期
+                            LocalDate expirationDate = invoiceDateLocal.plusDays(ingredient.getExpiration());
+                            int formattedExpirationDate = Integer.parseInt(expirationDate.format(formatter));
+                            int invoiceDateInt = Integer.parseInt(invoiceDate);
 
-                // 格式化為 yyyyMMdd 並轉換為 int 型別
-                int formattedExpirationDate = Integer.parseInt(expirationDate.format(formatter));
+                            // 檢查數據有效性
+                            if (ingredient.getIngredient_Name() == null || ingredient.getIngredient_Name().isEmpty()) {
+                                throw new IllegalArgumentException("Ingredient name cannot be null or empty");
+                            }
 
-                // 使用一個固定的 id 值，例如 0，並將 invoiceDate 轉換為 int 型別
-                int invoiceDateInt = Integer.parseInt(invoiceDate); // 將 invoiceDate 轉換為 int
+                            if (ingredient.getGrams() == null || ingredient.getGrams().isEmpty()) {
+                                throw new IllegalArgumentException("Grams cannot be null or empty");
+                            }
 
-                RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
-                        0, // ID
-                        ingredient.getIngredient_Name(), // 名稱
-                        Integer.parseInt(ingredient.getGrams()), // 數量 // 重量
-                        "圖片", // 圖片路徑
-                        ingredient.getIngredients_category(), // 種類
-                        invoiceDateInt, // 將發票日期轉換為 int
-                        formattedExpirationDate, // 保存期限 (int 格式)
-                        "克"
+                            RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
+                                    0,
+                                    ingredient.getIngredient_Name(),
+                                    Integer.parseInt(ingredient.getGrams()),
+                                    ingredient.getIngredient_pictures(),
+                                    ingredient.getIngredients_category(),
+                                    invoiceDateInt,
+                                    formattedExpirationDate,
+                                    formattedTodayDate,
+                                    null // 根據保存期限計算狀態
+                            );
 
-                );
+                            // 在事務中執行插入操作
+                            db.runInTransaction(() -> {
+                                long result = refrigeratorIngredientDAO.insertRefrigeratorIngredient(refrigeratorIngredient);
+                                if (result > 0) {
+                                    Log.d(TAG, "成功寫入資料庫: " + refrigeratorIngredient.getName());
+                                } else {
+                                    throw new RuntimeException("Insert operation failed");
+                                }
+                                return null;
+                            });
 
-                // 插入資料到資料庫（需要在背景執行緒中執行）
-                Executors.newSingleThreadExecutor().execute(() -> {
-                    refrigeratorIngredientDAO.insertIngredient(refrigeratorIngredient);
-                });
-            }
-        }
+                            // 更新UI
+                          //  runOnUiThread(() -> updateUI(item, ingredient));
 
-
-
-        // 確保只有該商品對應有資料才會顯示
-        if (itemIndex < items.size()) {
-            Item item = items.get(itemIndex);
-            StringBuilder result = new StringBuilder(textViewItems.getText());
-            for (CombinedIngredient ingredient : ingredients) {
-                result.append("商品原始名稱: ").append(item.getName()).append("\n")
-                        .append("數量: ").append(item.getQuantity()).append("\n")
-                        .append("商品種類: ").append(ingredient.getIngredients_category()).append("\n")
-                        .append("商品轉換名稱: ").append(ingredient.getIngredient_Name()).append("\n")
-                        .append("保存期限: ").append(ingredient.getExpiration()).append(" 天\n")
-                        .append("-------------------------\n");
-            }
-            textViewItems.setText(result.toString());
+                        } catch (NumberFormatException e) {
+                            Log.e(TAG, "數值轉換錯誤: " + e.getMessage(), e);
+                            showError("數值格式錯誤");
+                        } catch (IllegalArgumentException e) {
+                            Log.e(TAG, "參數錯誤: " + e.getMessage(), e);
+                            showError("資料格式錯誤");
+                        } catch (Exception e) {
+                            Log.e(TAG, "資料庫操作錯誤: " + e.getMessage(), e);
+                            showError("資料庫寫入失敗");
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "整體處理錯誤: " + e.getMessage(), e);
+                    showError("處理過程發生錯誤");
+                }
+            });
+            executor.shutdown();
         }
     }
 
+    // 計算食材狀態
+    private String calculateStatus(int expirationDate) {
+        LocalDate today = LocalDate.now();
+        LocalDate expDate = LocalDate.parse(String.valueOf(expirationDate),
+                DateTimeFormatter.ofPattern("yyyyMMdd"));
+        long daysUntilExpiration = ChronoUnit.DAYS.between(today, expDate);
 
+        if (daysUntilExpiration < 0) {
+            return "已過期";
+        } else if (daysUntilExpiration <= 3) {
+            return "即將過期";
+        } else {
+            return "正常";
+        }
+    }
 
+    // 更新UI的方法
+//    private void updateUI(Item item, CombinedIngredient ingredient) {
+//        StringBuilder result = new StringBuilder(textViewItems.getText());
+//        result.append("商品原始名稱: ").append(item.getName()).append("\n")
+//                .append("數量: ").append(item.getQuantity()).append("\n")
+//                .append("商品種類: ").append(ingredient.getIngredients_category()).append("\n")
+//                .append("商品轉換名稱: ").append(ingredient.getIngredient_Name()).append("\n")
+//                .append("保存期限: ").append(ingredient.getExpiration()).append(" 天\n")
+//                .append("-------------------------\n");
+//        textViewItems.setText(result.toString());
+//    }
+
+    // 顯示錯誤訊息
+    private void showError(String message) {
+        runOnUiThread(() ->
+                Toast.makeText(OcrActivity.this, message, Toast.LENGTH_SHORT).show()
+        );
+    }
 }
+
+
+
 
 
