@@ -39,7 +39,7 @@ public class ScheduleRecipeRepository {
     }
 
     public void schedule(int date, int dayOfWeek, RecipeWithPreRecipeId recipeWithPreRecipeId) {
-        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, recipeWithPreRecipeId.id, date, dayOfWeek, 0);
+        ScheduleRecipe scheduleRecipe = new ScheduleRecipe(0, recipeWithPreRecipeId.recipe.id, date, dayOfWeek, 0);
         scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe);
         preparedRecipeRepository.schedule((recipeWithPreRecipeId));
     }

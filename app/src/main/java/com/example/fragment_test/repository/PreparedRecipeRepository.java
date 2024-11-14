@@ -74,7 +74,7 @@ public class PreparedRecipeRepository {
     }
 
     public void schedule(RecipeWithPreRecipeId recipeWithPreRecipeId) {
-        PreparedRecipe preparedRecipe = new PreparedRecipe(recipeWithPreRecipeId.pRId, recipeWithPreRecipeId.id, 1);
+        PreparedRecipe preparedRecipe = new PreparedRecipe(recipeWithPreRecipeId.pRId, recipeWithPreRecipeId.recipe.id, 1);
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
     }
 
