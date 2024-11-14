@@ -51,6 +51,7 @@ public class ExpiringRefrigeratorIngredientsAdapterForHome extends RecyclerView.
         holder.ingredientName.setText(refrigeratorIngredient.name);
         holder.ingredientQuantity.setText(refrigeratorIngredient.quantity + " g");
         holder.remindNumber.setText(refrigeratorIngredient.daysRemaining + "");
+
     }
 
     @Override

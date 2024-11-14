@@ -19,7 +19,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/bold"
+                android:fontFamily="@font/regular"
                 android:text="@string/shoppingItemIdTitle"
                 android:textAlignment="center"
                 android:textSize="24dp" />
@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/bold"
+                android:fontFamily="@font/regular"
                 android:text="@string/shoppingItemNameTitle"
                 android:textAlignment="center"
                 android:textSize="24dp" />
@@ -37,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/bold"
+                android:fontFamily="@font/regular"
                 android:text="@string/shoppingItemSortTitle"
                 android:textAlignment="center"
                 android:textSize="24dp" />
@@ -46,7 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/bold"
+                android:fontFamily="@font/regular"
                 android:text="@string/shoppingItemQuantityTitle"
                 android:textAlignment="center"
                 android:textSize="24dp" />
@@ -55,16 +55,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/bold"
+                android:fontFamily="@font/regular"
                 android:text="@string/shoppingItemStateTitle"
                 android:textAlignment="center"
                 android:textSize="24dp" />
 
         </LinearLayout>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shoppingListItemRecyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    </androidx.core.widget.NestedScrollView>
+
 
 </LinearLayout>

@@ -40,6 +40,7 @@
             android:id="@+id/remind_number"
             android:fontFamily="@font/regular"
             android:textSize="20dp"
+            android:textColor="@color/important_red"
             />
 
 <!--        到期提醒文字部分-->
@@ -50,6 +51,7 @@
             android:id="@+id/remind_text"
             android:fontFamily="@font/regular"
             android:textSize="20dp"
+            android:textColor="@color/important_red"
             />
 
     </LinearLayout>

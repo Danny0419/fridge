@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -86,6 +87,10 @@ public class ScanReceiptActivity extends AppCompatActivity {
         Button addManuallyButton=findViewById(R.id.add_manually_button);    //手動輸入按鈕
         LinearLayout scanLayout = findViewById(R.id.scan_layout);   //掃描發票orOCR按鈕區塊
         LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
+        int unclickTextColor = ContextCompat.getColor(this, R.color.hintBoxGray);
+        int clickTextColor=ContextCompat.getColor(this,R.color.black);
+        Drawable unclickBackground=ContextCompat.getDrawable(this,R.drawable.non_under_line);
+        Drawable clickBackground=ContextCompat.getDrawable(this,R.drawable.text_under_line);
 
 
         //返回
@@ -98,13 +103,22 @@ public class ScanReceiptActivity extends AppCompatActivity {
         scanReceiptButton.setOnClickListener(v -> {
             addManuallyLayout.setVisibility(View.GONE);
             scanLayout.setVisibility(View.VISIBLE);
+            scanReceiptButton.setTextColor(clickTextColor);
+            scanReceiptButton.setBackground(clickBackground);
+            addManuallyButton.setTextColor(unclickTextColor);
+            addManuallyButton.setBackground(unclickBackground);
         });
 
         //手動輸入
         addManuallyButton.setOnClickListener(v -> {
             addManuallyLayout.setVisibility(View.VISIBLE);
             scanLayout.setVisibility(View.GONE);
+            scanReceiptButton.setTextColor(unclickTextColor);
+            scanReceiptButton.setBackground(unclickBackground);
+            addManuallyButton.setTextColor(clickTextColor);
+            addManuallyButton.setBackground(clickBackground);
         });
+
         Button albumBtn = findViewById(R.id.albumBnt);
         albumBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, OcrActivity.class);
