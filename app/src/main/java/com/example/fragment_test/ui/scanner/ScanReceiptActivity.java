@@ -1,6 +1,10 @@
 package com.example.fragment_test.ui.scanner;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.ScannerList.OcrActivity;
@@ -17,8 +23,12 @@ import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +45,11 @@ import retrofit2.Response;
 
 public class ScanReceiptActivity extends AppCompatActivity {
     //相機掃描
-    //private DecoratedBarcodeView barcodeView;
+    private DecoratedBarcodeView barcodeView;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+    //QRcode集合
+    private Set<String> scannedDataSet = new HashSet<>();
+
 
     // 用于存储已识别的QR码信息
     private Set<String> recognizedQrCodes = new HashSet<>();
@@ -47,16 +61,25 @@ public class ScanReceiptActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan_receipt);
 
         //開啟相機
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        intentIntegrator.setPrompt("Scan a QR code");
-        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.initiateScan();
+//        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+//        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+//        intentIntegrator.setPrompt("Scan a QR code");
+//        intentIntegrator.setCameraId(0);  // 使用特定的摄像头
+//        intentIntegrator.setBeepEnabled(true);
+//        intentIntegrator.setBarcodeImageEnabled(true);
+//        intentIntegrator.initiateScan();
 
-        //barcodeView = findViewById(R.id.camara);
-        //barcodeView.resume();  // 启动相机预览
+        barcodeView = findViewById(R.id.camara);
+        // 相機
+        if (checkCameraPermission()) {
+            //如果相機已授權，則啟動相機
+            startCamera();
+            initializeBarcodeScanner();
+        }
+        else {
+            //如果相機未授權，則請求
+            requestCameraPermission();
+        }
 
         /*
         個按鈕之點擊
@@ -88,6 +111,73 @@ public class ScanReceiptActivity extends AppCompatActivity {
         });
         String productName = "有機青江菜";
         fetchCombinedIngredients(productName);
+    }
+
+    //開啟相機
+    private void startCamera() {
+        barcodeView.decodeContinuous(result -> {
+            String scanContent = result.getText();
+            Toast.makeText(ScanReceiptActivity.this, "Scan result: " + scanContent, Toast.LENGTH_LONG).show();
+        });
+    }
+
+    //要求相機權限
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+    }
+
+    //    確認相機權限
+    private boolean checkCameraPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    protected void onResume() {
+        super.onResume();
+        barcodeView.resume();
+    }
+
+    //暫停相機
+    @Override
+    protected void onPause() {
+        super.onPause();
+        barcodeView.pause();
+    }
+
+    //    使用者拒絕開啟相機
+//    @SuppressLint("MissingSuperCall")
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // 用户授予了相机权限，启动相机
+//                startCamera();
+//            } else {
+//                // 用户拒绝了相机权限，显示提示
+//                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
+
+    private void initializeBarcodeScanner() {
+        barcodeView.decodeContinuous(new BarcodeCallback() {
+            @Override
+            public void barcodeResult(BarcodeResult result) {
+                if (result != null) {
+                    String scannedData = result.getText();
+                    scannedDataSet.add(scannedData);
+
+                    if (scannedDataSet.size() == 2) {
+                        handleRecognizedQrCodes(scannedDataSet);
+                        barcodeView.pause();
+                    }
+                }
+            }
+
+            @Override
+            public void possibleResultPoints(List<ResultPoint> resultPoints) {
+                // 可選：處理可能的結果點
+            }
+        });
     }
 
     private void fetchCombinedIngredients(String productName) {
@@ -128,6 +218,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("tag", "onActivityResult: "+"avtivity");
         // 处理QR码扫描结果
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
@@ -148,10 +240,11 @@ public class ScanReceiptActivity extends AppCompatActivity {
                 }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleRecognizedQrCodes(Set<String> qrCodes) {
+
+        Log.i("tag", "handleRecognizedQrCodes: "+"handleRecognizedQrCodes");
         // 合并QR码信息并解析发票和品项
         StringBuilder combinedInfo = new StringBuilder();
         List<ParsedItem> items = new ArrayList<>();
@@ -202,7 +295,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                 if (existingInvoice != null) {
                     // 提示用户发票已被扫描过
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "此发票已被扫描过，请检查！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "此發票已被掃描過，請檢查！", Toast.LENGTH_LONG).show();
                     });
                     return; // 拦截，避免后续处理
                 }
@@ -224,7 +317,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
                 // 提示用户成功
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "发票和品项已成功保存", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "發票和品項已成功保存", Toast.LENGTH_LONG).show();
                     finish();
                 });
             });
