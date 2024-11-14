@@ -37,6 +37,13 @@ public class RecipeIngredient extends Ingredient implements Parcelable {
         this.rId = rId;
     }
 
+    public RecipeIngredient(String name, int quantity, String sort) {
+        super();
+        this.name = name;
+        this.quantity = quantity;
+        this.sort = sort;
+    }
+
     protected RecipeIngredient(Parcel in) {
         super(in);
         img = in.readString();

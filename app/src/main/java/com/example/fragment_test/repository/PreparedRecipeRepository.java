@@ -64,7 +64,7 @@ public class PreparedRecipeRepository {
                 shoppingListIngredientRepository.addShoppingItem(new ShoppingIngredient(
                         0,
                         ingredient.name,
-                        "新增",
+                        ingredient.sort,
                         difference.get(),
                         0)
                 );

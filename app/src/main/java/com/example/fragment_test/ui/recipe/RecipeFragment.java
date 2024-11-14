@@ -152,7 +152,7 @@ public class RecipeFragment extends Fragment {
                                     try {
                                         String ingredientNeed = o1.getIngredient_need();
                                         String quantity = ingredientNeed.substring(0, ingredientNeed.length() - 1);
-                                        ingredients.add(new RecipeIngredient(o1.getIngredient_name(), Integer.parseInt(quantity)));
+                                        ingredients.add(new RecipeIngredient(o1.getIngredient_name(), Integer.parseInt(quantity), o1.getIngredient_category()));
                                     } catch (Exception e) {
 
                                     }
