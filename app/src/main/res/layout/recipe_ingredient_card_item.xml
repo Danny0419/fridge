@@ -6,20 +6,13 @@
     android:orientation="vertical"
     android:gravity="center"
     android:paddingRight="5dp">
-
-        <ImageView
-            android:id="@+id/ingredientImg"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/photo"/>
-
     <TextView
         android:id="@+id/ingredientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/regular"
         android:text="食材名稱"
-        android:textSize="13dp"
+        android:textSize="16dp"
         tools:ignore="TextSizeCheck" />
 
 </LinearLayout>

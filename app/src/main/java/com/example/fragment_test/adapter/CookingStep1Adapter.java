@@ -13,7 +13,7 @@ import com.example.fragment_test.entity.Ingredient;
 
 import java.util.List;
 
-public class RecipeDetailIngredientAdapter extends RecyclerView.Adapter<RecipeDetailIngredientAdapter.RecipeDetailIngredientViewHolder> {
+public class CookingStep1Adapter extends RecyclerView.Adapter<CookingStep1Adapter.RecipeDetailIngredientViewHolder> {
     private List<? extends Ingredient> ingredients;
 
     class RecipeDetailIngredientViewHolder extends RecyclerView.ViewHolder {
@@ -27,14 +27,14 @@ public class RecipeDetailIngredientAdapter extends RecyclerView.Adapter<RecipeDe
         }
     }
 
-    public RecipeDetailIngredientAdapter(List<? extends Ingredient> ingredients) {
+    public CookingStep1Adapter(List<? extends Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
     @NonNull
     @Override
     public RecipeDetailIngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_detail_ingredients, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meals_prepared_ingredients, parent, false);
         return new RecipeDetailIngredientViewHolder(view);
     }
 

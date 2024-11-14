@@ -16,5 +16,6 @@
     <color name="selectRed">#FF5C5C</color>
     <color name="tabBackgroundPink">#80FFDBDB</color>
     <color name="tabStrokeGray">#C8C7C7</color>
+    <color name="viewUnderLineGray">#8C8C8C</color>
 
 </resources>

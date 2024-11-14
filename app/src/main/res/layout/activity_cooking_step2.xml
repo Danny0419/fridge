@@ -10,7 +10,7 @@
     <include
         android:id="@+id/steps"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         layout="@layout/recipe_steps"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout

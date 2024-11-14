@@ -94,7 +94,7 @@
                     android:textSize="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.5" />
+                    app:layout_constraintWidth_percent="0.5"/>
 
                 <TextView
                     android:id="@+id/recipe_take_time"

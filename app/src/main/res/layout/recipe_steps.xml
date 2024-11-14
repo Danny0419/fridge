@@ -12,17 +12,18 @@
         android:fontFamily="@font/bold"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginBottom="17dp"/>
+        android:layout_marginBottom="17dp"
+        android:layout_marginTop="15dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/steps"
-        android:background="@drawable/uper_line"
         android:paddingTop="11dp"
         android:layout_marginBottom="11dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp">
+        android:layout_marginRight="25dp"
+        android:background="@drawable/uper_line">
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

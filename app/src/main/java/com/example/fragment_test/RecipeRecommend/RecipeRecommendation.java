@@ -121,6 +121,7 @@ public class RecipeRecommendation {
                     @Override
                     public void onError(Throwable e) {
                         callback.onError("載入冰箱食材失敗: " + e.getMessage());
+
                     }
 
                     @Override

@@ -70,7 +70,7 @@ public class StartCookingActivity extends AppCompatActivity {
         RecipeIntroductionBinding recipeIntroduction = activityStartCookingBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(scheduleRecipe.recipe.name);
 //        recipeIntroduction.recipeImg.setText(scheduleRecipe.recipe.img);
-        recipeIntroduction.recipeServing.setText(Integer.toString(scheduleRecipe.recipe.serving));
+        recipeIntroduction.recipeServing.setText("份量\n"+scheduleRecipe.recipe.serving+"人份");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);

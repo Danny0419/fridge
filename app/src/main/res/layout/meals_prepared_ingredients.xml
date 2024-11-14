@@ -3,11 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<!--    食材與數量-->
     <TextView
         android:id="@+id/ingredient_name"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="食材1"
         android:textSize="20dp"
@@ -17,43 +16,28 @@
     <TextView
         android:id="@+id/ingredient_quantity"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="食材1用量"
         android:textSize="20dp"
         android:gravity="center"
         android:fontFamily="@font/regular"/>
 
-<!--    到期提醒-->
     <LinearLayout
-        android:id="@+id/remind_date"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="center">
-
-<!--        到期提醒數字部分-->
-        <TextView
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp">
+        <CheckBox
+            android:id="@+id/shoppingItemState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="？"
-            android:id="@+id/remind_number"
-            android:fontFamily="@font/regular"
             android:textSize="20dp"
-            android:textColor="@color/important_red"
-            />
-
-<!--        到期提醒文字部分-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="天後到期"
-            android:id="@+id/remind_text"
-            android:fontFamily="@font/regular"
-            android:textSize="20dp"
-            android:textColor="@color/important_red"
-            />
-
+            android:textAlignment="center" />
     </LinearLayout>
+
 
 </LinearLayout>

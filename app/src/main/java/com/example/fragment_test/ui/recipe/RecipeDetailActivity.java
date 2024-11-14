@@ -65,7 +65,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                             recipeIntroduction.recipeImg.setImageBitmap(recipe.pic);
                         });
 
-        recipeIntroduction.recipeServing.setText(Integer.toString(recipe.serving));
+        recipeIntroduction.recipeServing.setText("份量\n"+recipe.serving+"人份");
 
         recipeViewModel.loadRecipeSteps(recipe);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);

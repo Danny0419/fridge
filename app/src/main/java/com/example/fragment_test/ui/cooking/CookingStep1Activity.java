@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.fragment_test.adapter.CookingStep1Adapter;
 import com.example.fragment_test.adapter.RecipeDetailIngredientAdapter;
 import com.example.fragment_test.databinding.ActivityCookingStep1Binding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
@@ -28,7 +29,7 @@ public class CookingStep1Activity extends AppCompatActivity {
         activityCookingStep1Binding
                         .recipeIngredients.setLayoutManager(layoutManager);
         activityCookingStep1Binding
-                .recipeIngredients.setAdapter(new RecipeDetailIngredientAdapter(cookingRecipe.recipe.ingredients));
+                .recipeIngredients.setAdapter(new CookingStep1Adapter(cookingRecipe.recipe.ingredients));
 
 
         activityCookingStep1Binding.nextBtn.setOnClickListener(view -> {

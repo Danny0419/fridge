@@ -17,34 +17,33 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginBottom="4dp"/>
 
-    <ImageView
-        android:id="@+id/step_picture"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:scaleType="centerCrop"
-        android:text="食譜步驟照片一"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/step"
-        app:layout_constraintEnd_toStartOf="@+id/step_describe"
-        app:layout_constraintWidth_percent="0.5"
-        android:layout_marginRight="2dp"
-        android:src="@drawable/photo"
-        />
+<!--    <ImageView-->
+<!--        android:id="@+id/step_picture"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:gravity="center"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:text="食譜步驟照片一"-->
+<!--        app:layout_constraintDimensionRatio="1:1"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/step"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/step_describe"-->
+<!--        app:layout_constraintWidth_percent="0.5"-->
+<!--        android:layout_marginRight="2dp"-->
+<!--        android:src="@drawable/photo"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/step_describe"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="194dp"
         android:gravity="center"
         android:text="食譜描述"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toEndOf="@+id/step_picture"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/step"
-        app:layout_constraintWidth_percent="0.5"
         android:layout_marginLeft="2dp"
         android:fontFamily="@font/regular"
-        android:textSize="16dp"/>
+        android:textSize="20dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
