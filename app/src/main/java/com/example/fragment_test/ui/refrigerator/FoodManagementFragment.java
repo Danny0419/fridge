@@ -208,17 +208,17 @@ public class FoodManagementFragment extends Fragment {
         fragmentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.home_toolbar, menu);
+                menuInflater.inflate(R.menu.schedule_toolbar, menu);
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                int itemId = menuItem.getItemId();
-                NavController navController = Navigation.findNavController(getActivity(),
-                        R.id.nav_host_fragment_activity_main2);
-                if (itemId == R.id.scan) {
-                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
-                }
+//                int itemId = menuItem.getItemId();
+//                NavController navController = Navigation.findNavController(getActivity(),
+//                        R.id.nav_host_fragment_activity_main2);
+//                if (itemId == R.id.scan) {
+//                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+//                }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);

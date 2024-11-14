@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.ui.schedule.MealsPrepareDialogActivity;
+import com.example.fragment_test.utils.DividerItemDecoration;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -89,6 +90,7 @@ public class ScheduleAdapter extends BaseAdapter {
             intent.putExtra("dayOfWeek", dates[position].getDayOfWeek().toString());
             v.getContext().startActivity(intent);
         });
+
         return view;
     }
 
