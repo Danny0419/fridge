@@ -15,26 +15,30 @@ import androidx.room.PrimaryKey;
 public class PreparedRecipe {
     @PrimaryKey(autoGenerate = true)
     public int id;
-
     @ColumnInfo(name = "r_id")
     public Integer rId;
-
+    @ColumnInfo
+    public String src;
     @ColumnInfo(name = "s_r_id")
     public Integer sRId;
 
     @ColumnInfo
     public int scheduled;
 
-    @Ignore
-    public PreparedRecipe(int id, Integer rId, int scheduled) {
+    public PreparedRecipe(int id, Integer rId, String src, int scheduled) {
         this.id = id;
         this.rId = rId;
+        this.src = src;
         this.scheduled = scheduled;
     }
 
-    public PreparedRecipe(int id, Integer rId, Integer sRId, int scheduled) {
+    @Ignore
+
+
+    public PreparedRecipe(int id, Integer rId, String src, Integer sRId, int scheduled) {
         this.id = id;
         this.rId = rId;
+        this.src = src;
         this.sRId = sRId;
         this.scheduled = scheduled;
     }

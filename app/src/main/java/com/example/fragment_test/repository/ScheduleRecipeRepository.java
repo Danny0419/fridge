@@ -46,7 +46,7 @@ public class ScheduleRecipeRepository {
 
     public void unSchedule(int date, Recipe recipe) {
         scheduleRecipeDAO.deleteScheduleRecipeStatusByDateAndRecipeId(date, recipe.id);
-        preparedRecipeRepository.unSchedule(new PreparedRecipe(0, recipe.id, 0));
+        preparedRecipeRepository.unSchedule(new PreparedRecipe(0, recipe.id, recipe.src, 0));
     }
 
 

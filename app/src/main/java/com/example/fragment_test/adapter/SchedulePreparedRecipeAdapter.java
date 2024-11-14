@@ -48,6 +48,7 @@ public class SchedulePreparedRecipeAdapter extends RecyclerView.Adapter<Schedule
     public void onBindViewHolder(@NonNull SchedulePreparedRecipeViewHolder holder, int position) {
         RecipeWithPreRecipeId preparedRecipe = preparedRecipes.get(position);
         holder.recipeName.setText(preparedRecipe.recipe.name);
+        holder.recipePicture.setImageBitmap(preparedRecipe.recipe.pic);
         holder.itemView.setOnClickListener(view -> onclickListener.onclick(preparedRecipe));
     }
 

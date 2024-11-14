@@ -44,7 +44,7 @@ public class PreparedRecipeRepository {
         recipe.ingredients
                 .forEach(recipeIngredient -> recipeIngredient.rId = recipe.id);
         recipeIngredientRepository.addRecipeIngredients(recipe.ingredients);
-        PreparedRecipe preparedRecipe = new PreparedRecipe(0, recipe.id, null, 0);
+        PreparedRecipe preparedRecipe = new PreparedRecipe(0, recipe.id, recipe.src, null, 0);
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
         addNotSufficientIngredientsToShoppingList(recipe.ingredients.stream().map(o -> (Ingredient) o).toList());
 
@@ -74,7 +74,7 @@ public class PreparedRecipeRepository {
     }
 
     public void schedule(RecipeWithPreRecipeId recipeWithPreRecipeId) {
-        PreparedRecipe preparedRecipe = new PreparedRecipe(recipeWithPreRecipeId.pRId, recipeWithPreRecipeId.recipe.id, 1);
+        PreparedRecipe preparedRecipe = new PreparedRecipe(recipeWithPreRecipeId.pRId, recipeWithPreRecipeId.recipe.id, recipeWithPreRecipeId.recipe.src,1);
         preparedRecipeDAO.insertPreparedRecipe(preparedRecipe);
     }
 
