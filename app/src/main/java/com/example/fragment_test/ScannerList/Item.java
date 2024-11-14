@@ -8,6 +8,7 @@ public class Item {
     private String expiration;   // 新增保存期限
     private String Ingredient_Name;
     private String Ingredients_category;
+    private String Ingredient_pictures;
     public Item(String name, String quantity, String amount, String changedName, String expiration) {
         this.name = name;
         this.quantity = quantity;
@@ -55,6 +56,9 @@ public class Item {
 
     public String getIngredient_Name() {
         return Ingredient_Name;
+    }
+    public String getIngredient_pictures() {
+        return Ingredient_pictures;
     }
     public String getIngredients_category() {
         return Ingredients_category;

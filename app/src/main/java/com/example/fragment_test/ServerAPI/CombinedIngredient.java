@@ -8,6 +8,7 @@ public class CombinedIngredient {
     private String Ingredient_Name;
     private String Ingredients_category;
     private int expiration;
+    private String Ingredient_pictures;
 
     // Getters and setters
     public int getSupermarket_ingredient_ID() {
@@ -45,7 +46,9 @@ public class CombinedIngredient {
     public String getIngredient_Name() {
         return Ingredient_Name;
     }
-
+    public String getIngredient_pictures() {
+        return Ingredient_pictures;
+    }
     public void setIngredient_Name(String ingredient_Name) {
         Ingredient_Name = ingredient_Name;
     }

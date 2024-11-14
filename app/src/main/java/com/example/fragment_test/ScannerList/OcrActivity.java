@@ -176,10 +176,10 @@ public class OcrActivity extends AppCompatActivity {
 
     private List<Item> extractItems(List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Pattern patternItem = Pattern.compile("^([\\*\\+#]\\d+|66)\\s*(.+)");
-        Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");
-        Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$");
-        Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)");
+        Pattern patternItem = Pattern.compile("^([\\*\\+#]\\d+|66)\\s*(.+)"); //商品
+        Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");   //價錢
+        Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$"); //數量
+        Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)"); //單一價錢
         Pattern patternFullItem = Pattern.compile("\\$(\\d+)\\s*[\\*\\+](\\d+)\\s*(\\d+)TX");
 
         Item currentItem = null;
@@ -419,7 +419,7 @@ public class OcrActivity extends AppCompatActivity {
                                     0,
                                     ingredient.getIngredient_Name(),
                                     Integer.parseInt(ingredient.getGrams()),
-                                    "圖片",
+                                    ingredient.getIngredient_pictures(),
                                     ingredient.getIngredients_category(),
                                     invoiceDateInt,
                                     formattedExpirationDate,
@@ -439,7 +439,7 @@ public class OcrActivity extends AppCompatActivity {
                             });
 
                             // 更新UI
-                            runOnUiThread(() -> updateUI(item, ingredient));
+                          //  runOnUiThread(() -> updateUI(item, ingredient));
 
                         } catch (NumberFormatException e) {
                             Log.e(TAG, "數值轉換錯誤: " + e.getMessage(), e);
@@ -478,16 +478,16 @@ public class OcrActivity extends AppCompatActivity {
     }
 
     // 更新UI的方法
-    private void updateUI(Item item, CombinedIngredient ingredient) {
-        StringBuilder result = new StringBuilder(textViewItems.getText());
-        result.append("商品原始名稱: ").append(item.getName()).append("\n")
-                .append("數量: ").append(item.getQuantity()).append("\n")
-                .append("商品種類: ").append(ingredient.getIngredients_category()).append("\n")
-                .append("商品轉換名稱: ").append(ingredient.getIngredient_Name()).append("\n")
-                .append("保存期限: ").append(ingredient.getExpiration()).append(" 天\n")
-                .append("-------------------------\n");
-        textViewItems.setText(result.toString());
-    }
+//    private void updateUI(Item item, CombinedIngredient ingredient) {
+//        StringBuilder result = new StringBuilder(textViewItems.getText());
+//        result.append("商品原始名稱: ").append(item.getName()).append("\n")
+//                .append("數量: ").append(item.getQuantity()).append("\n")
+//                .append("商品種類: ").append(ingredient.getIngredients_category()).append("\n")
+//                .append("商品轉換名稱: ").append(ingredient.getIngredient_Name()).append("\n")
+//                .append("保存期限: ").append(ingredient.getExpiration()).append(" 天\n")
+//                .append("-------------------------\n");
+//        textViewItems.setText(result.toString());
+//    }
 
     // 顯示錯誤訊息
     private void showError(String message) {
