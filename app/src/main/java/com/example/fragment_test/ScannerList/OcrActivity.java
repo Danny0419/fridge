@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fragment_test.CookingActivity;
 import com.example.fragment_test.MainActivity2;
 import com.example.fragment_test.R;
 import com.example.fragment_test.ServerAPI.*;
@@ -27,7 +26,6 @@ import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.databinding.ActivityOcrBinding;
 import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.ui.refrigerator.FoodManagementFragment;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -39,6 +37,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -50,13 +49,9 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 
 public class OcrActivity extends AppCompatActivity {
-
     private static final String TAG = "OcrActivity";
     private static final int PICK_IMAGE_REQUEST = 1;
     private ScanIngredientConfirmBinding scanIngredientConfirmBinding;
@@ -67,35 +62,34 @@ public class OcrActivity extends AppCompatActivity {
     private TextView textViewItems;
     private RecyclerView recyclerViewItems;
     private ItemAdapter itemAdapter;
-    //    private JumpAdapter jumpAdapter;
-    private String invoiceDate; // 新增欄位儲存發票日期
+    private String invoiceDate;
 
     private TextRecognizer recognizer;
     private ExecutorService apiExecutor;
 
-
     private FridgeDatabase db;
     private RefrigeratorIngredientDAO refrigeratorIngredientDAO;
 
+    // 新增用於追蹤API調用的變數
+    private int apiCallsCompleted = 0;
+    private List<CombinedIngredient> allMatchedIngredients = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr);
-        //buttonRecognizeImage.setOnClickListener(v -> openGallery()); //日期用
+
         buttonRecognizeImage = findViewById(R.id.buttonRecognizeImage);
         textViewDate = findViewById(R.id.textViewDate);
         textViewItems = findViewById(R.id.textViewItems);
         recyclerViewItems = findViewById(R.id.recyclerViewItems);
-
 
         scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(getLayoutInflater());
 
         recognizer = TextRecognition.getClient(new ChineseTextRecognizerOptions.Builder().build());
         apiExecutor = Executors.newSingleThreadExecutor();
 
-        // 初始化資料庫和 DAO
         db = FridgeDatabase.getInstance(this);
         refrigeratorIngredientDAO = db.refrigeratorIngredientDAO();
 
@@ -104,11 +98,6 @@ public class OcrActivity extends AppCompatActivity {
         itemAdapter = new ItemAdapter(new ArrayList<>());
         recyclerViewItems.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewItems.setAdapter(itemAdapter);
-        RecyclerView recyclerView = findViewById(R.id.shoppingListItemRecyclerview);
-//        JumpAdapter adapter = new JumpAdapter(items); // items 为要显示的项目列表
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     private void openGallery() {
@@ -148,58 +137,45 @@ public class OcrActivity extends AppCompatActivity {
             }
         }
 
-        // 一次性設定 invoiceDate
         invoiceDate = extractDate(allLines);
-
         List<Item> items = extractItems(allLines);
 
-        Log.d(TAG, "Invoice Date: " + invoiceDate);
-        String displayDate = extractDate(allLines);
-        //
-        //textViewDate.setText("發票日期: " + displayDate);
+        // 重置計數器和列表
+        apiCallsCompleted = 0;
+        allMatchedIngredients = new ArrayList<>(Collections.nCopies(items.size(), null));
 
+        // 為每個項目調用API
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
-            Log.d(TAG, "Item: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Amount: " + item.getAmount());
-            callApiWithProductName(item.getName(), items, i, invoiceDate);  // 傳入 items 列表和當前索引
+            Log.d(TAG, "Processing item: " + item.getName());
+            callApiWithProductName(item.getName(), items, i, invoiceDate);
         }
 
         itemAdapter.updateItems(items);
     }
-
-
-
 
     private String extractDate(List<String> lines) {
         Pattern patternDate = Pattern.compile("\\b\\d{4}\\s*/\\s*\\d{2}\\s*/\\s*\\d{2}\\b");
         for (String line : lines) {
             Matcher matcher = patternDate.matcher(line);
             if (matcher.find()) {
-                String dateStr = matcher.group().replaceAll("\\s*", ""); // 如 "2024/11/16"
+                String dateStr = matcher.group().replaceAll("\\s*", "");
                 try {
-                    // 解析日期
                     SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy/MM/dd");
                     Date date = originalFormat.parse(dateStr);
-
-                    // 格式化為 yyyyMMdd 供儲存至資料庫
                     SimpleDateFormat targetFormatForDb = new SimpleDateFormat("yyyyMMdd");
-                    invoiceDate = targetFormatForDb.format(date);
-
-                    // 格式化為 yyyy/MM/dd 供顯示給使用者
-                    SimpleDateFormat targetFormatForDisplay = new SimpleDateFormat("yyyy/MM/dd");
-                    return targetFormatForDisplay.format(date);
-
+                    return targetFormatForDb.format(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
         }
-        return "未找到日期";
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
     private List<Item> extractItems(List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Pattern patternItem = Pattern.compile("^[\\*\\+#](\\d+)\\s*(.+)");
+        Pattern patternItem = Pattern.compile("^([\\*\\+#]\\d+|66)\\s*(.+)");
         Pattern patternPrice = Pattern.compile("^(\\d+)(?:TX)?$");
         Pattern patternQuantity = Pattern.compile("^[\\*\\+](\\d+)$");
         Pattern patternUnitPrice = Pattern.compile("^\\$(\\d+)");
@@ -268,58 +244,75 @@ public class OcrActivity extends AppCompatActivity {
         return items;
     }
 
-    // 在 OcrActivity.java 中創建 adapter 時
     private void callApiWithProductName(String productName, List<Item> items, int itemIndex, String invoiceDate) {
         String cleanedProductName = productName.replaceAll("[^a-zA-Z0-9\u4e00-\u9fa5]", "").trim();
+
         apiExecutor.execute(() -> {
             ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
             Call<List<CombinedIngredient>> call = apiService.getCombinedIngredients(cleanedProductName);
+
             try {
                 Response<List<CombinedIngredient>> response = call.execute();
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     List<CombinedIngredient> responseIngredients = response.body();
 
-                    List<CombinedIngredient> matchedIngredients = new ArrayList<>();
-                    for(int i = 0; i < items.size(); i++) {
-                        if(i == itemIndex && !responseIngredients.isEmpty()) {
-                            matchedIngredients.add(responseIngredients.get(0));
-                        } else {
-                            matchedIngredients.add(null);
+                    synchronized (this) {
+                        if (!responseIngredients.isEmpty()) {
+                            allMatchedIngredients.set(itemIndex, responseIngredients.get(0));
+                            Log.d(TAG, "API Success for item " + itemIndex + ": " + responseIngredients.get(0).getIngredient_Name());
+                        }
+
+                        updateDBWithIngredients(responseIngredients, items, itemIndex);
+                        apiCallsCompleted++;
+
+                        Log.d(TAG, "API calls completed: " + apiCallsCompleted + "/" + items.size());
+
+                        if (apiCallsCompleted == items.size()) {
+                            runOnUiThread(() -> showFinalDialog(items, allMatchedIngredients));
                         }
                     }
-
-                    runOnUiThread(() -> {
-                        Dialog dialog = new Dialog(OcrActivity.this);
-                        ScanIngredientConfirmBinding dialogBinding = ScanIngredientConfirmBinding.inflate(getLayoutInflater());
-                        dialog.setContentView(dialogBinding.getRoot());
-
-                        // 創建適配器並設置
-                        JumpAdapter jumpAdapter = new JumpAdapter(items, matchedIngredients);
-                        dialogBinding.shoppingListItemRecyclerview.setAdapter(jumpAdapter);
-                        dialogBinding.shoppingListItemRecyclerview.setLayoutManager(new LinearLayoutManager(OcrActivity.this));
-
-                        // 點擊繼續掃描
-                        dialogBinding.continueButton.setOnClickListener(v -> {
-                            dialog.dismiss();
-                            openGallery(); // 再次開啟相簿
-                        });
-
-                        // 點擊完成掃描
-                        dialogBinding.confirmButton.setOnClickListener(v -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(OcrActivity.this, MainActivity2.class);
-                            startActivity(intent); // 回到管理食材頁面
-                            finish();
-                        });
-
-                        dialog.show();
-                    });
+                } else {
+                    handleApiFailure(items, itemIndex);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.d(TAG, "API 呼叫失敗: " + e.getMessage());
+                handleApiFailure(items, itemIndex);
             }
         });
+    }
+
+    private void handleApiFailure(List<Item> items, int itemIndex) {
+        synchronized (this) {
+            apiCallsCompleted++;
+            Log.d(TAG, "API call failed for item " + itemIndex + ". Total completed: " + apiCallsCompleted + "/" + items.size());
+            if (apiCallsCompleted == items.size()) {
+                runOnUiThread(() -> showFinalDialog(items, allMatchedIngredients));
+            }
+        }
+    }
+
+    private void showFinalDialog(List<Item> items, List<CombinedIngredient> matchedIngredients) {
+        Dialog dialog = new Dialog(OcrActivity.this);
+        ScanIngredientConfirmBinding dialogBinding = ScanIngredientConfirmBinding.inflate(getLayoutInflater());
+        dialog.setContentView(dialogBinding.getRoot());
+
+        JumpAdapter jumpAdapter = new JumpAdapter(items, matchedIngredients);
+        dialogBinding.shoppingListItemRecyclerview.setAdapter(jumpAdapter);
+        dialogBinding.shoppingListItemRecyclerview.setLayoutManager(new LinearLayoutManager(OcrActivity.this));
+
+        dialogBinding.continueButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            openGallery();
+        });
+
+        dialogBinding.confirmButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(OcrActivity.this, MainActivity2.class);
+            startActivity(intent);
+            finish();
+        });
+
+        dialog.show();
     }
 //    private void callApiWithProductName(String productName, List<Item> items, int itemIndex, String invoiceDate) {
 //        // 清除不必要字符
@@ -415,7 +408,7 @@ public class OcrActivity extends AppCompatActivity {
                             }
 
                             RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
-                                    0, // ID
+                                    0,
                                     ingredient.getIngredient_Name(),
                                     Integer.parseInt(ingredient.getGrams()),
                                     "圖片",

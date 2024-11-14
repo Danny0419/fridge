@@ -65,4 +65,6 @@ public class CombinedIngredient {
     public void setExpiration(int expiration) {
         this.expiration = expiration;
     }
+
+
 }
