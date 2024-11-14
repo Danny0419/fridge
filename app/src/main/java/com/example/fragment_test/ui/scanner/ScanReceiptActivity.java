@@ -43,6 +43,8 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -139,8 +141,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
             Intent intent = new Intent(this, OcrActivity.class);
             startActivity(intent);
         });
-        String productName = "有機青江菜";
-        fetchCombinedIngredients(productName);
+//        String productName ;  //"有機青江菜"
+//        fetchCombinedIngredients(productName);
     }
 
     //開啟相機
@@ -335,7 +337,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "此發票已被掃描過，請檢查！", Toast.LENGTH_LONG).show();
                     });
-                    return; // 拦截，避免后续处理
+                    //return; // 拦截，避免后续处理
                 }
 
                 // 插入发票数据，使用提取的前10个字符作为ID
@@ -374,7 +376,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
 // 循环处理每个品项，调用 API 获取相关的食材信息
         for (ParsedItem item : items) {
-            String productName = "有機青江菜"; // 获取品项名称  //"有機青江菜"; item.getName();
+            String productName = item.getName(); // 获取品项名称  //"有機青江菜"; item.getName();
             int quantity = item.getQuantity(); // 获取品项数量
 
             // 使用 RetrofitClient 发送请求
@@ -393,12 +395,40 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     // 将获取的资讯存入 RefrigeratorIngredient
                                     // 处理 invoiceDate 从民国转换为西元日期
                                     String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
-                                    int date = Integer.parseInt(invoiceDateStr);
+                                    int date = 0;
+                                    int expirationDays = 0;
+
+                                    if (invoiceDateStr.length() == 7) {
+                                        // 提取民国年份、月份和日期
+                                        int rocYear = Integer.parseInt(invoiceDateStr.substring(0, 3)); // 民国年份
+                                        int month = Integer.parseInt(invoiceDateStr.substring(3, 5));   // 月份
+                                        int day = Integer.parseInt(invoiceDateStr.substring(5, 7));     // 日期
+
+                                        // 将民国年份转换为西元年份（西元年份 = 民国年份 + 1911）
+                                        int gregorianYear = rocYear + 1911;
+
+                                        // 转换为 LocalDate 对象
+                                        LocalDate invoiceLocalDate = LocalDate.of(gregorianYear, month, day);
+
+                                        // 保存原始日期的西元格式
+                                        String gregorianDateStr = invoiceLocalDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                                        date = Integer.parseInt(gregorianDateStr);
+                                        System.out.println("转换后的西元日期：" + gregorianDateStr);
+
+                                        // 加上保存天數來計算保存期限
+                                        LocalDate expirationDate = invoiceLocalDate.plusDays(ingredient.getExpiration());
+                                        expirationDays = Integer.parseInt(expirationDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+                                        System.out.println("保存期限日期：" + expirationDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+                                    } else {
+                                        System.out.println("无效的 invoiceDate 格式");
+                                    }
+
 
 // 创建格式化后的日期字符串
 
 // 解析保存天数
-                                    int expirationDays = Integer.parseInt(ingredient.getExpiration()); // 从 ingredient 中获取保存天数
+                                    //int expirationDays = date + ( ingredient.getExpiration() ); // 从 ingredient 中获取保存天数
 
 
 // 获取当前日期
@@ -412,10 +442,11 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                             0, // 假设 ID 是自动生成的
                                             ingredient.getIngredient_Name(), // 使用 ingredient 的名字
                                             quantity, // 使用 API 请求时的数量
-                                            "食材的图片", // 图片可以根据需要设置
+                                            ingredient.getIngredient_pictures(), // 图片可以根据需要设置
                                             ingredient.getIngredients_category(), // 使用 ingredient 的类别
                                             date, // 使用格式化后的购买日期
-                                            expirationDays // 保存天数
+                                            expirationDays, // 保存天数
+                                            ingredient.getUnit()
                                     );
 
                                     // 存入数据库
@@ -427,30 +458,30 @@ public class ScanReceiptActivity extends AppCompatActivity {
                         }
                         executorService.shutdown(); // 在适当的时机关闭线程池
                     } else {
-                        // 处理非预期的响应，存储缺失的食材信息
-                        Log.i("API RESPONSE", "NXo matching ingredients found for: " + productName);
-                        ExecutorService executorService = Executors.newSingleThreadExecutor();
-                        executorService.execute(() -> {
-                            // 处理 invoiceDate 从民国转换为西元日期
-                            String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
-                            int date = Integer.parseInt(invoiceDateStr);
-
-                            // 创建一个默认的 RefrigeratorIngredient 对象，未知字段设置为 null
-                            RefrigeratorIngredient missingIngredient = new RefrigeratorIngredient(
-                                    0, // 假设 ID 是自动生成的
-                                    productName, // 使用查询的产品名
-                                    quantity, // 数量设为 0
-                                    productName+"的圖片", // 图片设为 null
-                                    "其他", // 类别设为 null
-                                    date, // 购买日期设为 null
-                                    null, // 到期日期设为 null
-                                    "克"
-                            );
-
-                            // 存入数据库
-                            db.refrigeratorIngredientDAO().insertIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
-                        });
-                        executorService.shutdown(); // 在适当的时机关闭线程池
+//                        // 处理非预期的响应，存储缺失的食材信息
+//                        Log.i("API RESPONSE", "NXo matching ingredients found for: " + productName);
+//                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//                        executorService.execute(() -> {
+//                            // 处理 invoiceDate 从民国转换为西元日期
+//                            String invoiceDateStr = invoiceDate; // 假设 invoiceDate 是字符串类型，例如 "1131225"
+//                            int date = Integer.parseInt(invoiceDateStr);
+//
+//                            // 创建一个默认的 RefrigeratorIngredient 对象，未知字段设置为 null
+//                            RefrigeratorIngredient missingIngredient = new RefrigeratorIngredient(
+//                                    0, // 假设 ID 是自动生成的
+//                                    productName, // 使用查询的产品名
+//                                    quantity, // 数量设为 0
+//                                    productName+"的圖片", // 图片设为 null
+//                                    "其他", // 类别设为 null
+//                                    date, // 购买日期设为 null
+//                                    null, // 到期日期设为 null
+//                                    "克"
+//                            );
+//
+//                            // 存入数据库
+//                            db.refrigeratorIngredientDAO().insertIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
+//                        });
+//                        executorService.shutdown(); // 在适当的时机关闭线程池
                     }
                 }
 

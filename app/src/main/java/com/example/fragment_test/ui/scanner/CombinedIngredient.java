@@ -1,14 +1,15 @@
 package com.example.fragment_test.ui.scanner;
 
 public class CombinedIngredient {
-    private int Supermarket_ingredient_ID;
-    private int Ingredient_ID;
-    private String supermarket_ingredientcol_name;
-    private String unit;
-    private String Grams;
-    private String Ingredient_Name;
-    private String Ingredients_category;
-    private String expiration;
+    private int Supermarket_ingredient_ID;// 超市商品的唯一識別 ID
+    private int Ingredient_ID;// 原始成分的唯一識別 ID
+    private String supermarket_ingredientcol_name;// 超市商品的名稱或標籤名稱
+    private String unit;// 商品的計量單位（例如：kg、g、包裝等）
+    private String Grams;// 商品的重量或克數，以字符串形式存儲（例如："500g"）
+    private String Ingredient_Name; // 成分名稱，用於表明商品的原始成分名稱
+    private String Ingredients_category;// 成分類別，表示此成分所屬的類別（例如：蔬菜、水果、肉類等）
+    private int expiration;// 商品的保存期限或過期日期
+    private String Ingredient_pictures;
 
     // Getter 和 Setter 方法
     public int getSupermarket_ingredient_ID() {
@@ -67,11 +68,15 @@ public class CombinedIngredient {
         this.Ingredients_category = ingredients_category;
     }
 
-    public String getExpiration() {
+    public int getExpiration() {
         return expiration;
     }
 
     public void setExpiration(String expiration) {
-        this.expiration = expiration;
+        this.expiration = Integer.parseInt(expiration);
+    }
+
+    public String getIngredient_pictures() {
+        return Ingredient_pictures;
     }
 }
