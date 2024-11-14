@@ -107,7 +107,6 @@ public class RecipeRepository {
 
     public void loadRecipesPic(List<Recipe> recipes) {
         recipes.forEach(this::catchImageFromNet);
-
     }
 
     public void loadRecipePic(Recipe recipe) {
