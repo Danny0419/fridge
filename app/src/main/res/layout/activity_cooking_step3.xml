@@ -7,115 +7,59 @@
     android:layout_height="match_parent"
     tools:context=".ui.cooking.CookingStep3Activity">
 
-    <!--    食譜名稱照片-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/recipe_introduction"
+    <ListView
+        android:id="@+id/settlements_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/ingredient_used_confirm">
-
-        <TextView
-            android:id="@+id/recipeName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/text_under_line"
-            android:fontFamily="@font/bold"
-            android:text="紅酒燉牛肉"
-            android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/collect_bnt"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/bookmark"
-            android:contentDescription="NULL"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/recipe_img"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_below="@+id/recipeName"
-            android:layout_marginLeft="11dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="11dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
-            android:src="@drawable/photo"
-            android:text="食物照片"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipeName" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <include
-        android:id="@+id/ingredient_used_confirm"
-        layout="@layout/recipe_steps"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_introduction"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/btns"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/btns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingVertical="14dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
             android:id="@+id/return_btn"
             android:layout_width="0dp"
             android:layout_height="117dp"
-            app:layout_constraintWidth_percent="0.18604651"
-            android:src="@drawable/left_triangle"
+            android:layout_marginStart="25dp"
             android:background="@color/dark_pink"
+            android:contentDescription=" "
+            android:src="@drawable/left_triangle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="25dp"
-            android:contentDescription=" "/>
+            app:layout_constraintWidth_percent="0.18604651" />
 
         <Button
             android:id="@+id/finish_btn"
             android:layout_width="0dp"
             android:layout_height="117dp"
+            android:background="@color/dark_pink"
+            android:fontFamily="@font/regular"
             android:text="完成料理"
             android:textSize="36dp"
-            android:fontFamily="@font/regular"
-            app:layout_constraintWidth_percent="0.38372093"
-            android:background="@color/dark_pink"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/next_btn"
             app:layout_constraintStart_toStartOf="@id/return_btn"
-            app:layout_constraintEnd_toEndOf="@id/next_btn"/>
+            app:layout_constraintWidth_percent="0.38372093" />
 
         <ImageButton
             android:id="@+id/next_btn"
             android:layout_width="0dp"
             android:layout_height="117dp"
-            app:layout_constraintWidth_percent="0.18604651"
+            android:layout_marginEnd="25dp"
             android:background="#99F2ACAC"
+            android:contentDescription=" "
             android:src="@drawable/right_triangle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="25dp"
-            android:contentDescription=" "/>
+            app:layout_constraintWidth_percent="0.18604651" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

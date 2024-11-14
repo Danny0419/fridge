@@ -40,7 +40,7 @@
                 android:layout_marginBottom="15dp"
                 app:cardElevation="5dp">
                 <include
-                    android:id="@+id/recipe_steps"
+                    android:id="@+id/steps"
                     layout="@layout/recipe_steps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

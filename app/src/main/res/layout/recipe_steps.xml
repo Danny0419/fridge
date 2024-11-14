@@ -17,7 +17,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recipe_steps"
+        android:id="@+id/steps"
         android:background="@drawable/uper_line"
         android:paddingTop="11dp"
         android:layout_marginBottom="11dp"
