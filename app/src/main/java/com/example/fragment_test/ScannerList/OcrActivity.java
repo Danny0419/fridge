@@ -414,8 +414,9 @@ public class OcrActivity extends AppCompatActivity {
                             if (ingredient.getGrams() == null || ingredient.getGrams().isEmpty()) {
                                 throw new IllegalArgumentException("Grams cannot be null or empty");
                             }
-
+//int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, String unit
                             RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
+
                                     0,
                                     ingredient.getIngredient_Name(),
                                     Integer.parseInt(ingredient.getGrams()),
@@ -423,13 +424,12 @@ public class OcrActivity extends AppCompatActivity {
                                     ingredient.getIngredients_category(),
                                     invoiceDateInt,
                                     formattedExpirationDate,
-                                    formattedTodayDate,
-                                    null // 根據保存期限計算狀態
+                                    ingredient.getUnit()// 根據保存期限計算狀態
                             );
 
                             // 在事務中執行插入操作
                             db.runInTransaction(() -> {
-                                long result = refrigeratorIngredientDAO.insertRefrigeratorIngredient(refrigeratorIngredient);
+                                long result = refrigeratorIngredientDAO.insertIngredient(refrigeratorIngredient);
                                 if (result > 0) {
                                     Log.d(TAG, "成功寫入資料庫: " + refrigeratorIngredient.getName());
                                 } else {
