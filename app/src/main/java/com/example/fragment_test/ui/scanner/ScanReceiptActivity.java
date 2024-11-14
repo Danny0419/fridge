@@ -198,6 +198,9 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     String scannedData = result.getText();
                     scannedDataSet.add(scannedData);
 
+                    // 显示提示字，告知用户当前扫描的内容
+                    Toast.makeText(ScanReceiptActivity.this, "已掃描: " + scannedData, Toast.LENGTH_SHORT).show();
+
                     if (scannedDataSet.size() == 2) {
                         handleRecognizedQrCodes(scannedDataSet);
                         barcodeView.pause();
@@ -207,45 +210,45 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
             @Override
             public void possibleResultPoints(List<ResultPoint> resultPoints) {
-                // 可選：處理可能的結果點
+                // 可选：处理可能的结果点
             }
         });
     }
 
-    private void fetchCombinedIngredients(String productName) {
-        // 使用 RetrofitClient 發送請求
-        RetrofitClient.getInstance().getApiService().getCombinedIngredients(productName).enqueue(new Callback<List<CombinedIngredient>>() {
-            @Override
-            public void onResponse(Call<List<CombinedIngredient>> call, Response<List<CombinedIngredient>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    // 成功接收到 API 回應
-                    List<CombinedIngredient> ingredients = response.body();
-
-                    // 顯示詳細信息
-                    StringBuilder message = new StringBuilder("Found: " + ingredients.size() + " ingredients\n");
-                    for (CombinedIngredient ingredient : ingredients) {
-                        message.append("ID: ").append(ingredient.getSupermarket_ingredient_ID()).append(", ")
-                                .append("Name: ").append(ingredient.getIngredient_Name()).append(", ") //新名字
-                                .append("Category: ").append(ingredient.getIngredients_category()).append(", ") //種類
-                                .append("Unit: ").append(ingredient.getUnit()).append(", ")
-                                .append("Grams: ").append(ingredient.getGrams()).append(", ")
-                                .append("Expiration: ").append(ingredient.getExpiration()).append("\n"); //有效期限
-                    }
-
-                    Toast.makeText(ScanReceiptActivity.this, message.toString(), Toast.LENGTH_LONG).show();
-                } else {
-                    // 處理非預期的回應
-                    Toast.makeText(ScanReceiptActivity.this, "No matching ingredients found", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CombinedIngredient>> call, Throwable t) {
-                // 請求失敗處理
-                Toast.makeText(ScanReceiptActivity.this, "請求失敗: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+//    private void fetchCombinedIngredients(String productName) {
+//        // 使用 RetrofitClient 發送請求
+//        RetrofitClient.getInstance().getApiService().getCombinedIngredients(productName).enqueue(new Callback<List<CombinedIngredient>>() {
+//            @Override
+//            public void onResponse(Call<List<CombinedIngredient>> call, Response<List<CombinedIngredient>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    // 成功接收到 API 回應
+//                    List<CombinedIngredient> ingredients = response.body();
+//
+//                    // 顯示詳細信息
+//                    StringBuilder message = new StringBuilder("Found: " + ingredients.size() + " ingredients\n");
+//                    for (CombinedIngredient ingredient : ingredients) {
+//                        message.append("ID: ").append(ingredient.getSupermarket_ingredient_ID()).append(", ")
+//                                .append("Name: ").append(ingredient.getIngredient_Name()).append(", ") //新名字
+//                                .append("Category: ").append(ingredient.getIngredients_category()).append(", ") //種類
+//                                .append("Unit: ").append(ingredient.getUnit()).append(", ")
+//                                .append("Grams: ").append(ingredient.getGrams()).append(", ")
+//                                .append("Expiration: ").append(ingredient.getExpiration()).append("\n"); //有效期限
+//                    }
+//
+//                    Toast.makeText(ScanReceiptActivity.this, message.toString(), Toast.LENGTH_LONG).show();
+//                } else {
+//                    // 處理非預期的回應
+//                    Toast.makeText(ScanReceiptActivity.this, "No matching ingredients found", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<CombinedIngredient>> call, Throwable t) {
+//                // 請求失敗處理
+//                Toast.makeText(ScanReceiptActivity.this, "請求失敗: " + t.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
 
     @Override
@@ -386,7 +389,16 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         // 成功接收到 API 回应
                         List<CombinedIngredient> ingredients = response.body();
+                        // 顯示詳細信息
+                        StringBuilder message = new StringBuilder("成功新增! " + "\n"); // + ingredients.size()
+                        for (CombinedIngredient ingredient : ingredients) {
+                            message.append("品名: ").append(ingredient.getSupermarket_ingredientcol_name()).append(", ")
+                                    .append("種類: ").append(ingredient.getIngredients_category()).append(", ") //種類
+                                    .append("有效天數: ").append(ingredient.getExpiration()).append("\n"); //有效天數
+                        }
 
+                        Toast.makeText(ScanReceiptActivity.this, message.toString(), Toast.LENGTH_LONG).show();
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // 获取到期日期
                         ExecutorService executorService = Executors.newSingleThreadExecutor();
                         for (CombinedIngredient ingredient : ingredients) {
@@ -458,6 +470,9 @@ public class ScanReceiptActivity extends AppCompatActivity {
                         }
                         executorService.shutdown(); // 在适当的时机关闭线程池
                     } else {
+                        // 處理非預期的回應
+                        Toast.makeText(ScanReceiptActivity.this, "No matching ingredients found", Toast.LENGTH_LONG).show();
+
 //                        // 处理非预期的响应，存储缺失的食材信息
 //                        Log.i("API RESPONSE", "NXo matching ingredients found for: " + productName);
 //                        ExecutorService executorService = Executors.newSingleThreadExecutor();
