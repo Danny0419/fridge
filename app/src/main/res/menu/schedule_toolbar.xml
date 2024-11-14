@@ -2,17 +2,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/foodMenu"
-        android:title="foodMenu"
-        android:icon="@drawable/menu"
-        app:showAsAction="always"
-        />
-
-    <item
-        android:id="@+id/editdate"
-        android:title="editDate"
-        android:icon="@drawable/edit"
-        app:showAsAction="always"
-        />
 </menu>

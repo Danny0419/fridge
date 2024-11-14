@@ -158,12 +158,12 @@ public class ScheduleFragment extends Fragment {
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
-                if (itemId == R.id.foodMenu) {
-//                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
-                }
-                if (itemId == R.id.editdate) {
-                    showDialog();
-                }
+//                if (itemId == R.id.foodMenu) {
+////                    navController.navigate(R.id.action_navigation_home_to_navigation_camera);
+//                }
+//                if (itemId == R.id.editdate) {
+//                    showDialog();
+//                }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
