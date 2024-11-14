@@ -179,7 +179,7 @@ public class RecipeViewModel extends AndroidViewModel {
                 });
     }
 
-    public void setRecipesPic(List<Recipe> recipes) {
+    public void loadRecipesPic(List<Recipe> recipes) {
         Completable.fromAction(() -> recipeRepository.setRecipesPic(recipes))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -196,7 +196,7 @@ public class RecipeViewModel extends AndroidViewModel {
                 });
     }
 
-    public void setRecipePic(Recipe recipe) {
+    public void loadRecipePic(Recipe recipe) {
         Completable.fromAction(() -> recipeRepository.setRecipePic(recipe))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -217,7 +217,7 @@ public class RecipeViewModel extends AndroidViewModel {
         return recipes;
     }
 
-    public MutableLiveData<List<RecipeIngredient>> getRecipeIngredients() {
+    public SingleLiveData<List<RecipeIngredient>> getRecipeIngredients() {
         return recipeIngredients;
     }
 

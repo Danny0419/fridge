@@ -161,7 +161,7 @@ public class RecipeFragment extends Fragment {
                         return r;
                     })
                     .collect(Collectors.toList());
-            mViewModel.setRecipesPic(recipes);
+            mViewModel.loadRecipesPic(recipes);
             mViewModel.getRecipes()
                     .observe(this, r -> {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
