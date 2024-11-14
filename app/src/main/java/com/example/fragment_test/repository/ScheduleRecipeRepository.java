@@ -21,12 +21,14 @@ public class ScheduleRecipeRepository {
     private static ScheduleRecipeRepository scheduleRecipeRepository;
     private final ScheduleRecipeDAO scheduleRecipeDAO;
     private final PreparedRecipeRepository preparedRecipeRepository;
+    private final RecipeRepository recipeRepository;
     private RefrigeratorIngredientRepository refrigeratorIngredientRepository;
 
     private ScheduleRecipeRepository(Context context) {
         this.scheduleRecipeDAO = FridgeDatabase.getInstance(context).scheduleRecipeDAO();
         this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(context);
         this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(context);
+        this.recipeRepository = RecipeRepository.getInstance(context);
     }
 
     public static ScheduleRecipeRepository getInstance(Context context) {
@@ -60,6 +62,7 @@ public class ScheduleRecipeRepository {
     public Map<DayOfWeek, List<RecipeWithScheduledId>> getAWeekSchedules() {
         String today = DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now());
         List<RecipeWithScheduledId> allNotFinishedSchedule = scheduleRecipeDAO.queryAllNotDoneAndUnexpiredScheduleRecipes(Integer.parseInt(today));
+        allNotFinishedSchedule.forEach(recipeWithScheduledId -> recipeRepository.catchImageFromNet(recipeWithScheduledId.recipe));
         return allNotFinishedSchedule.stream()
                 .collect(Collectors.groupingBy(RecipeWithScheduledId::getDayOfWeek));
     }

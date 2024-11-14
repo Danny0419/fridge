@@ -21,7 +21,7 @@ public interface PreparedRecipeDAO {
 
     @Query(
             """
-            SELECT r.id as id, r.name as name, r.img as img, r.collected as collected, r.serving as serving, p_r.id as pRId
+            SELECT r.id as id, r.name as name, r.src as img, r.collected as collected, r.serving as serving, p_r.id as pRId
             FROM prepared_recipes p_r join recipes r
             on p_r.r_id = r.id
             WHERE p_r.scheduled = 0

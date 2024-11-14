@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 public class Ingredient implements Parcelable {
@@ -14,6 +15,8 @@ public class Ingredient implements Parcelable {
     public String name;
     @ColumnInfo
     public int quantity;
+    @Ignore
+    public String sort;
 
     public Ingredient() {
     }
@@ -29,10 +32,12 @@ public class Ingredient implements Parcelable {
         this.quantity = quantity;
     }
 
+
     protected Ingredient(Parcel in) {
         id = in.readInt();
         name = in.readString();
         quantity = in.readInt();
+        sort = in.readString();
     }
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
@@ -62,6 +67,11 @@ public class Ingredient implements Parcelable {
     }
 
 
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -72,5 +82,6 @@ public class Ingredient implements Parcelable {
         parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeInt(quantity);
+        parcel.writeString(sort);
     }
 }

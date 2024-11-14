@@ -171,13 +171,24 @@ public class RecipeRecommendation {
         List<IngredientMatch> matches = calculateIngredientMatches(recipe, fridgeIngredients);
         float matchScore = calculateMatchScore(matches, recipe);
         float expiryScore = calculateExpiryScore(matches);
+
+        long machedIngredientCount = matches.stream()
+                .filter(match -> match.matchScore > 0) // 有匹配到的食材
+                .count();
+
+        int requiredIngredientCount = (int) recipe.getIngredients().stream()
+                .filter(ingredient -> !SEASONINGS.contains(ingredient.getIngredient_name()))
+                .count();
+
         float finalScore = calculateFinalScore(
                 matchScore,
                 expiryScore,
-                30,
-                "簡易"
+                recipe.getCooking_time(),
+                "普通",
+                (int) machedIngredientCount,
+                requiredIngredientCount
         );
-
+//        Log.i("TAG","requierIng"+requiredIngredientCount);
         Map<String, Float> scores = new HashMap<>();
         scores.put("matchScore", matchScore);
         scores.put("expiryScore", expiryScore);
@@ -204,6 +215,7 @@ public class RecipeRecommendation {
                 .map(ingredient -> {
                     FridgeIngredient fridgeIngredient =
                             fridgeIngredients.get(ingredient.getIngredient_name());
+                    Log.i("TAG","category"+ingredient.getIngredient_category());
                     if (fridgeIngredient == null) {
                         return new IngredientMatch(ingredient.getIngredient_name(), 0, 0, 0);
                     }
@@ -258,6 +270,7 @@ public class RecipeRecommendation {
 
     // 根據剩餘天數計算過期分數
     private float calculateExpiryScoreByDays(long days) {
+//        Log.i("TAG", String.valueOf(days));
         if (days <= 1) return 2.0f;
         if (days <= 3) return 1.6f;
         if (days <= 7) return 1.2f;
@@ -267,12 +280,27 @@ public class RecipeRecommendation {
 
     // 計算最終分數
     private float calculateFinalScore(float matchScore, float expiryScore,
-                                      int cookingTime, String difficulty) {
+                                      int cookingTime, String difficulty, int ingredientCount, int requiredIngredientCount) {
         float baseScore = (matchScore * MATCH_WEIGHT) + (expiryScore * EXPIRY_WEIGHT);
         float timeDeduction = (cookingTime / (float) COOKING_TIME_THRESHOLD) * TIME_PENALTY_WEIGHT;
         float difficultyMultiplier = getDifficultyMultiplier(difficulty);
+        float ingredientCountAdjustment = getIngredientCountAdjustment(ingredientCount);
+        float tooMuchIng;
 
-        return (baseScore - timeDeduction) * difficultyMultiplier;
+        if (requiredIngredientCount>8){tooMuchIng=0;}else{tooMuchIng=1;}
+
+        return (baseScore - timeDeduction) * difficultyMultiplier*ingredientCountAdjustment*tooMuchIng;
+    }
+
+    // 根據食材數量計算調整因子
+    private float getIngredientCountAdjustment(int ingredientCount) {
+//        Log.i("IngredientCountAdjustment", "getIngredientCountAdjustment"+0.2f*ingredientCount);
+        float result = 0;
+        if (ingredientCount <= 3) {result =ingredientCount*0.2f;}
+        if(ingredientCount>=4){
+                result = (float) (0.6 + ((ingredientCount - 3) * 0.1f));
+            }
+        return result; // 其他情況不變
     }
 
     // 取得難度乘數
@@ -375,7 +403,6 @@ public class RecipeRecommendation {
     // 接口：初始化回調
     public interface InitCallback {
         void onSuccess(Map<String, FridgeIngredient> fridgeIngredients);
-
         void onError(String errorMessage);
     }
 }

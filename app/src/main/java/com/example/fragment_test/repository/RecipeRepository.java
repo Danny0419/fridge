@@ -1,6 +1,7 @@
 package com.example.fragment_test.repository;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 
 import com.example.fragment_test.RecipeRecommend.RecipeRecommendation;
 import com.example.fragment_test.ServerAPI.RetrofitClient;
@@ -12,6 +13,11 @@ import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.Step;
 import com.example.fragment_test.service.RecipeService;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +66,7 @@ public class RecipeRepository {
                     com.example.fragment_test.ServerAPI.Recipe recipe = o.getRecipe();
                     Recipe r = new Recipe(recipe.getRecipe_id()
                             , recipe.getRecipe_name()
-                            , recipe.getImage()
+                            , recipe.getPicture()
                             , recipe.getServing()
                     );
                     List<RecipeIngredient> ingredients = new ArrayList<>();
@@ -97,5 +103,28 @@ public class RecipeRepository {
 
     public Single<List<Step>> getRecipeSteps(Recipe recipe) {
         return recipeService.getRecipeSteps(recipe.id);
+    }
+
+    public void setRecipesPic(List<Recipe> recipes) {
+        recipes.forEach(this::catchImageFromNet);
+
+    }
+
+    public void setRecipePic(Recipe recipe) {
+        catchImageFromNet(recipe);
+    }
+
+    public void catchImageFromNet(Recipe recipe) {
+        try {
+            URL url = new URL(recipe.src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            recipe.setPic(BitmapFactory.decodeStream(inputStream));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

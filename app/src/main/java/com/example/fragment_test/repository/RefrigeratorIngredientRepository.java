@@ -145,6 +145,9 @@ public class RefrigeratorIngredientRepository {
                     areIngredientsSufficient.set(false);
                 }
             }, () -> areIngredientsSufficient.set(false));
+            if (!areIngredientsSufficient.get()) {
+                break;
+            }
         }
         return areIngredientsSufficient.get();
     }

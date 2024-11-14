@@ -29,6 +29,7 @@ public class StartCookingActivity extends AppCompatActivity {
     private CookingViewModel cookingViewModel;
     RecipeWithScheduledId scheduleRecipe;
     Intent intent;
+
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class StartCookingActivity extends AppCompatActivity {
         Optional<RecipeWithScheduledId> recipeOptional = Optional.ofNullable(bundle.getParcelable("scheduleRecipe", RecipeWithScheduledId.class));
         scheduleRecipe = recipeOptional.orElseThrow(RuntimeException::new);
 
+        recipeViewModel.loadRecipePic(scheduleRecipe.recipe);
         recipeViewModel.loadRecipeSteps(scheduleRecipe.recipe);
 
         // toolbar setting
@@ -76,13 +78,18 @@ public class StartCookingActivity extends AppCompatActivity {
 
 
         RecipeStepsBinding recipeStepsBinding = activityStartCookingBinding.recipeSteps;
-        recipeViewModel.getRecipeSteps()
-                        .observe(this, steps -> {
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
-                            recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+
+        recipeViewModel.getRecipeDetail()
+                        .observe(this, recipe -> {
+                            recipeIntroduction.recipeImg.setImageBitmap(recipe.pic);
                         });
+        recipeViewModel.getRecipeSteps()
+                .observe(this, steps -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
+                    recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                });
 
         recipeIntroduction.collectBnt.setOnClickListener(view -> {
             recipeViewModel.collectAndUnCollectRecipe(scheduleRecipe.recipe);

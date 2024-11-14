@@ -38,6 +38,7 @@ public class RefrigeratorIngredient extends Ingredient {
         this.sort = sort;
         this.purchaseDate = purchaseDate;
         this.expiration = expiration;
+        this.savingDay = savingDay;
     }
 
     @NonNull

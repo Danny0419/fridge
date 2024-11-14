@@ -24,6 +24,7 @@ import com.example.fragment_test.adapter.RecipeAdapterForHome;
 import com.example.fragment_test.adapter.ShoppingListAdapterForHome;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.ui.recipe.RecipeViewModel;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
 import java.time.DayOfWeek;
@@ -34,14 +35,14 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
+    private RecipeViewModel recipeViewModel;
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         LocalDate now = LocalDate.now();
 
         fragmentOfDate(now);
@@ -49,10 +50,14 @@ public class HomeFragment extends Fragment {
         homeViewModel.loadScheduleRecipesOfToday(Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(now)));
         homeViewModel.getScheduleRecipesOfToday()
                 .observe(getViewLifecycleOwner(), (recipes -> {
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    binding.eatingForToday.setLayoutManager(layoutManager);
-                    binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
+                    recipeViewModel.loadRecipesPic(recipes);
+                    recipeViewModel.getRecipes()
+                            .observe(getViewLifecycleOwner(), rs -> {
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                                layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                                binding.eatingForToday.setLayoutManager(layoutManager);
+                                binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
+                            });
                 }));
 
         homeViewModel.loadShoppingList();
@@ -119,12 +124,21 @@ public class HomeFragment extends Fragment {
                     LocalDate threeDaysLater = now.plusDays(3);
                     String threeDaysLaterStr = DateTimeFormatter.BASIC_ISO_DATE.format(threeDaysLater);
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient(0, "牛排", 3,"牛排照片" , "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "牛排", 3, "牛排照片", "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "牛小排", 4, "牛小排照片", "牛肉", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "高麗菜", 60, "broccoli", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "番茄", 60, "牛小排照片", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "花椰菜", 60, "牛小排照片", "葉菜花菜", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
+                            new RefrigeratorIngredient(1, "豬五花肉", 500, "porkpieces", "豬肉", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(2, "火鍋牛肉片", 500, "hotpotslicedbeef", "牛肉", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(3, "雞腿肉", 500, "chickenthigh", "禽類", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(4, "高麗菜", 100, "cabbage", "葉菜花菜", Integer.parseInt(date), someDaysLater(7)),
+                            new RefrigeratorIngredient(5, "青江菜", 200, "spooncabbage", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(6, "洋蔥", 200, "onion", "根莖類", Integer.parseInt(date), someDaysLater(14)),
+                            new RefrigeratorIngredient(7, "紅蘿蔔", 300, "carrot", "根莖類", Integer.parseInt(date), someDaysLater(14)),
+                            new RefrigeratorIngredient(8, "白蘿蔔", 300, "whiteradish", "根莖類", Integer.parseInt(date), someDaysLater(10)),
+                            new RefrigeratorIngredient(9, "玉米", 300, "corn", "蔬菜類", Integer.parseInt(date), someDaysLater(7)),
+                            new RefrigeratorIngredient(10, "菠菜", 250, "spinach", "葉菜花菜", Integer.parseInt(date), someDaysLater(4)),
+                            new RefrigeratorIngredient(11, "蛋", 10, "egg", "禽類", Integer.parseInt(date), someDaysLater(21)),
+                            new RefrigeratorIngredient(12, "花椰菜", 100, "broccoli", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(13, "番茄", 100, "tomato", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(14, "小黃瓜", 250, "cucumber", "豆菜與瓜菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(15, "蘑菇", 250, "mushroom", "蕈菇類", Integer.parseInt(date), someDaysLater(5))
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }
@@ -133,9 +147,46 @@ public class HomeFragment extends Fragment {
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
     }
 
+    public Integer someDaysLater(int day) {
+        LocalDate now = LocalDate.now();
+        String plusDay = DateTimeFormatter.BASIC_ISO_DATE.format(now.plusDays(day));
+        return Integer.parseInt(plusDay);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void onClick(View v) {
+        int clickedId = v.getId();
+
+//        if (clickedId == R.id.test_button) {
+//            dialog.show();
+//
+//            //把checkbox改成textview
+//            RecyclerView recyclerView = scanIngredientConfirmBinding.ingredientList.shoppingListItemRecyclerview;
+//            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+//                View view = recyclerView.getChildAt(i);
+//                CheckBox checkBox = view.findViewById(R.id.shoppingItemState);
+//                if (checkBox != null) {
+//                    // textview
+//                    TextView textView = new TextView(getContext());
+//                    textView.setTextSize(20); //字體大小
+//
+//                    //替換checkbox
+//                    ViewGroup parent = (ViewGroup) checkBox.getParent();
+//                    int index = parent.indexOfChild(checkBox);
+//                    parent.removeView(checkBox);
+//                    parent.addView(textView, index);
+//                }
+//            }
+//
+//        } else if (clickedId == R.id.continue_button) {
+//            dialog.dismiss();
+//        } else if (clickedId == R.id.confirm_button){
+//            dialog.dismiss();
+//        }
     }
 }

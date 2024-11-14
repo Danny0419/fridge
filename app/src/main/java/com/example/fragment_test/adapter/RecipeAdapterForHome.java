@@ -44,6 +44,7 @@ public class RecipeAdapterForHome extends RecyclerView.Adapter<RecipeAdapterForH
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolderForHome holder, int position) {
         Recipe recipe = recipes.get(position);
+        holder.recipePicture.setImageBitmap(recipe.pic);
         holder.recipeName.setText(recipe.name);
     }
 
