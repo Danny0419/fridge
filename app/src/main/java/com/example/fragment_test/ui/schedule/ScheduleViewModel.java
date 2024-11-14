@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fragment_test.entity.ScheduleRecipe;
-import com.example.fragment_test.repository.ScheduleRepository;
+import com.example.fragment_test.entity.RecipeWithScheduledId;
+import com.example.fragment_test.repository.ScheduleRecipeRepository;
 
 import java.time.DayOfWeek;
 import java.util.List;
@@ -19,23 +19,22 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class ScheduleViewModel extends AndroidViewModel {
-    private final MutableLiveData<Map<DayOfWeek, List<ScheduleRecipe>>> scheduleRecipes = new MutableLiveData<>();
-    private final ScheduleRepository repository;
+    private final MutableLiveData<Map<DayOfWeek, List<RecipeWithScheduledId>>> scheduledRecipes = new MutableLiveData<>();
+    private final ScheduleRecipeRepository repository;
 
     public ScheduleViewModel(@NonNull Application application) {
         super(application);
-        this.repository = ScheduleRepository.getInstance(getApplication());
+        this.repository = ScheduleRecipeRepository.getInstance(getApplication());
     }
 
     public void loadSchedules() {
-
         Maybe.fromCallable(repository::getAWeekSchedules)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<Map<DayOfWeek, List<ScheduleRecipe>>>() {
+                .subscribe(new DisposableMaybeObserver<Map<DayOfWeek, List<RecipeWithScheduledId>>>() {
                     @Override
-                    public void onSuccess(Map<DayOfWeek, List<ScheduleRecipe>> schedules) {
-                        scheduleRecipes.setValue(schedules);
+                    public void onSuccess(Map<DayOfWeek, List<RecipeWithScheduledId>> schedules) {
+                        scheduledRecipes.setValue(schedules);
                     }
 
                     @Override
@@ -50,8 +49,10 @@ public class ScheduleViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<Map<DayOfWeek, List<ScheduleRecipe>>> getScheduleRecipes() {
-        return scheduleRecipes;
+
+
+    public MutableLiveData<Map<DayOfWeek, List<RecipeWithScheduledId>>> getScheduledRecipes() {
+        return scheduledRecipes;
     }
 
 }

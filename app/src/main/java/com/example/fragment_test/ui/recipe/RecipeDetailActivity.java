@@ -10,11 +10,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.RecipeDetailIngredientAdapter;
+import com.example.fragment_test.adapter.RecipeDetailStepsAdapter;
 import com.example.fragment_test.databinding.ActivityRecipeDetailBinding;
 import com.example.fragment_test.databinding.RecipeIntroductionBinding;
+import com.example.fragment_test.databinding.RecipeStepsBinding;
 import com.example.fragment_test.entity.Recipe;
 
 import java.util.Optional;
@@ -54,15 +57,30 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Optional<Recipe> recipeOptional = Optional.ofNullable(bundle.getParcelable("recipe"));
         Recipe recipe = recipeOptional.orElseThrow(RuntimeException::new);
 
+        recipeViewModel.loadRecipePic(recipe);
         RecipeIntroductionBinding recipeIntroduction = activityRecipeDetailBinding.recipeIntroduction;
         recipeIntroduction.recipeName.setText(recipe.name);
-        recipeIntroduction.recipeImg.setText(recipe.img);
+        recipeViewModel.getRecipeDetail()
+                        .observe(this, r -> {
+                            recipeIntroduction.recipeImg.setImageBitmap(recipe.pic);
+                        });
+
         recipeIntroduction.recipeServing.setText(Integer.toString(recipe.serving));
 
+        recipeViewModel.loadRecipeSteps(recipe);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recipeIntroduction.recipeIngredients.setLayoutManager(gridLayoutManager);
         recipeIntroduction.recipeIngredients.setAdapter(new RecipeDetailIngredientAdapter(recipe.ingredients));
+
+        RecipeStepsBinding recipeStepsBinding = activityRecipeDetailBinding.recipeSteps;
+        recipeViewModel.getRecipeSteps()
+                .observe(this, steps -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
+                    recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                });
 
         recipeIntroduction.collectBnt.setOnClickListener(view -> {
             recipeViewModel.collectAndUnCollectRecipe(recipe);

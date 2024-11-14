@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.entity.Ingredient;
-import com.example.fragment_test.entity.RecipeIngredient;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class RecipeDetailIngredientAdapter extends RecyclerView.Adapter<RecipeDe
         }
     }
 
-    public RecipeDetailIngredientAdapter(List<RecipeIngredient> ingredients) {
+    public RecipeDetailIngredientAdapter(List<? extends Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 

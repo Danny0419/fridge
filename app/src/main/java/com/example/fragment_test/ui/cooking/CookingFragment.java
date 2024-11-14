@@ -1,4 +1,4 @@
-package com.example.fragment_test;
+package com.example.fragment_test.ui.cooking;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.ViewStub;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.fragment_test.R;
 
 public class CookingFragment extends Fragment {
 

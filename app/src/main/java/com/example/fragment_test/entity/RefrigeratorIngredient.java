@@ -16,33 +16,37 @@ public class RefrigeratorIngredient extends Ingredient {
     @ColumnInfo
     public Integer expiration;
     @ColumnInfo
-    public Integer state;
-    //改成ignore
+    public String unit;
     @Ignore
-    public String savingDay; // 移除 @Ignore
+    public Integer savingDay;
+    @Ignore
+    public int daysRemaining;
 
+    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, String unit) {
+        super(id, name, quantity);
+        this.img = img;
+        this.sort = sort;
+        this.purchaseDate = purchaseDate;
+        this.expiration = expiration;
+        this.unit = unit;
+    }
+
+    @Ignore
     public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration) {
         super(id, name, quantity);
         this.img = img;
         this.sort = sort;
         this.purchaseDate = purchaseDate;
         this.expiration = expiration;
-    }
-
-    @Ignore
-    public RefrigeratorIngredient(int id, @NonNull String name, int quantity, String img, String sort, Integer purchaseDate, Integer expiration, String savingDay,Integer state) {
-        super(id, name, quantity);
-        this.img = img;
-        this.sort = sort;
-        this.purchaseDate = purchaseDate;
-        this.expiration = expiration;
         this.savingDay = savingDay;
-        this.state = state;
     }
-
 
     @NonNull
     public String getSort() {
         return sort;
+    }
+
+    public void setDaysRemaining(int daysRemaining) {
+        this.daysRemaining = daysRemaining;
     }
 }

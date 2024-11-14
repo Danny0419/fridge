@@ -7,7 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
 
 import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
 import junit.framework.TestCase;
@@ -43,11 +42,11 @@ public class ScheduleRecipeDAOTest extends TestCase {
         long l1 = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe1);
         assertEquals(1, l);
         assertEquals(2, l1);
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesBySId(1);
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesByDate(1);
         assertEquals(2, scheduleRecipes.size());
 
         scheduleRecipeDAO.updateScheduleRecipeStatusById(1);
-        scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesBySId(1);
+        scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesByDate(1);
         assertEquals(1, scheduleRecipes.size());
     }
 
@@ -66,7 +65,7 @@ public class ScheduleRecipeDAOTest extends TestCase {
         long l1 = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe1);
         assertEquals(1, l);
         assertEquals(2, l1);
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesBySId(1);
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryIsNotDoneScheduleRecipesByDate(1);
         assertEquals(1, scheduleRecipes.size());
         assertEquals(2, scheduleRecipes.get(0).rid.intValue());
     }
@@ -86,7 +85,7 @@ public class ScheduleRecipeDAOTest extends TestCase {
         long l1 = scheduleRecipeDAO.insertScheduleRecipe(scheduleRecipe1);
         assertEquals(1, l);
         assertEquals(2, l1);
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(1);
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesByDate(1);
         assertEquals(2, scheduleRecipes.size());
         assertEquals(1, scheduleRecipes.get(0).sId.intValue());
         assertEquals(1, scheduleRecipes.get(1).sId.intValue());

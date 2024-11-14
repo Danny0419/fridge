@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -24,8 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ShoppingListAdapter;
 import com.example.fragment_test.databinding.FragmentShoppingListBinding;
+import com.example.fragment_test.databinding.ShoppingItemEditDialogBinding;
 import com.example.fragment_test.databinding.ShoppinglistAlterDialogBinding;
 import com.example.fragment_test.entity.ShoppingIngredient;
+import com.example.fragment_test.vo.ShoppingItemVO;
 
 import java.util.List;
 
@@ -33,9 +36,11 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
     private FragmentShoppingListBinding binding;
     private ShoppinglistAlterDialogBinding dialogBinding;
+    private ShoppingItemEditDialogBinding shoppingItemEditDialogBinding;
     private ShoppingListViewModel mViewModel;
     private RecyclerView shoppingListItemRecycleView;
-    private Dialog dialog;
+    private Dialog addItemDialog;
+    private Dialog editItemDialog;
     private RecyclerView.LayoutManager layoutManager;
 
     public static ShoppingListFragment newInstance() {
@@ -47,6 +52,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ShoppingListViewModel.class);
         mViewModel.loadShoppingList();
+
     }
 
     @Override
@@ -54,27 +60,54 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
 
         View view = initialize(inflater, container);
-        mViewModel.getCurrShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingIngredient>>() {
+
+        // 應急用調整彈跳視窗大小
+
+
+        mViewModel.getCurrShoppingList().observe(getViewLifecycleOwner(), new Observer<List<ShoppingItemVO>>() {
             @Override
-            public void onChanged(List<ShoppingIngredient> shoppingIngredients) {
+            public void onChanged(List<ShoppingItemVO> shoppingIngredients) {
                 layoutManager = new LinearLayoutManager(getContext());
                 shoppingListItemRecycleView.setLayoutManager(layoutManager);
-                shoppingListItemRecycleView.setAdapter(new ShoppingListAdapter(shoppingIngredients, getContext()));
+                ShoppingListAdapter adapter = new ShoppingListAdapter(shoppingIngredients);
+                adapter.setShoppingItemEditedListener(shoppingItem -> {
+                    setShoppingEditDialogAttribute(shoppingItem, shoppingItemEditDialogBinding);
+                    editItemDialog.show();
+
+                    setShoppingEditDialogBtnOnClickListener(shoppingItem, shoppingItemEditDialogBinding);
+                });
+                shoppingListItemRecycleView.setAdapter(adapter);
+
+
             }
         });
-        // 應急用調整彈跳視窗大小
-        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-        layoutParams.width = 1000;
-        layoutParams.height = 1020;
-        dialog.getWindow().setAttributes(layoutParams);
-
-
         return view;
+    }
+
+    private void setShoppingEditDialogBtnOnClickListener(ShoppingItemVO shoppingItemVO, ShoppingItemEditDialogBinding shoppingItemEditDialogBinding) {
+        shoppingItemEditDialogBinding.cancelButton.setOnClickListener(view -> editItemDialog.dismiss());
+
+        shoppingItemEditDialogBinding.editButton.setOnClickListener(view -> {
+            mViewModel.editShoppingItem(shoppingItemVO, Integer.parseInt(shoppingItemEditDialogBinding.quantity.getText().toString()));
+            editItemDialog.dismiss();
+        });
+
+        shoppingItemEditDialogBinding.deleteButton.setOnClickListener(view -> {
+            mViewModel.deleteShoppingItem(shoppingItemVO);
+            editItemDialog.dismiss();
+        });
+    }
+
+    private void setShoppingEditDialogAttribute(ShoppingItemVO shoppingItem, ShoppingItemEditDialogBinding shoppingItemEditDialogBinding) {
+        shoppingItemEditDialogBinding.name.setText(shoppingItem.name);
+        shoppingItemEditDialogBinding.sort.setText(shoppingItem.sort);
+        shoppingItemEditDialogBinding.quantity.setText(shoppingItem.sumOfQuantity + "");
     }
 
     private View initialize(LayoutInflater inflater, ViewGroup container) {
 
         binding = FragmentShoppingListBinding.inflate(inflater, container, false);
+        shoppingItemEditDialogBinding = ShoppingItemEditDialogBinding.inflate(getLayoutInflater());
         shoppingListItemRecycleView = binding.getRoot().findViewById(R.id.shoppingListItemRecyclerview);
         layoutManager = new LinearLayoutManager(getContext());
 
@@ -89,31 +122,44 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         Button dialogCancelBtn = dialogBinding.cancelButton;
         Button dialogConfirmBtn = dialogBinding.confirmButton;
 
+        addItemDialog = new Dialog(getContext());
+        addItemDialog.setContentView(dialogBinding.getRoot());
+        addItemDialog.setCancelable(false);
+        WindowManager.LayoutParams layoutParams = addItemDialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1020;
+        addItemDialog.getWindow().setAttributes(layoutParams);
 
-        dialog = new Dialog(getContext());
-        dialog.setContentView(dialogBinding.getRoot());
-        dialog.setCancelable(false);
+        editItemDialog = new Dialog(getContext());
+        editItemDialog.setContentView(shoppingItemEditDialogBinding.getRoot());
+        editItemDialog.setCancelable(false);
+        WindowManager.LayoutParams layoutParams1 = editItemDialog.getWindow().getAttributes();
+//        layoutParams1.width = 1000;
+//        layoutParams1.height = 1020;
+        editItemDialog.getWindow().setAttributes(layoutParams);
+
 
         dialogCancelBtn.setOnClickListener(this);
         dialogConfirmBtn.setOnClickListener(this);
+
         return binding.getRoot();
     }
 
     @Override
     public void onClick(View v) {
         int clickedId = v.getId();
-
         if (clickedId == R.id.addNewShoppingListItemButton) {
-            initialSpinner(dialogBinding.nameSpinner, R.array.ingredients_name_array);
-            initialSpinner(dialogBinding.sortSpinner, R.array.ingredients_sort_array);
-            dialog.show();
-
+            mViewModel.loadAllSortsOfIngredients();
+            mViewModel.getAllSorts()
+                    .observe(getViewLifecycleOwner(), strings -> {
+                        initialSpinner(dialogBinding.sortSpinner, dialogBinding.nameSpinner, strings);
+                        addItemDialog.show();
+                    });
         } else if (clickedId == R.id.cancel_button) {
             dialogBinding.quantity.setText("");
-            dialog.dismiss();
+            addItemDialog.dismiss();
 
         } else if (clickedId == R.id.confirm_button) {
-
             try {
                 String name = dialogBinding.nameSpinner.getSelectedItem().toString();
                 String sort = dialogBinding.sortSpinner.getSelectedItem().toString();
@@ -122,7 +168,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
                 mViewModel.addShoppingItem(ingredient);
                 dialogBinding.quantity.setText("");
-                dialog.dismiss();
+                addItemDialog.dismiss();
             } catch (NumberFormatException e) {
                 Toast.makeText(getContext(), "請輸入數量", Toast.LENGTH_SHORT).show();
             }
@@ -130,16 +176,30 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
     }
 
-    private void initialSpinner(Spinner spinner, int textArrayResId) {
-        // Create an ArrayAdapter using the string array and a default spinner layout.
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getContext(),
-                textArrayResId,
-                android.R.layout.simple_spinner_item
-        );
+    private void initialSpinner(Spinner sortSpinner, Spinner nameSpinner, List<String> sorts) {
+        // Create an ArrayAdapter using the string array and a default sortSpinner layout.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sorts);
         // Specify the layout to use when the list of choices appears.
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner.
-        spinner.setAdapter(adapter);
+        // Apply the adapter to the sortSpinner.
+        sortSpinner.setAdapter(adapter);
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String sort = adapterView.getSelectedItem().toString();
+                mViewModel.loadSortOfIngredientsName(sort);
+                mViewModel.getAllSortOfIngredientsName()
+                        .observe(getViewLifecycleOwner(), names -> {
+                            ArrayAdapter<String> namesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, names);
+                            namesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            nameSpinner.setAdapter(namesAdapter);
+                        });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }

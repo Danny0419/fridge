@@ -5,7 +5,6 @@ import static com.example.fragment_test.utils.setListBackground.setListBackgroun
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
@@ -28,15 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.fragment_test.R;
 import com.example.fragment_test.adapter.ScheduleAdapter;
 import com.example.fragment_test.databinding.FragmentScheduleBinding;
-import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.entity.ScheduleRecipe;
+import com.example.fragment_test.ui.recipe.RecipeViewModel;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,9 +39,9 @@ import java.util.Map;
  */
 public class ScheduleFragment extends Fragment {
     private FragmentScheduleBinding scheduleBinding;
-    private ScheduleViewModel viewModel;
+    private ScheduleViewModel scheduleViewModel;
+    private RecipeViewModel recipeViewModel;
     private final LocalDate[] aWeek = new LocalDate[7];
-    private Map<DayOfWeek, List<ScheduleRecipe>> schedule = new HashMap<>();
     private ListView scheduleContainer;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -88,20 +82,24 @@ public class ScheduleFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(ScheduleViewModel.class);
-        viewModel.loadSchedules();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
+        scheduleViewModel = viewModelProvider.get(ScheduleViewModel.class);
+        recipeViewModel = viewModelProvider.get(RecipeViewModel.class);
 
         setAWeek();
     }
 
     private void setAWeek() {
         LocalDate today = LocalDate.now();
-        aWeek[today.getDayOfWeek().getValue()-1] = today;
-        for (int i = 1; i < 7; i++) {
-            LocalDate date = today.plusDays(i);
-            aWeek[date.getDayOfWeek().getValue()-1] = date;
+//        aWeek[today.getDayOfWeek().getValue() - 1] = today;
+        int todayIndex = today.getDayOfWeek().getValue() - 1;
+        for (int i = 0; i < 7; i++) {
+            aWeek[i] = today.plusDays(i);
         }
+//        for (int i = 1; i < 7; i++) {
+//            LocalDate date = today.plusDays(i);
+//            aWeek[date.getDayOfWeek().getValue() - 1] = date;
+//        }
     }
 
     @SuppressLint("ResourceAsColor")
@@ -109,33 +107,42 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        scheduleBinding= FragmentScheduleBinding.inflate(inflater, container, false);
+        scheduleBinding = FragmentScheduleBinding.inflate(inflater, container, false);
         scheduleContainer = scheduleBinding.schedulesContainer;
 
-        viewModel.getScheduleRecipes().observe(getViewLifecycleOwner(), (scheduleRecipes -> {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            scheduleContainer.setAdapter(new ScheduleAdapter(aWeek, schedule));
-        }));
+        scheduleViewModel.getScheduledRecipes()
+                .observe(getViewLifecycleOwner(), (scheduleRecipes -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    ScheduleAdapter scheduleAdapter = new ScheduleAdapter(aWeek, scheduleViewModel.getScheduledRecipes().getValue());
+                    scheduleAdapter.setOnClickListener(recipeWithScheduledId -> {
+                        recipeViewModel.loadRecipeIngredients(recipeWithScheduledId);
+                        recipeViewModel.getClickedSchedule()
+                                        .observe(getViewLifecycleOwner(), rws -> {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putParcelable("scheduleRecipe", rws);
+                                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                                            try {
+                                                navController.navigate(R.id.navigation_start_cooking, bundle);
+                                            } catch (RuntimeException e) {
+                                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                    });
+                    scheduleContainer.setAdapter(scheduleAdapter);
+                }));
+
 
         //去除邊框(分隔線為透明色、高度為0)
         scheduleContainer.setDivider(null);
         scheduleContainer.setDividerHeight(0);
 
         //設定奇偶行數背景顏色
-        setListBackgroundColor(scheduleContainer,requireContext());
-
-//        // 失敗的底線
-//        View viewRecipeItem = inflater.inflate(R.layout.recipe_item, container, false);
-//        TextView eachDayText=viewRecipeItem.findViewById(R.id.eachDayText);
-//        eachDayText.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        setListBackgroundColor(scheduleContainer, requireContext());
 
         addToolbar();
 
         return scheduleBinding.getRoot();
-    }
-
-    public void setSchedule(Map<String, ArrayList<Recipe>> schedule){
     }
 
     //toolbar
@@ -163,7 +170,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     //彈跳式窗
-    private void showDialog(){
+    private void showDialog() {
         //彈跳頁面
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.schedule_change_display_dialog);
@@ -191,4 +198,9 @@ public class ScheduleFragment extends Fragment {
         dialog.show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        scheduleViewModel.loadSchedules();
+    }
 }

@@ -1,8 +1,12 @@
 package com.example.fragment_test.ui.scanner;
 
-import static androidx.fragment.app.FragmentManager.TAG;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +16,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+
+//import com.example.fragment_test.Manifest;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -55,6 +66,10 @@ public class ScanReceiptActivity extends AppCompatActivity {
     private Set<String> recognizedQrCodes = new HashSet<>();
     // 需要识别的QR码数量
     private static final int REQUIRED_QRCODES = 2;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+    private DecoratedBarcodeView barcodeView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +106,10 @@ public class ScanReceiptActivity extends AppCompatActivity {
         LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
 
         //返回
-        goBackBtn.setOnClickListener(v -> finish());
+        goBackBtn.setOnClickListener(v -> {
+            finish();
+                }
+        );
 
         //掃描發票orOCR
         scanReceiptButton.setOnClickListener(v -> {
@@ -247,23 +265,31 @@ public class ScanReceiptActivity extends AppCompatActivity {
         Log.i("tag", "handleRecognizedQrCodes: "+"handleRecognizedQrCodes");
         // 合并QR码信息并解析发票和品项
         StringBuilder combinedInfo = new StringBuilder();
+        // 用于存储解析出的品项列表
         List<ParsedItem> items = new ArrayList<>();
+        // 用于存储发票日期
         String invoiceDate = null;
 
+        // 分开存储不以"**"开头和以"**"开头的内容
         List<String> beforeStarStar = new ArrayList<>();
         List<String> afterStarStar = new ArrayList<>();
 
+        // 分类存储
         for (String qrCode : qrCodes) {
             if (qrCode.startsWith("**")) {
+                // 将开头的"**"替换为":"后存储
                 afterStarStar.add(qrCode.replaceFirst("\\*\\*", ":"));
             } else {
                 beforeStarStar.add(qrCode);
             }
         }
 
+        // 先处理不以"**"开头的内容
         for (String qrCode : beforeStarStar) {
             combinedInfo.append(qrCode);
         }
+
+        // 再处理以"**"开头的内容
         for (String qrCode : afterStarStar) {
             combinedInfo.append(qrCode);
         }
@@ -381,7 +407,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     );
 
                                     // 存入数据库
-                                    db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(refrigeratorIngredient);
+                                    db.refrigeratorIngredientDAO().insertIngredient(refrigeratorIngredient);
                                 } catch (NumberFormatException e) {
                                     Log.e("DATA ERROR", "Invalid number format: " + e.getMessage());
                                 }
@@ -405,13 +431,12 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     productName+"的圖片", // 图片设为 null
                                     "其他", // 类别设为 null
                                     date, // 购买日期设为 null
-                                    null, // 保存天数设为 null
                                     null, // 到期日期设为 null
-                                    null // 剩余天数设为 null
+                                    "克"
                             );
 
                             // 存入数据库
-                            db.refrigeratorIngredientDAO().insertRefrigeratorIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
+                            db.refrigeratorIngredientDAO().insertIngredient(missingIngredient);//不把其他食材存入，就註解掉這行
                         });
                         executorService.shutdown(); // 在适当的时机关闭线程池
                     }
@@ -505,3 +530,4 @@ public class ScanReceiptActivity extends AppCompatActivity {
         }
     }
 }
+

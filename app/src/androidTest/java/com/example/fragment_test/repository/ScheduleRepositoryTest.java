@@ -9,13 +9,11 @@ import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.database.RecipeIngredientDAO;
 import com.example.fragment_test.database.RefrigeratorIngredientDAO;
-import com.example.fragment_test.database.ScheduleDAO;
 import com.example.fragment_test.database.ScheduleRecipeDAO;
 import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ScheduleRecipe;
 
 import junit.framework.TestCase;
@@ -96,7 +94,7 @@ public class ScheduleRepositoryTest extends TestCase {
         Schedule schedule = scheduleDAO.getSchedule(Integer.parseInt(format));
         assertEquals(Integer.parseInt(format), schedule.date);
 
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(Integer.parseInt(format));
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesByDate(Integer.parseInt(format));
 
         scheduleRepository.cooking(scheduleRecipes);
 
@@ -123,7 +121,7 @@ public class ScheduleRepositoryTest extends TestCase {
         Schedule schedule = scheduleDAO.getSchedule(Integer.parseInt(format));
         assertEquals(Integer.parseInt(format), schedule.date);
 
-        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesBySId(Integer.parseInt(format));
+        List<ScheduleRecipe> scheduleRecipes = scheduleRecipeDAO.queryScheduleRecipesByDate(Integer.parseInt(format));
         assertEquals(2, scheduleRecipes.size());
         assertEquals(Integer.parseInt(format), scheduleRecipes.get(0).sId.intValue());
         assertEquals(Integer.parseInt(format), scheduleRecipes.get(1).sId.intValue());

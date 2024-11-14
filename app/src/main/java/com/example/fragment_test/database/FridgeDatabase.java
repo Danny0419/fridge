@@ -15,7 +15,6 @@ import com.example.fragment_test.entity.PreparedRecipe;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
-import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.ScheduleRecipe;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.example.fragment_test.entity.Step;
@@ -27,12 +26,12 @@ import java.util.List;
         InvoiceItem.class,
         RefrigeratorIngredient.class,
         ShoppingIngredient.class,
-        Schedule.class,
         Recipe.class,
         Step.class,
         RecipeIngredient.class,
         ScheduleRecipe.class,
-        PreparedRecipe.class},
+        PreparedRecipe.class,
+        IngredientUsage.class},
         version = 1)
 public abstract class FridgeDatabase extends RoomDatabase {
 
@@ -58,7 +57,6 @@ public abstract class FridgeDatabase extends RoomDatabase {
     public abstract InvoiceItemDAO invoiceItemDAO();
     public abstract RefrigeratorIngredientDAO refrigeratorIngredientDAO();
     public abstract ShoppingDAO shoppingDAO();
-    public abstract ScheduleDAO scheduleDAO();
     public abstract RecipeDAO recipeDAO();
     public abstract StepDAO stepDAO();
     public abstract RecipeIngredientDAO recipeIngredientDAO();

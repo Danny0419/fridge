@@ -7,7 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
 
 import com.example.fragment_test.entity.Recipe;
-import com.example.fragment_test.entity.Schedule;
 import com.example.fragment_test.entity.Step;
 
 import junit.framework.TestCase;

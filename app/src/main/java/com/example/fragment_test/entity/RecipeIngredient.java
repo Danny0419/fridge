@@ -20,6 +20,11 @@ public class RecipeIngredient extends Ingredient implements Parcelable {
     public Integer rId;
 
     @Ignore
+    public RecipeIngredient(@NonNull String name, int quantity) {
+        super(name, quantity);
+    }
+
+    @Ignore
     public RecipeIngredient(@NonNull String name, int quantity, String img, Integer rId) {
         super(name, quantity);
         this.img = img;
@@ -30,6 +35,13 @@ public class RecipeIngredient extends Ingredient implements Parcelable {
         super(id, name, quantity);
         this.img = img;
         this.rId = rId;
+    }
+
+    public RecipeIngredient(String name, int quantity, String sort) {
+        super();
+        this.name = name;
+        this.quantity = quantity;
+        this.sort = sort;
     }
 
     protected RecipeIngredient(Parcel in) {

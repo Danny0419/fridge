@@ -1,23 +1,45 @@
 package com.example.fragment_test.repository;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 
+import com.example.fragment_test.RecipeRecommend.RecipeRecommendation;
+import com.example.fragment_test.ServerAPI.RetrofitClient;
 import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RecipeDAO;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeIngredient;
+import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.entity.Step;
+import com.example.fragment_test.service.RecipeService;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import io.reactivex.Single;
 
 public class RecipeRepository {
     private static RecipeRepository recipeRepository;
     private final RecipeDAO recipeDAO;
     private final RecipeIngredientRepository recipeIngredientRepository;
+    private final RefrigeratorIngredientRepository refrigeratorIngredientRepository;
+    private RecipeService recipeService;
+    private final RecipeRecommendation recipeRecommendation;
 
     private RecipeRepository(Context context) {
         this.recipeDAO = FridgeDatabase.getInstance(context).recipeDAO();
         this.recipeIngredientRepository = RecipeIngredientRepository.getInstance(context);
+        this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(context);
+        this.recipeRecommendation = new RecipeRecommendation();
+        this.recipeService = RetrofitClient.getRetrofitInstance().create(RecipeService.class);
     }
 
     public static RecipeRepository getInstance(Context context) {
@@ -28,20 +50,33 @@ public class RecipeRepository {
     }
 
     public Optional<List<Recipe>> recommendRecipes() {
-        List<RecipeIngredient> recipeIngredients = List.of(
-                new RecipeIngredient("高麗菜", 30, "蔬菜照片", null),
-                new RecipeIngredient("花椰菜", 10, "蔬菜照片", null),
-                new RecipeIngredient("番茄", 5, "蔬菜照片", null)
-        );
-        return Optional.of(List.of(
-                new Recipe(1, "蔬菜大餐", "照片", 2, 0,null, recipeIngredients),
-                new Recipe(2, "菲力牛排", "照片", 2, 1),
-                new Recipe(3, "義大利麵", "照片", 2, 0),
-                new Recipe(4, "蛋包飯", "照片", 2, 0),
-                new Recipe(5, "卡拉雞腿堡", "照片", 2, 0),
-                new Recipe(6, "聖誕大餐", "照片", 2, 1),
-                new Recipe(7, "來一客", "照片", 2, 1)
-        ));
+
+        List<RefrigeratorIngredient> refrigeratorIngredients = refrigeratorIngredientRepository.getRefrigeratorIngredients();
+        Map<String, RecipeRecommendation.FridgeIngredient> ingredientMap = refrigeratorIngredients.stream()
+                .collect(Collectors.toMap(o -> o.name, o -> new RecipeRecommendation.FridgeIngredient(o.name, o.quantity, o.expiration), (o1, o2) -> {
+                    o1.setQuantity(o1.getQuantity() + o2.getQuantity());
+                    if (o1.getExpiryDays() > o2.getExpiryDays()) {
+                        o1.setExpiryDays(o2.getExpiryDays());
+                    }
+                    return o1;
+                }));
+        List<RecipeRecommendation.Recommendation> recommendations = recipeRecommendation.getRecommendations(ingredientMap);
+        List<Recipe> recipes = recommendations.stream()
+                .map(o -> {
+                    com.example.fragment_test.ServerAPI.Recipe recipe = o.getRecipe();
+                    Recipe r = new Recipe(recipe.getRecipe_id()
+                            , recipe.getRecipe_name()
+                            , recipe.getPicture()
+                            , recipe.getServings()
+                    );
+                    List<RecipeIngredient> ingredients = new ArrayList<>();
+                    recipe.getIngredients()
+                            .forEach(o1 -> ingredients.add(new RecipeIngredient(o1.getIngredient_name(), Integer.parseInt(o1.getIngredient_need()))));
+                    r.setIngredients(ingredients);
+                    return r;
+                })
+                .collect(Collectors.toList());
+        return Optional.of(recipes);
     }
 
     public long storeRecipe(Recipe recipe) {
@@ -60,5 +95,36 @@ public class RecipeRepository {
 
     public List<Recipe> showRecipeCollection() {
         return recipeDAO.queryAllCollectedRecipe();
+    }
+
+    public List<RecipeIngredient> getRecipeIngredients(int id) {
+        return recipeIngredientRepository.getRecipeIngredientsByRId(id);
+    }
+
+    public Single<List<Step>> getRecipeSteps(Recipe recipe) {
+        return recipeService.getRecipeSteps(recipe.id);
+    }
+
+    public void setRecipesPic(List<Recipe> recipes) {
+        recipes.forEach(this::catchImageFromNet);
+
+    }
+
+    public void setRecipePic(Recipe recipe) {
+        catchImageFromNet(recipe);
+    }
+
+    public void catchImageFromNet(Recipe recipe) {
+        try {
+            URL url = new URL(recipe.src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            recipe.setPic(BitmapFactory.decodeStream(inputStream));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -3,9 +3,10 @@ package com.example.fragment_test.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "preparedRecipes", foreignKeys =
+@Entity(tableName = "prepared_recipes", foreignKeys =
 @ForeignKey(
         entity = Recipe.class,
         parentColumns = "id",
@@ -23,6 +24,13 @@ public class PreparedRecipe {
 
     @ColumnInfo
     public int scheduled;
+
+    @Ignore
+    public PreparedRecipe(int id, Integer rId, int scheduled) {
+        this.id = id;
+        this.rId = rId;
+        this.scheduled = scheduled;
+    }
 
     public PreparedRecipe(int id, Integer rId, Integer sRId, int scheduled) {
         this.id = id;

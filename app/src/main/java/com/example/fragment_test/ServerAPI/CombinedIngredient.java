@@ -8,6 +8,8 @@ public class CombinedIngredient {
     private String Ingredient_Name;
     private String Ingredients_category;
     private int expiration;
+    private String Ingredient_pictures;
+    private String unit;
 
     // Getters and setters
     public int getSupermarket_ingredient_ID() {
@@ -37,6 +39,9 @@ public class CombinedIngredient {
     public String getGrams() {
         return Grams;
     }
+    public String getUnit() {
+        return unit;
+    }
 
     public void setGrams(String grams) {
         Grams = grams;
@@ -45,7 +50,9 @@ public class CombinedIngredient {
     public String getIngredient_Name() {
         return Ingredient_Name;
     }
-
+    public String getIngredient_pictures() {
+        return Ingredient_pictures;
+    }
     public void setIngredient_Name(String ingredient_Name) {
         Ingredient_Name = ingredient_Name;
     }
@@ -65,4 +72,6 @@ public class CombinedIngredient {
     public void setExpiration(int expiration) {
         this.expiration = expiration;
     }
+
+
 }

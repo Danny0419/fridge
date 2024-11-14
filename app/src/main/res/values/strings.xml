@@ -6,14 +6,29 @@
     <string name="main_page_title">冰箱</string>
     <string name="recipe_page_title"></string>
     <string-array name="kinds_of_ingredient">
-        <item>肉類</item>
-        <item>魚肉類</item>
-        <item>豆蛋類</item>
-        <item>蔬菜類</item>
-        <item>乳品類</item>
-        <item>水果類</item>
-        <item>全榖雜糧類</item>
-        <item>堅果種子類</item>
+        <item>葉菜花菜</item>葉菜花菜
+        豆菜與瓜菜
+        根莖類
+        蕈菇類
+        辛香蔥蒜
+        豆類製品
+        牛肉
+        豬肉
+        禽類
+        羊肉
+        海鮮
+        加工肉品
+        <item>豆菜與瓜菜</item>
+        <item>根莖類</item>
+        <item>蕈菇類</item>
+        <item>辛香蔥蒜</item>
+        <item>豆類製品</item>
+        <item>牛肉</item>
+        <item>豬肉</item>
+        <item>禽類</item>
+        <item>羊肉</item>
+        <item>海鮮</item>
+        <item>加工肉品</item>
     </string-array>
 
     <string name="addReceiptTileText">請將發票條碼放入區域</string>

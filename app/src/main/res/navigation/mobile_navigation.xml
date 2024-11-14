@@ -15,7 +15,13 @@
         android:id="@+id/navigation_recipe_detail"
         android:name="com.example.fragment_test.ui.recipe.RecipeDetailActivity"
         android:label="@string/recipe_page_title"
-        tools:layout="@layout/activity_recipe_detail"/>/>
+        tools:layout="@layout/activity_recipe_detail"/>
+
+    <activity
+        android:id="@+id/navigation_start_cooking"
+        android:name="com.example.fragment_test.ui.cooking.StartCookingActivity"
+        tools:layout="@layout/activity_start_cooking"/>
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.fragment_test.ui.home.HomeFragment"
@@ -45,13 +51,20 @@
         <action
             android:id="@+id/action_navigation_recipe_to_navigation_shopping_list"
             app:destination="@id/navigation_shopping_list" />
+        <action
+            android:id="@+id/action_navigation_recipe_to_navigation_recipe_detail"
+            app:destination="@id/navigation_recipe_detail" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_schedule"
         android:name="com.example.fragment_test.ui.schedule.ScheduleFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_schedule" />
+        tools:layout="@layout/fragment_schedule" >
+        <action
+            android:id="@+id/action_navigation_schedule_to_navigation_start_cooking"
+            app:destination="@id/navigation_start_cooking" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_shopping_list"

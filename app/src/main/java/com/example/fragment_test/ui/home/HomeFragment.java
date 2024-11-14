@@ -1,6 +1,5 @@
 package com.example.fragment_test.ui.home;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,79 +16,91 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fragment_test.R;
+import com.example.fragment_test.adapter.ExpiringRefrigeratorIngredientsAdapterForHome;
+import com.example.fragment_test.adapter.RecipeAdapterForHome;
+import com.example.fragment_test.adapter.ShoppingListAdapterForHome;
 import com.example.fragment_test.databinding.FragmentHomeBinding;
-import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.ui.recipe.RecipeViewModel;
 import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private Dialog dialog;
-    private ScanIngredientConfirmBinding scanIngredientConfirmBinding;
+    private RecipeViewModel recipeViewModel;
+    private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+        LocalDate now = LocalDate.now();
 
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-//
-//        // 观察 Invoice 列表和其项，并更新 UI
-//        homeViewModel.getInvoiceWithItemsList().observe(getViewLifecycleOwner(), invoiceWithItemsList -> {
-//            StringBuilder allInvoices = new StringBuilder();
-//            for (InvoiceWithItems invoiceWithItems : invoiceWithItemsList) {
-//                Invoice invoice = invoiceWithItems.invoice;
-//                allInvoices.append("\n")
-//                        .append("Invoice ID: ").append(invoice.getId()).append("，")
-//                        .append("Date: ").append(invoice.getDate()).append("\n");
-//
-//                // 显示发票下的所有品项
-//                for (InvoiceItem item : invoiceWithItems.items) {
-//                    allInvoices.append("    Item Name: ").append(item.getName()).append("\n")
-//                            .append("    Quantity: ").append(item.getQuantity()).append("，")
-//                            .append("    Price: ").append(item.getPrice()).append("\n");
-//                }
-//            }
-//            textView.setText(allInvoices.toString());
-//        });
-//
+        fragmentOfDate(now);
+
+        homeViewModel.loadScheduleRecipesOfToday(Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(now)));
+        homeViewModel.getScheduleRecipesOfToday()
+                .observe(getViewLifecycleOwner(), (recipes -> {
+                    recipeViewModel.loadRecipesPic(recipes);
+                    recipeViewModel.getRecipes()
+                            .observe(getViewLifecycleOwner(), rs -> {
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                                layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                                binding.eatingForToday.setLayoutManager(layoutManager);
+                                binding.eatingForToday.setAdapter(new RecipeAdapterForHome(recipes));
+                            });
+                }));
+
+        homeViewModel.loadShoppingList();
+        homeViewModel.getShoppingList()
+                .observe(getViewLifecycleOwner(), (shoppingItemVOS) -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    binding.shoppingListRecycle.setLayoutManager(layoutManager);
+                    binding.shoppingListRecycle.setAdapter(new ShoppingListAdapterForHome(shoppingItemVOS));
+                });
+
+        homeViewModel.loadExpiringRefrigeratorIngredient();
+        homeViewModel.getExpiringIngredients()
+                .observe(getViewLifecycleOwner(), (ingredientDetailVOList) -> {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    binding.expiringIngredients.setLayoutManager(layoutManager);
+                    binding.expiringIngredients.setAdapter(new ExpiringRefrigeratorIngredientsAdapterForHome(ingredientDetailVOList));
+                });
+
         addToolbar();
-//
-//        binding.testButton.setOnClickListener(this);
-//        setupDialog(inflater, container);
 
-        return root;
+        return binding.getRoot();
     }
 
-//    private void setupDialog(LayoutInflater inflater, ViewGroup container) {
-//        scanIngredientConfirmBinding = ScanIngredientConfirmBinding.inflate(inflater, container, false);
-//        dialog = new Dialog(getContext());
-//        dialog.setContentView(scanIngredientConfirmBinding.getRoot());
-//        dialog.setCancelable(false);
-//
-//        Button continueButton = scanIngredientConfirmBinding.continueButton;
-//        Button confirmButton = scanIngredientConfirmBinding.confirmButton;
-//
-//        continueButton.setOnClickListener(this);
-//        confirmButton.setOnClickListener(this);
-//
-//        // 應急用調整彈跳視窗大小
-//        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-//        layoutParams.width = 1000;
-//        layoutParams.height = 1020;
-//        dialog.getWindow().setAttributes(layoutParams);
-//    }
+    private void fragmentOfDate(LocalDate now) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.\nMM.dd.");
+        String dateStr = dateTimeFormatter.format(now);
+        binding.date.setText(dateStr);
+        DayOfWeek dayOfWeek = now.getDayOfWeek();
+        binding.weekDate.setText(convertDayOfWeekToChiStr(dayOfWeek));
+    }
+
+    public String convertDayOfWeekToChiStr(DayOfWeek dayOfWeek) {
+        String dOWeek = "一";
+        switch (dayOfWeek) {
+            case TUESDAY -> dOWeek = "二";
+            case WEDNESDAY -> dOWeek = "三";
+            case THURSDAY -> dOWeek = "四";
+            case FRIDAY -> dOWeek = "五";
+            case SATURDAY -> dOWeek = "六";
+            case SUNDAY -> dOWeek = "日";
+        }
+        return "星期" + dOWeek;
+    }
 
     private void addToolbar() {
         FragmentActivity fragmentActivity = requireActivity();
@@ -113,22 +124,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     LocalDate threeDaysLater = now.plusDays(3);
                     String threeDaysLaterStr = DateTimeFormatter.BASIC_ISO_DATE.format(threeDaysLater);
                     List<RefrigeratorIngredient> ingredients = List.of(
-                            new RefrigeratorIngredient(0, "牛肉", 500, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "豬肉", 500, "牛排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "雞肉", 1000, "牛小排照片", "肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "高麗菜", 100, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "青江菜", 200, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "洋蔥", 2, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "紅蘿波", 300, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "玉米", 300, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "菠菜", 250, "牛小排照片", "蔬菜類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr)),
-                            new RefrigeratorIngredient(0, "雞蛋", 10, "牛小排照片", "蛋豆魚肉類", Integer.parseInt(date), Integer.parseInt(threeDaysLaterStr))
+                            new RefrigeratorIngredient(1, "豬五花肉", 500, "porkpieces", "豬肉", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(2, "火鍋牛肉片", 500, "hotpotslicedbeef", "牛肉", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(3, "雞腿肉", 500, "chickenthigh", "禽類", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(4, "高麗菜", 100, "cabbage", "葉菜花菜", Integer.parseInt(date), someDaysLater(7)),
+                            new RefrigeratorIngredient(5, "青江菜", 200, "spooncabbage", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(6, "洋蔥", 200, "onion", "根莖類", Integer.parseInt(date), someDaysLater(14)),
+                            new RefrigeratorIngredient(7, "紅蘿蔔", 300, "carrot", "根莖類", Integer.parseInt(date), someDaysLater(14)),
+                            new RefrigeratorIngredient(8, "白蘿蔔", 300, "whiteradish", "根莖類", Integer.parseInt(date), someDaysLater(10)),
+                            new RefrigeratorIngredient(9, "玉米", 300, "corn", "蔬菜類", Integer.parseInt(date), someDaysLater(7)),
+                            new RefrigeratorIngredient(10, "菠菜", 250, "spinach", "葉菜花菜", Integer.parseInt(date), someDaysLater(4)),
+                            new RefrigeratorIngredient(11, "蛋", 10, "egg", "禽類", Integer.parseInt(date), someDaysLater(21)),
+                            new RefrigeratorIngredient(12, "花椰菜", 100, "broccoli", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(13, "番茄", 100, "tomato", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(14, "小黃瓜", 250, "cucumber", "豆菜與瓜菜", Integer.parseInt(date), someDaysLater(5)),
+                            new RefrigeratorIngredient(15, "蘑菇", 250, "mushroom", "蕈菇類", Integer.parseInt(date), someDaysLater(5))
                     );
                     foodManagementViewModel.addRefrigeratorIngredients(ingredients);
                 }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.STARTED);
+    }
+
+    public Integer someDaysLater(int day) {
+        LocalDate now = LocalDate.now();
+        String plusDay = DateTimeFormatter.BASIC_ISO_DATE.format(now.plusDays(day));
+        return Integer.parseInt(plusDay);
     }
 
     @Override

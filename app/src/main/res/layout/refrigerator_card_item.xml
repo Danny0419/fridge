@@ -1,40 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="10dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-        <TextView
+<!--        食材照片-->
+        <ImageView
             android:id="@+id/ingredientImg"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_margin="15dp" />
-
-        <TextView
-            android:id="@+id/ingredientName"
             android:layout_width="70dp"
-            android:layout_height="35dp"
-            android:layout_toEndOf="@id/ingredientImg"
-            android:layout_alignParentTop="true" />
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/photo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/ingredientExpiration"
-            android:layout_width="250dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/ingredientImg"
-            android:layout_below="@id/ingredientName"
-            android:layout_marginTop="5dp"/>
+<!--        「食材名稱＆剩餘天數」＆保存期限-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+<!--            「食材名稱＆剩餘天數」-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="110dp"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/ingredientName"
+                    android:text="食材名稱"
+                    android:fontFamily="@font/regular"
+                    android:textSize="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/ingredientDaysRemain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp"
+                    android:fontFamily="@font/regular"
+                    android:text="x天"
+                    android:textSize="14dp"
+                    tools:ignore="TextSizeCheck"
+                    android:layout_gravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--            保存期限-->
+            <TextView
+                android:id="@+id/ingredientExpiration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/light"
+                android:text="有效日期:xx/xx/xx"
+                android:textSize="13dp"
+                tools:ignore="TextSizeCheck" />
+
+        </LinearLayout>
+
+<!--        剩餘克數-->
         <TextView
             android:id="@+id/ingredientQuan"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
-</androidx.cardview.widget.CardView>
+            android:text="xxxg"
+            android:fontFamily="@font/bold"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="13dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
