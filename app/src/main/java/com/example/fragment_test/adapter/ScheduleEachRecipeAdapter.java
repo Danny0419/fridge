@@ -51,7 +51,9 @@ public class ScheduleEachRecipeAdapter extends RecyclerView.Adapter<ScheduleEach
         RecipeWithScheduledId recipeWithScheduledId = recipes.get(position);
         holder.recipeImg.setImageBitmap(recipeWithScheduledId.recipe.pic);
         holder.recipeTitle.setText(recipeWithScheduledId.recipe.name);
-        holder.itemView.setOnClickListener((v) -> onClickListener.onClick(recipeWithScheduledId));
+        holder.itemView.setOnClickListener((v) -> {
+            onClickListener.onClick(recipeWithScheduledId);
+        });
     }
 
     @Override

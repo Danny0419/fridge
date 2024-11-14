@@ -29,10 +29,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RecipeViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
-    private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
+    private final SingleLiveData<List<Recipe>> recipes = new SingleLiveData<>();
     private final SingleLiveData<List<RecipeIngredient>> recipeIngredients = new SingleLiveData<>();
     private final SingleLiveData<List<Step>> recipeSteps = new SingleLiveData<>();
     private final SingleLiveData<Recipe> recipeDetail = new SingleLiveData<>();
+    private final SingleLiveData<RecipeWithScheduledId> clickedSchedule = new SingleLiveData<>();
     private final RecipeRepository recipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
 
@@ -127,7 +128,8 @@ public class RecipeViewModel extends AndroidViewModel {
                 .subscribe(new DisposableMaybeObserver<List<RecipeIngredient>>() {
                     @Override
                     public void onSuccess(List<RecipeIngredient> ingredients) {
-                        recipeIngredients.setValue(ingredients);
+                        recipeWithScheduledId.recipe.ingredients = ingredients;
+                        clickedSchedule.setValue(recipeWithScheduledId);
                     }
 
                     @Override
@@ -227,5 +229,9 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public SingleLiveData<Recipe> getRecipeDetail() {
         return recipeDetail;
+    }
+
+    public SingleLiveData<RecipeWithScheduledId> getClickedSchedule() {
+        return clickedSchedule;
     }
 }

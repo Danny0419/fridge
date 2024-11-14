@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
@@ -65,7 +64,7 @@ public class CookingViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<Boolean> getAreIngredientSufficient() {
+    public SingleLiveData<Boolean> getAreIngredientSufficient() {
         return areIngredientSufficient;
     }
 }

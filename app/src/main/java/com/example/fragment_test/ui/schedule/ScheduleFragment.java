@@ -117,17 +117,17 @@ public class ScheduleFragment extends Fragment {
                     ScheduleAdapter scheduleAdapter = new ScheduleAdapter(aWeek, scheduleViewModel.getScheduledRecipes().getValue());
                     scheduleAdapter.setOnClickListener(recipeWithScheduledId -> {
                         recipeViewModel.loadRecipeIngredients(recipeWithScheduledId);
-                        recipeViewModel.getRecipeIngredients().observe(getViewLifecycleOwner(), ingredients -> {
-                            recipeWithScheduledId.recipe.ingredients = ingredients;
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("scheduleRecipe", recipeWithScheduledId);
-                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
-                            try {
-                                navController.navigate(R.id.navigation_start_cooking, bundle);
-                            }catch (RuntimeException e) {
-                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        recipeViewModel.getClickedSchedule()
+                                        .observe(getViewLifecycleOwner(), rws -> {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putParcelable("scheduleRecipe", rws);
+                                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main2);
+                                            try {
+                                                navController.navigate(R.id.navigation_start_cooking, bundle);
+                                            } catch (RuntimeException e) {
+                                                Toast.makeText(getContext(), "請在嘗試一次", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                     });
                     scheduleContainer.setAdapter(scheduleAdapter);
                 }));

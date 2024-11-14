@@ -21,6 +21,7 @@ import com.example.fragment_test.databinding.RecipeStepsBinding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.ui.recipe.RecipeViewModel;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class StartCookingActivity extends AppCompatActivity {
@@ -58,7 +59,7 @@ public class StartCookingActivity extends AppCompatActivity {
 
         // 點擊返回
         ImageView customBackButton = findViewById(R.id.close_view_btn);
-        customBackButton.setOnClickListener(view -> onBackPressed());
+        customBackButton.setOnClickListener(view -> finish());
 
     }
 
@@ -80,9 +81,9 @@ public class StartCookingActivity extends AppCompatActivity {
         RecipeStepsBinding recipeStepsBinding = activityStartCookingBinding.recipeSteps;
 
         recipeViewModel.getRecipeDetail()
-                        .observe(this, recipe -> {
-                            recipeIntroduction.recipeImg.setImageBitmap(recipe.pic);
-                        });
+                .observe(this, recipe -> {
+                    recipeIntroduction.recipeImg.setImageBitmap(recipe.pic);
+                });
         recipeViewModel.getRecipeSteps()
                 .observe(this, steps -> {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -96,18 +97,24 @@ public class StartCookingActivity extends AppCompatActivity {
         });
 
         activityStartCookingBinding.cookingBnt.setOnClickListener(view -> {
+            int value = LocalDate.now().getDayOfWeek().getValue();
+            if (value != scheduleRecipe.dayOfWeek) {
+                Toast.makeText(this, "請別日再來", Toast.LENGTH_SHORT).show();
+                return;
+            }
             cookingViewModel.checkIfIngredientsSufficient(scheduleRecipe);
+            cookingViewModel.getAreIngredientSufficient()
+                    .observe(this, aBoolean -> {
+                        if (aBoolean) {
+                            Intent intent = new Intent(this, CookingStep1Activity.class);
+                            intent.putExtra("cookingRecipe", scheduleRecipe);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(this, "您的食材不夠", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
-        cookingViewModel.getAreIngredientSufficient()
-                .observe(this, aBoolean -> {
-                    if (aBoolean) {
-                        Intent intent = new Intent(this, CookingStep1Activity.class);
-                        intent.putExtra("cookingRecipe", scheduleRecipe);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(this, "您的食材不夠", Toast.LENGTH_SHORT).show();
-                    }
-                });
+
     }
 }
