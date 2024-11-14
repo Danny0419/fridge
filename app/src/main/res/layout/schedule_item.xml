@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="214dp"
+        android:paddingBottom="20dp"
         android:id="@+id/meal_today"
         >
         <TextView
@@ -18,8 +19,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/text_under_line"
             android:fontFamily="@font/bold"
-            android:text="mon"
-            android:textSize="24dp"
+            android:text="點選下方圖片加入規劃"
+            android:textSize="20dp"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="20dp"
             android:layout_alignParentStart="true"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:background="@color/dark_pink"
             android:fontFamily="@font/regular"
-            android:text=" 點我選擇要吃甚麼叭 "
+            android:text=" 點我開始規劃叭 "
             android:textSize="16dp"
             android:layout_marginRight="14dp"
             android:layout_marginTop="14dp"
@@ -54,53 +55,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/food_item"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="25dp"
-            android:layout_below="@+id/eachDayText">
-        </androidx.recyclerview.widget.RecyclerView>
-    </RelativeLayout>
-
-<!--   預備料理-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="214dp"
-        android:id="@+id/ready_to_cook"
-        android:visibility="gone"
-        >
-        <TextView
-            android:id="@+id/want_to_eat_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_under_line"
-            android:fontFamily="@font/bold"
-            android:text="等等要吃......"
-            android:textSize="24dp"
+            android:layout_below="@+id/eachDayText"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="20dp"
-            android:layout_alignParentStart="true"/>
+            android:layout_marginRight="25dp">
 
-        <Button
-            android:id="@+id/start_to_cook_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/dark_pink"
-            android:fontFamily="@font/regular"
-            android:text=" 點我開始料理 "
-            android:textSize="16dp"
-            android:layout_marginRight="14dp"
-            android:layout_marginTop="14dp"
-            android:layout_alignParentEnd="true"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ready_foodContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="25dp"
-            android:layout_below="@+id/want_to_eat_text">
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 </LinearLayout>

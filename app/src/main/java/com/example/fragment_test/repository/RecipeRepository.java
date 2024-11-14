@@ -105,12 +105,11 @@ public class RecipeRepository {
         return recipeService.getRecipeSteps(recipe.id);
     }
 
-    public void setRecipesPic(List<Recipe> recipes) {
+    public void loadRecipesPic(List<Recipe> recipes) {
         recipes.forEach(this::catchImageFromNet);
-
     }
 
-    public void setRecipePic(Recipe recipe) {
+    public void loadRecipePic(Recipe recipe) {
         catchImageFromNet(recipe);
     }
 

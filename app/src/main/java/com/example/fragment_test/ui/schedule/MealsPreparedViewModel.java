@@ -6,9 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.Recipe;
 import com.example.fragment_test.entity.RecipeWithPreRecipeId;
 import com.example.fragment_test.repository.PreparedRecipeRepository;
+import com.example.fragment_test.repository.RecipeRepository;
 import com.example.fragment_test.repository.ScheduleRecipeRepository;
 
 import java.util.List;
@@ -22,22 +24,27 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MealsPreparedViewModel extends AndroidViewModel {
-    private final MutableLiveData<List<Recipe>> scheduledRecipes = new MutableLiveData<>();
-    private final MutableLiveData<List<RecipeWithPreRecipeId>> preparedRecipes = new MutableLiveData<>();
+    private final SingleLiveData<List<Recipe>> scheduledRecipes = new SingleLiveData<>();
+    private final SingleLiveData<List<RecipeWithPreRecipeId>> preparedRecipes = new SingleLiveData<>();
     private final ScheduleRecipeRepository scheduleRecipeRepository;
     private final PreparedRecipeRepository preparedRecipeRepository;
+    private final RecipeRepository recipeRepository;
+
 
     public MealsPreparedViewModel(@NonNull Application application) {
         super(application);
         this.scheduleRecipeRepository = ScheduleRecipeRepository.getInstance(application);
         this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(application);
+        this.recipeRepository = RecipeRepository.getInstance(application);
     }
 
     public void loadSchedules(int date) {
         Maybe.fromCallable(new Callable<List<Recipe>>() {
                     @Override
                     public List<Recipe> call() throws Exception {
-                        return scheduleRecipeRepository.getSpecificDateScheduledRecipes(date);
+                        List<Recipe> recipes = scheduleRecipeRepository.getSpecificDateScheduledRecipes(date);
+                        recipeRepository.loadRecipesPic(recipes);
+                        return recipes;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -64,7 +71,12 @@ public class MealsPreparedViewModel extends AndroidViewModel {
         Maybe.fromCallable(new Callable<List<RecipeWithPreRecipeId>>() {
                     @Override
                     public List<RecipeWithPreRecipeId> call() throws Exception {
-                        return preparedRecipeRepository.getPreparedRecipes();
+                        List<RecipeWithPreRecipeId> recipes = preparedRecipeRepository.getPreparedRecipes();
+                        List<Recipe> rs = recipes.stream()
+                                        .map(o -> o.recipe)
+                                                .toList();
+                        recipeRepository.loadRecipesPic(rs);
+                        return recipes;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -123,11 +135,11 @@ public class MealsPreparedViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<List<Recipe>> getScheduledRecipes() {
+    public SingleLiveData<List<Recipe>> getScheduledRecipes() {
         return scheduledRecipes;
     }
 
-    public MutableLiveData<List<RecipeWithPreRecipeId>> getPreparedRecipes() {
+    public SingleLiveData<List<RecipeWithPreRecipeId>> getPreparedRecipes() {
         return preparedRecipes;
     }
 }

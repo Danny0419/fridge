@@ -182,7 +182,7 @@ public class RecipeViewModel extends AndroidViewModel {
     }
 
     public void loadRecipesPic(List<Recipe> recipes) {
-        Completable.fromAction(() -> recipeRepository.setRecipesPic(recipes))
+        Completable.fromAction(() -> recipeRepository.loadRecipesPic(recipes))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {
@@ -199,7 +199,7 @@ public class RecipeViewModel extends AndroidViewModel {
     }
 
     public void loadRecipePic(Recipe recipe) {
-        Completable.fromAction(() -> recipeRepository.setRecipePic(recipe))
+        Completable.fromAction(() -> recipeRepository.loadRecipePic(recipe))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {

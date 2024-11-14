@@ -49,4 +49,26 @@ public class RefrigeratorIngredient extends Ingredient {
     public void setDaysRemaining(int daysRemaining) {
         this.daysRemaining = daysRemaining;
     }
+
+    public String getPurchaseDate(){
+        String stringPurchaseDate= String.valueOf(purchaseDate);
+
+        String year = stringPurchaseDate.substring(2, 4);
+        String month = stringPurchaseDate.substring(4, 6);
+        String day = stringPurchaseDate.substring(6, 8);
+
+        stringPurchaseDate = year + "/" + month + "/" + day;
+        return stringPurchaseDate;
+    }
+
+    public String getExpiration(){
+        String stringExpiration= String.valueOf(expiration);
+
+        String year = stringExpiration.substring(2, 4);
+        String month = stringExpiration.substring(4, 6);
+        String day = stringExpiration.substring(6, 8);
+
+        stringExpiration = year + "/" + month + "/" + day;
+        return stringExpiration;
+    }
 }

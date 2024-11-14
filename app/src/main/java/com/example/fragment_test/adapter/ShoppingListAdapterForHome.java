@@ -46,7 +46,7 @@ public class ShoppingListAdapterForHome extends RecyclerView.Adapter <ShoppingLi
     public void onBindViewHolder(@NonNull ShoppingItemViewHolderForHome holder, int position) {
         ShoppingItemVO shoppingItemVO = shoppingItems.get(position);
         holder.ingredientName.setText(shoppingItemVO.name);
-        holder.ingredientQuantity.setText(shoppingItemVO.sumOfQuantity + "");
+        holder.ingredientQuantity.setText(shoppingItemVO.sumOfQuantity + " g");
     }
 
 
