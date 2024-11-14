@@ -66,8 +66,6 @@ public class ScanReceiptActivity extends AppCompatActivity {
     private Set<String> recognizedQrCodes = new HashSet<>();
     // 需要识别的QR码数量
     private static final int REQUIRED_QRCODES = 2;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
-    private DecoratedBarcodeView barcodeView;
 
 
     @Override
