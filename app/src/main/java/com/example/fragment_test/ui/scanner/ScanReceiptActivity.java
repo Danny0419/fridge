@@ -340,7 +340,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "此發票已被掃描過，請檢查！", Toast.LENGTH_LONG).show();
                     });
-                    //return; // 拦截，避免后续处理
+                    return; // 拦截，避免后续处理
                 }
 
                 // 插入发票数据，使用提取的前10个字符作为ID
@@ -364,7 +364,6 @@ public class ScanReceiptActivity extends AppCompatActivity {
                     finish();
                 });
             });
-
             executorService.shutdown(); // 在适当的时候关闭线程池
         }
     }
@@ -453,7 +452,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
                                     RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(
                                             0, // 假设 ID 是自动生成的
                                             ingredient.getIngredient_Name(), // 使用 ingredient 的名字
-                                            quantity, // 使用 API 请求时的数量
+                                            Integer.parseInt(ingredient.getGrams()), // 使用 API 请求时的数量
                                             ingredient.getIngredient_pictures(), // 图片可以根据需要设置
                                             ingredient.getIngredients_category(), // 使用 ingredient 的类别
                                             date, // 使用格式化后的购买日期
