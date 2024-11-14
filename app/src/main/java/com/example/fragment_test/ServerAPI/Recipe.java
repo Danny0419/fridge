@@ -8,7 +8,7 @@ public class Recipe {
     private List<Ingredient> ingredients;
     private int cooking_time;
     private String picture;
-    private int serving;
+    private int servings;
 
     // Getter and Setter methods
     public int getRecipe_id() {return recipe_id;}
@@ -60,7 +60,7 @@ public class Recipe {
 
     public void setPicture(String picture) { this.picture = picture; }
 
-    public int getServing() { return serving; }
+    public int getServings() { return servings; }
 
-    public void setServing(int serving) { this.serving = serving; }
+    public void setServings(int servings) { this.servings = servings; }
 }
