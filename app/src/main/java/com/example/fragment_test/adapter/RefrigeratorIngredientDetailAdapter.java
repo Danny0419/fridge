@@ -55,8 +55,8 @@ public class RefrigeratorIngredientDetailAdapter extends RecyclerView.Adapter<Re
     public void onBindViewHolder(@NonNull RefrigeratorIngredientDetailViewHolder holder, int position) {
         RefrigeratorIngredient ingredient = ingredientDetails.get(position);
         holder.ingredientQuantity.setText("" + ingredient.quantity);
-        holder.ingredientPurchaseDate.setText("" + ingredient.purchaseDate);
-        holder.ingredientExpiration.setText("" + ingredient.expiration);
+        holder.ingredientPurchaseDate.setText("" + ingredient.getPurchaseDate());
+        holder.ingredientExpiration.setText("" + ingredient.getExpiration());
         holder.daysRemaining.setText("" + ingredient.daysRemaining);
 
         holder.ingredientQuantity.setOnEditorActionListener((textView, i, keyEvent) -> {

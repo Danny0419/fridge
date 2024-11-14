@@ -8,7 +8,7 @@
     android:padding="25dp">
 
 <!--    今天想吃......-->
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/meal_today"
         android:layout_width="0dp"
         android:layout_height="140dp"
@@ -16,24 +16,33 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/date_today"
         android:layout_marginRight="20dp"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="6dp"
-        android:orientation="vertical"
-        android:background="@color/pink">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="今天想吃......"
-            android:textSize="24dp"
-            android:background="@drawable/text_under_line"
-            android:fontFamily="@font/bold"
-            android:layout_marginBottom="12dp"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/eatingForToday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:background="@color/pink"
+        app:cardBackgroundColor="@color/pink"
+        app:cardElevation="5dp">
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="6dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="今天想吃......"
+                android:textSize="24dp"
+                android:background="@drawable/text_under_line"
+                android:fontFamily="@font/bold"
+                android:layout_marginBottom="12dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eatingForToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 <!--    <fragment-->
 <!--        android:id="@+id/meal_today"-->
 <!--        android:name="com.example.fragment_test.ui.schedule.ScheduleFragment"-->
@@ -45,34 +54,45 @@
 <!--        android:layout_marginRight="20dp"/>-->
 
 <!--    今天日期-->
-    <LinearLayout
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/date_today"
         android:layout_width="140dp"
         android:layout_height="140dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toRightOf="@id/meal_today"
         app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="13dp"
-        android:background="@color/pink">
-        <TextView
-            android:id="@+id/date"
+        android:background="@color/pink"
+        app:cardBackgroundColor="@color/pink"
+        app:cardElevation="5dp"
+        >
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2024.\n03.21."
-            android:textSize="24dp"
-            android:fontFamily="@font/bold"
-            />
-        <TextView
-            android:id="@+id/week_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="星期五"
-            android:textSize="36dp"
-            android:fontFamily="@font/bold"
-            />
-    </LinearLayout>
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="13dp"
+
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2024.\n03.21."
+                android:textSize="24dp"
+                android:fontFamily="@font/bold"
+                />
+            <TextView
+                android:id="@+id/week_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="星期五"
+                android:textSize="36dp"
+                android:fontFamily="@font/bold"
+                />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 <!--    <fragment-->
 <!--        android:id="@+id/date_today"-->
 <!--        android:layout_width="140dp"-->
@@ -82,7 +102,7 @@
 <!--        app:layout_constraintTop_toTopOf="parent"/>-->
 
 <!--    待購清單-->
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/shoppingList"
         android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"
         android:layout_width="match_parent"
@@ -91,25 +111,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/meal_today"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="6dp"
-        android:background="@color/pink"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="@color/pink"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="待購清單"
-            android:textSize="24dp"
-            android:fontFamily="@font/bold"
-            android:background="@drawable/text_under_line"
-            android:layout_marginBottom="11dp"/>
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="6dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="待購清單"
+                android:textSize="24dp"
+                android:fontFamily="@font/bold"
+                android:background="@drawable/text_under_line"
+                android:layout_marginBottom="11dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/shoppingList_recycle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/shoppingList_recycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 <!--    <fragment-->
 <!--        android:id="@+id/shoppingList"-->
 <!--        android:name="com.example.fragment_test.ui.shopping_list.ShoppingListFragment"-->
@@ -121,37 +149,44 @@
 <!--        app:layout_constraintTop_toBottomOf="@+id/meal_today"/>-->
 
 <!--    快過期食材-->
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/expired_food"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:minHeight="380dp"
-        android:minWidth="360dp"
         android:layout_marginTop="23.5dp"
+        android:background="@color/pink"
+        android:minWidth="360dp"
+        android:minHeight="30dp"
+        app:cardBackgroundColor="@color/pink"
+        app:cardElevation="5dp"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shoppingList"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="@color/pink"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="6dp"
-        android:orientation="vertical">
+        app:layout_constraintTop_toBottomOf="@+id/shoppingList">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="快過期的食材有......"
-            android:textSize="24dp"
-            android:background="@drawable/text_under_line"
-            android:fontFamily="@font/bold"
-            android:layout_marginBottom="11dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/expiring_ingredients"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="10dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="11dp"
+                android:background="@drawable/text_under_line"
+                android:fontFamily="@font/bold"
+                android:text="快過期的食材有......"
+                android:textSize="24dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/expiring_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <!--        <fragment-->
 <!--            android:id="@+id/expired_food"-->

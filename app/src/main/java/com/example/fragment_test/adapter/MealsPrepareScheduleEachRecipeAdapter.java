@@ -49,7 +49,7 @@ public class MealsPrepareScheduleEachRecipeAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ScheduleEachRecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-//        holder.recipeImg.setText(recipe.img);
+        holder.recipeImg.setImageBitmap(recipe.pic);
         holder.recipeTitle.setText(recipe.name);
         holder.itemView.setOnClickListener((v) -> onClickListener.onClick(date, recipe));
     }

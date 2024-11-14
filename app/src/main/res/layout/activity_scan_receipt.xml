@@ -26,7 +26,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="@font/regular"
-            android:background="@drawable/text_under_line"
+            android:textColor="@color/hintBoxGray"
+            android:background="@drawable/non_under_line"
             android:text="手動新增"
             android:textSize="24dp"/>
 

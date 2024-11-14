@@ -127,7 +127,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         addItemDialog.setCancelable(false);
         WindowManager.LayoutParams layoutParams = addItemDialog.getWindow().getAttributes();
         layoutParams.width = 1000;
-        layoutParams.height = 1020;
+        layoutParams.height = 1100;
         addItemDialog.getWindow().setAttributes(layoutParams);
 
         editItemDialog = new Dialog(getContext());
