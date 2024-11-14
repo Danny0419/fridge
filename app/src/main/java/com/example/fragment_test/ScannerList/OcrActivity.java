@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -312,7 +313,14 @@ public class OcrActivity extends AppCompatActivity {
             finish();
         });
 
+        // 應急用調整彈跳視窗大小
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.width = 1000;
+        layoutParams.height = 1020;
+        dialog.getWindow().setAttributes(layoutParams);
+
         dialog.show();
+
     }
 //    private void callApiWithProductName(String productName, List<Item> items, int itemIndex, String invoiceDate) {
 //        // 清除不必要字符

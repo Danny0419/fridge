@@ -39,22 +39,20 @@ public class JumpAdapter extends RecyclerView.Adapter<JumpAdapter.ViewHolder> {
         public void bind(Item item, CombinedIngredient ingredient, int position) {
             itemId.setText(String.valueOf(position + 1));
 
-
-
             if (item != null && ingredient != null) {
+                // 有對應商品時顯示資訊
                 itemName.setText(ingredient.getIngredient_Name());
                 itemSort.setText(ingredient.getIngredients_category());
                 itemExpiration.setText(String.valueOf(ingredient.getExpiration()) + " 天");
                 itemQuantity.setText(ingredient.getGrams());
-                Log.i("TAG","send UI: " + ingredient.getIngredient_Name());
+                itemView.setVisibility(View.VISIBLE); // 顯示 itemView
+                Log.i("TAG", "send UI: " + ingredient.getIngredient_Name());
             } else {
-               
-                itemName.setText("");
-                itemSort.setText("");
-                itemExpiration.setText("");
-                itemQuantity.setText("");
+                // 若無對應商品名稱，將項目隱藏
+                itemView.setVisibility(View.GONE);
             }
         }
+
     }
 
     @NonNull
