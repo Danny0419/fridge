@@ -286,10 +286,13 @@ public class RecipeRecommendation {
         float difficultyMultiplier = getDifficultyMultiplier(difficulty);
         float ingredientCountAdjustment = getIngredientCountAdjustment(ingredientCount);
         float tooMuchIng;
+        float fullMatch = 0;
 
         if (requiredIngredientCount>8){tooMuchIng=0;}else{tooMuchIng=1;}
+        
+        if(requiredIngredientCount==ingredientCount){fullMatch=1f;}
 
-        return (baseScore - timeDeduction) * difficultyMultiplier*ingredientCountAdjustment*tooMuchIng;
+        return ((baseScore - timeDeduction) * difficultyMultiplier*ingredientCountAdjustment*tooMuchIng)+fullMatch;
     }
 
     // 根據食材數量計算調整因子
