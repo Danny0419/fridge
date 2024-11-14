@@ -37,7 +37,7 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
 
         viewModel.getScheduledRecipes()
                 .observe(this, (recipes) -> {
-                    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
                     RecyclerView foodItem = mealsPrepareDialogBinding.scheduleItem.foodItem;
                     foodItem.setLayoutManager(gridLayoutManager);
                     MealsPrepareScheduleEachRecipeAdapter scheduleEachRecipeAdapter = new MealsPrepareScheduleEachRecipeAdapter(recipes, date);
@@ -49,7 +49,7 @@ public class MealsPrepareDialogActivity extends AppCompatActivity {
 
         viewModel.getPreparedRecipes()
                 .observe(this, (recipes -> {
-                    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
                     RecyclerView foodPrepareItem = mealsPrepareDialogBinding.foodPrepareItem;
                     foodPrepareItem.setLayoutManager(gridLayoutManager);
                     SchedulePreparedRecipeAdapter schedulePreparedRecipeAdapter = new SchedulePreparedRecipeAdapter(recipes);

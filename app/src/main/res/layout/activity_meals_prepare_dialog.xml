@@ -10,21 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="67dp"/>
 
-    <include
-        android:id="@+id/schedule_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="214dp"
-        layout="@layout/schedule_item"/>
+        <include
+            android:id="@+id/schedule_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/schedule_item"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/food_prepare_item"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="214dp"
-        android:paddingVertical="20dp"
-        android:paddingHorizontal="25dp"
-        android:background="@color/pink">
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/food_prepare_item"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="25dp"
+            android:background="@drawable/uper_line_gray">
+        </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

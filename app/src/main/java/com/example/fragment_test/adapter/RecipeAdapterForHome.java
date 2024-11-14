@@ -46,6 +46,18 @@ public class RecipeAdapterForHome extends RecyclerView.Adapter<RecipeAdapterForH
         Recipe recipe = recipes.get(position);
         holder.recipePicture.setImageBitmap(recipe.pic);
         holder.recipeName.setText(recipe.name);
+
+        //圖片大小
+        int imgSizeDp=55;//55dp
+        float scale = holder.itemView.getContext().getResources().getDisplayMetrics().density;
+        int imgSizePx = (int) (imgSizeDp * scale + 0.5f); // 將 dp 轉換為像素
+        holder.recipePicture.getLayoutParams().width = imgSizePx;
+        holder.recipePicture.getLayoutParams().height = imgSizePx;
+        holder.recipePicture.requestLayout();
+
+        // 設定文字
+        holder.recipeName.setText(recipe.name);
+        holder.recipeName.setTextSize(16); // 設定字體大小為 16sp
     }
 
     @Override
