@@ -10,6 +10,8 @@ import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.repository.CookingRepository;
 
+import java.util.List;
+
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,6 +22,8 @@ import io.reactivex.schedulers.Schedulers;
 public class CookingViewModel extends AndroidViewModel {
     private final SingleLiveData<Boolean> areIngredientSufficient = new SingleLiveData<>();
     private final CookingRepository cookingRepository;
+    private final SingleLiveData<List<String>> settlements = new SingleLiveData<>();
+
     public CookingViewModel(@NonNull Application application) {
         super(application);
         this.cookingRepository = CookingRepository.getInstance(application);
@@ -48,7 +52,7 @@ public class CookingViewModel extends AndroidViewModel {
     }
 
     public void cooking(RecipeWithScheduledId recipeWithScheduledId) {
-        Completable.fromAction(() ->cookingRepository.cooking(recipeWithScheduledId))
+        Completable.fromAction(() -> cookingRepository.cooking(recipeWithScheduledId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {
@@ -64,7 +68,33 @@ public class CookingViewModel extends AndroidViewModel {
                 });
     }
 
+    public void loadSettlement(RecipeWithScheduledId cookingRecipe) {
+        Maybe.fromCallable(() -> cookingRepository.loadSettlement(cookingRecipe))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> s) {
+                        settlements.setValue(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public SingleLiveData<Boolean> getAreIngredientSufficient() {
         return areIngredientSufficient;
+    }
+
+    public SingleLiveData<List<String>> getSettlements() {
+        return settlements;
     }
 }

@@ -3,6 +3,7 @@ package com.example.fragment_test.ui.cooking;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -10,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fragment_test.MainActivity2;
-import com.example.fragment_test.R;
 import com.example.fragment_test.databinding.ActivityCookingStep3Binding;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 
@@ -29,6 +29,12 @@ public class CookingStep3Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         RecipeWithScheduledId cookingRecipe = intent.getParcelableExtra("cookingRecipe", RecipeWithScheduledId.class);
+        viewModel.loadSettlement(cookingRecipe);
+        viewModel.getSettlements()
+                        .observe(this, strings -> {
+                            activityCookingStep3Binding.settlementsList
+                                    .setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings));
+                        });
 
         activityCookingStep3Binding.returnBtn.setOnClickListener(view -> {
             finish();
@@ -42,7 +48,7 @@ public class CookingStep3Activity extends AppCompatActivity {
         });
 
         //未測試
-        title=findViewById(R.id.stepTitle);
-        title.setText("食材消耗確認");
+//        title=findViewById(R.id.stepTitle);
+//        title.setText("食材消耗確認");
     }
 }

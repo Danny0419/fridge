@@ -6,7 +6,9 @@ import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RecipeWithScheduledId;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,6 +17,7 @@ public class CookingRepository {
     private static CookingRepository cookingRepository;
     private final RefrigeratorIngredientRepository refrigeratorIngredientRepository;
     private final ScheduleRecipeRepository scheduleRecipeRepository;
+
     private CookingRepository(Context context) {
         this.refrigeratorIngredientRepository = RefrigeratorIngredientRepository.getInstance(context);
         this.scheduleRecipeRepository = ScheduleRecipeRepository.getInstance(context);
@@ -55,5 +58,21 @@ public class CookingRepository {
                 refrigeratorIngredientRepository.useRefrigeratorIngredient(ingredient);
             }
         }
+    }
+
+    public List<String> loadSettlement(RecipeWithScheduledId cookingRecipe) {
+        Map<String, RefrigeratorIngredientVO> refrigeratorIngredientsSortedByName = refrigeratorIngredientRepository.getRefrigeratorIngredientsSortedByName();
+        ArrayList<String> settlements = new ArrayList<>();
+        cookingRecipe.recipe.ingredients
+                .forEach(o -> {
+                    try {
+                        RefrigeratorIngredientVO ingredientVO = refrigeratorIngredientsSortedByName.get(o.name);
+                        settlements.add(ingredientVO.name + ":" + ingredientVO.sumQuantity + " - " + o.quantity + " -> " +
+                                (ingredientVO.sumQuantity - o.quantity));
+                    } catch (Exception e) {
+
+                    }
+                });
+        return settlements;
     }
 }
