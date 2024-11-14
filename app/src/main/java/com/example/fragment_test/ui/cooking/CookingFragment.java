@@ -31,7 +31,7 @@ public class CookingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_cooking, container, false);
 
         recipeIntroductionStub = rootView.findViewById(R.id.recipe_introduction);
-        recipeStepsStub = rootView.findViewById(R.id.recipe_steps);
+        recipeStepsStub = rootView.findViewById(R.id.steps);
         ingredientConsumptionConfirmStub = rootView.findViewById(R.id.ingredient_consumption);
 
         recipeIntroduction = recipeIntroductionStub.inflate();

@@ -73,13 +73,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         recipeIntroduction.recipeIngredients.setLayoutManager(gridLayoutManager);
         recipeIntroduction.recipeIngredients.setAdapter(new RecipeDetailIngredientAdapter(recipe.ingredients));
 
-        RecipeStepsBinding recipeStepsBinding = activityRecipeDetailBinding.recipeSteps;
+        RecipeStepsBinding recipeStepsBinding = activityRecipeDetailBinding.steps;
         recipeViewModel.getRecipeSteps()
                 .observe(this, steps -> {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
-                    recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                    recipeStepsBinding.steps.setLayoutManager(layoutManager);
+                    recipeStepsBinding.steps.setAdapter(new RecipeDetailStepsAdapter(steps));
                 });
 
         recipeIntroduction.collectBnt.setOnClickListener(view -> {

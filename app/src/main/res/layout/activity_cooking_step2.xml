@@ -8,6 +8,7 @@
     tools:context=".ui.cooking.CookingStep2Activity">
 
     <include
+        android:id="@+id/steps"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/recipe_steps"/>

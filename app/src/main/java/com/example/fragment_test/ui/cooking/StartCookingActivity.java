@@ -88,8 +88,9 @@ public class StartCookingActivity extends AppCompatActivity {
                 .observe(this, steps -> {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    recipeStepsBinding.recipeSteps.setLayoutManager(layoutManager);
-                    recipeStepsBinding.recipeSteps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                    recipeStepsBinding.steps.setLayoutManager(layoutManager);
+                    recipeStepsBinding.steps.setAdapter(new RecipeDetailStepsAdapter(steps));
+                    scheduleRecipe.recipe.steps = steps;
                 });
 
         recipeIntroduction.collectBnt.setOnClickListener(view -> {
