@@ -18,6 +18,8 @@ public class RecipeIngredient extends Ingredient implements Parcelable {
     public String img;
     @ColumnInfo(name = "r_id")
     public Integer rId;
+    @Ignore
+    public int sufficient;
 
     @Ignore
     public RecipeIngredient(@NonNull String name, int quantity) {
@@ -81,5 +83,9 @@ public class RecipeIngredient extends Ingredient implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(rId);
         }
+    }
+
+    public void setSufficient(int sufficient) {
+        this.sufficient = sufficient;
     }
 }

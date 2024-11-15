@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
                     String threeDaysLaterStr = DateTimeFormatter.BASIC_ISO_DATE.format(threeDaysLater);
                     List<RefrigeratorIngredient> ingredients = List.of(
                             new RefrigeratorIngredient(1, "豬五花肉", 500, "porkpieces", "豬肉", Integer.parseInt(date), someDaysLater(3)),
-//                            new RefrigeratorIngredient(2, "火鍋牛肉片", 500, "hotpotslicedbeef", "牛肉", Integer.parseInt(date), someDaysLater(3)),
+                            new RefrigeratorIngredient(2, "火鍋牛肉片", 100, "hotpotslicedbeef", "牛肉", Integer.parseInt(date), someDaysLater(3)),
                             new RefrigeratorIngredient(3, "雞腿肉", 500, "chickenthigh", "禽類", Integer.parseInt(date), someDaysLater(3)),
                             new RefrigeratorIngredient(4, "高麗菜", 100, "cabbage", "葉菜花菜", Integer.parseInt(date), someDaysLater(7)),
                             new RefrigeratorIngredient(5, "青江菜", 200, "spooncabbage", "葉菜花菜", Integer.parseInt(date), someDaysLater(5)),

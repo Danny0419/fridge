@@ -12,12 +12,15 @@ import com.example.fragment_test.entity.RecipeIngredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
 import com.example.fragment_test.entity.Step;
 import com.example.fragment_test.service.RecipeService;
+import com.example.fragment_test.vo.RefrigeratorIngredientVO;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -125,5 +128,40 @@ public class RecipeRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Recipe> checkIfRecommendIngredientsSufficient(List<Recipe> recipes) {
+        int today = Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now()));
+        Map<String, RefrigeratorIngredientVO> refrigeratorIngredientsSortedByName = refrigeratorIngredientRepository.getRefrigeratorIngredientsSortedByName();
+        recipes.forEach(recipe -> {
+            recipe.ingredients.forEach(recipeIngredient -> {
+
+                try {
+                    RefrigeratorIngredientVO refrigeratorIngredientVO = refrigeratorIngredientsSortedByName.get(recipeIngredient.name);
+
+                    if (recipeIngredient.quantity - refrigeratorIngredientVO.sumQuantity > 0) {
+                        recipeIngredient.sufficient = 0;
+                        return;
+                    }
+                    int dateGap = refrigeratorIngredientVO.earlyEx - today;
+                    if (dateGap <= 3) {
+                        recipeIngredient.sufficient = 1;
+                        return;
+                    }
+
+                    if (dateGap <= 7) {
+                        recipeIngredient.sufficient = 2;
+                        return;
+                    }
+
+                    recipeIngredient.sufficient = 3;
+                } catch (NullPointerException e) {
+                    recipeIngredient.sufficient = 0;
+                }
+
+            });
+        });
+
+        return recipes;
     }
 }
