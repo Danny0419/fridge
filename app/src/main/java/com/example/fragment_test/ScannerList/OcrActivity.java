@@ -26,7 +26,9 @@ import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.database.RefrigeratorIngredientDAO;
 import com.example.fragment_test.databinding.ActivityOcrBinding;
 import com.example.fragment_test.databinding.ScanIngredientConfirmBinding;
+import com.example.fragment_test.entity.Ingredient;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.repository.ShoppingListIngredientRepository;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -47,6 +49,7 @@ import java.util.regex.Pattern;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -384,7 +387,6 @@ public class OcrActivity extends AppCompatActivity {
 //    }
 
 
-
     private void updateDBWithIngredients(List<CombinedIngredient> ingredients, List<Item> items, int itemIndex) {
         if (itemIndex < items.size()) {
             Item item = items.get(itemIndex);
@@ -429,6 +431,7 @@ public class OcrActivity extends AppCompatActivity {
 
                             // 在事務中執行插入操作
                             db.runInTransaction(() -> {
+                                ShoppingListIngredientRepository.getInstance(this).check((List.of(refrigeratorIngredient)));
                                 long result = refrigeratorIngredientDAO.insertIngredient(refrigeratorIngredient);
                                 if (result > 0) {
                                     Log.d(TAG, "成功寫入資料庫: " + refrigeratorIngredient.getName());
@@ -439,7 +442,7 @@ public class OcrActivity extends AppCompatActivity {
                             });
 
                             // 更新UI
-                          //  runOnUiThread(() -> updateUI(item, ingredient));
+                            //  runOnUiThread(() -> updateUI(item, ingredient));
 
                         } catch (NumberFormatException e) {
                             Log.e(TAG, "數值轉換錯誤: " + e.getMessage(), e);
