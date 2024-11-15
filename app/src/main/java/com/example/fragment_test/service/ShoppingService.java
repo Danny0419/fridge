@@ -14,4 +14,10 @@ public interface ShoppingService {
     Single<List<String>> getSortOfIngredientsName(
             @Path("sort") String sort
     );
+
+    @GET("api/get_ingredient_saving_days/{name}")
+    // Return the number of days the ingredient will save if you remove it from your fridge.
+    Single<Integer> getIngredientSavingDays(
+            @Path("name") String ingredientName
+    );
 }

@@ -7,18 +7,24 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -28,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fragment_test.R;
 import com.example.fragment_test.ScannerList.OcrActivity;
@@ -35,6 +42,8 @@ import com.example.fragment_test.database.FridgeDatabase;
 import com.example.fragment_test.entity.Invoice;
 import com.example.fragment_test.entity.InvoiceItem;
 import com.example.fragment_test.entity.RefrigeratorIngredient;
+import com.example.fragment_test.ui.refrigerator.FoodManagementViewModel;
+import com.example.fragment_test.ui.shopping_list.ShoppingListViewModel;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -60,6 +69,7 @@ import retrofit2.Response;
 public class ScanReceiptActivity extends AppCompatActivity {
     //相機掃描
     private DecoratedBarcodeView barcodeView;
+    ShoppingListViewModel shoppingListViewModel;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
     //QRcode集合
     private Set<String> scannedDataSet = new HashSet<>();
@@ -75,7 +85,8 @@ public class ScanReceiptActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_receipt);
-
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory());
+        shoppingListViewModel = viewModelProvider.get(ShoppingListViewModel.class);
         //開啟相機
 //        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
 //        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
@@ -91,8 +102,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
             //如果相機已授權，則啟動相機
             startCamera();
             initializeBarcodeScanner();
-        }
-        else {
+        } else {
             //如果相機未授權，則請求
             requestCameraPermission();
         }
@@ -106,13 +116,15 @@ public class ScanReceiptActivity extends AppCompatActivity {
         LinearLayout scanLayout = findViewById(R.id.scan_layout);   //掃描發票orOCR按鈕區塊
         LinearLayout addManuallyLayout = findViewById(R.id.add_manually_layout);    //手動輸入區塊
         int unclickTextColor = ContextCompat.getColor(this, R.color.hintBoxGray);
-        int clickTextColor=ContextCompat.getColor(this,R.color.black);
-        Drawable unclickBackground=ContextCompat.getDrawable(this,R.drawable.non_under_line);
-        Drawable clickBackground=ContextCompat.getDrawable(this,R.drawable.text_under_line);
+        int clickTextColor = ContextCompat.getColor(this, R.color.black);
+        Drawable unclickBackground = ContextCompat.getDrawable(this, R.drawable.non_under_line);
+        Drawable clickBackground = ContextCompat.getDrawable(this, R.drawable.text_under_line);
+        Button cancel_button = findViewById(R.id.cancel_button);
+        Button confirm_button = findViewById(R.id.confirm_button);
 
         //返回
         goBackBtn.setOnClickListener(v -> {
-            finish();
+                    finish();
                 }
         );
 
@@ -126,14 +138,42 @@ public class ScanReceiptActivity extends AppCompatActivity {
             addManuallyButton.setBackground(unclickBackground);
         });
 
+        Spinner sortSpinner = addManuallyLayout.findViewById(R.id.sortSpinner);
+        Spinner nameSpinner = addManuallyLayout.findViewById(R.id.nameSpinner);
         //手動輸入
         addManuallyButton.setOnClickListener(v -> {
+            shoppingListViewModel.loadAllSortsOfIngredients();
+            shoppingListViewModel.getAllSorts()
+                    .observe(this, strings -> {
+                        initialSpinner(sortSpinner, nameSpinner, strings);
+                    });
             addManuallyLayout.setVisibility(View.VISIBLE);
             scanLayout.setVisibility(View.GONE);
             scanReceiptButton.setTextColor(unclickTextColor);
             scanReceiptButton.setBackground(unclickBackground);
             addManuallyButton.setTextColor(clickTextColor);
             addManuallyButton.setBackground(clickBackground);
+
+            //取消
+            cancel_button.setOnClickListener(cancelView -> {
+                finish();
+            });
+
+            //確認
+            confirm_button.setOnClickListener(cancelView -> {
+                String name = nameSpinner.getSelectedItem().toString();
+                String sort = sortSpinner.getSelectedItem().toString();
+                String quantity = ((EditText)addManuallyLayout.findViewById(R.id.quantity)).getText().toString();
+                shoppingListViewModel.loadIngredientSavingDays(name);
+                shoppingListViewModel.getSavingDays()
+                        .observe(this, savingDays -> {
+                            int today = Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now()));
+                            RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(0, name, Integer.parseInt(quantity), null, sort, today, today + savingDays);
+                            viewModelProvider.get(FoodManagementViewModel.class).addRefrigeratorIngredients(List.of(refrigeratorIngredient));
+                        });
+                finish();
+            });
+
         });
 
         Button albumBtn = findViewById(R.id.albumBnt);
@@ -254,7 +294,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("tag", "onActivityResult: "+"avtivity");
+        Log.i("tag", "onActivityResult: " + "avtivity");
         // 处理QR码扫描结果
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
@@ -279,7 +319,7 @@ public class ScanReceiptActivity extends AppCompatActivity {
 
     private void handleRecognizedQrCodes(Set<String> qrCodes) {
 
-        Log.i("tag", "handleRecognizedQrCodes: "+"handleRecognizedQrCodes");
+        Log.i("tag", "handleRecognizedQrCodes: " + "handleRecognizedQrCodes");
         // 合并QR码信息并解析发票和品项
         StringBuilder combinedInfo = new StringBuilder();
         // 用于存储解析出的品项列表
@@ -585,6 +625,33 @@ public class ScanReceiptActivity extends AppCompatActivity {
         public double getPrice() {
             return price;
         }
+    }
+
+    private void initialSpinner(Spinner sortSpinner, Spinner nameSpinner, List<String> sorts) {
+        // Create an ArrayAdapter using the string array and a default sortSpinner layout.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sorts);
+        // Specify the layout to use when the list of choices appears.
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the sortSpinner.
+        sortSpinner.setAdapter(adapter);
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String sort = adapterView.getSelectedItem().toString();
+                shoppingListViewModel.loadSortOfIngredientsName(sort);
+                shoppingListViewModel.getAllSortOfIngredientsName()
+                        .observe(ScanReceiptActivity.this, names -> {
+                            ArrayAdapter<String> namesAdapter = new ArrayAdapter<>(ScanReceiptActivity.this, android.R.layout.simple_spinner_item, names);
+                            namesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            nameSpinner.setAdapter(namesAdapter);
+                        });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fragment_test.LiveData.SingleLiveData;
 import com.example.fragment_test.entity.ShoppingIngredient;
 import com.example.fragment_test.repository.ShoppingListIngredientRepository;
 import com.example.fragment_test.vo.ShoppingItemVO;
@@ -27,6 +28,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
     private MutableLiveData<List<ShoppingItemVO>> currShoppingList = new MutableLiveData<>();
     private MutableLiveData<List<String>> allSorts = new MutableLiveData<>();
     private MutableLiveData<List<String>> allSortOfIngredientsName = new MutableLiveData<>();
+    private SingleLiveData<Integer> savingDays = new SingleLiveData<>();
 
     public ShoppingListViewModel(@NonNull Application application) {
         super(application);
@@ -153,5 +155,26 @@ public class ShoppingListViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<String>> getAllSortOfIngredientsName() {
         return allSortOfIngredientsName;
+    }
+
+    public void loadIngredientSavingDays(String name) {
+        repository.getIngredientSavingDays(name)
+               .subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(new DisposableSingleObserver<Integer>() {
+                   @Override
+                   public void onSuccess(Integer integer) {
+                       savingDays.setValue(integer);
+                   }
+
+                   @Override
+                   public void onError(Throwable e) {
+
+                   }
+               });
+    }
+
+    public SingleLiveData<Integer> getSavingDays() {
+        return savingDays;
     }
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class ShoppingListIngredientRepository {
@@ -113,5 +114,9 @@ public class ShoppingListIngredientRepository {
                 editedQuantity - quantity,
                 0)
         );
+    }
+
+    public Single<Integer> getIngredientSavingDays(String name) {
+       return shoppingService.getIngredientSavingDays(name);
     }
 }
