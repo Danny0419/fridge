@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fragment_test.R;
@@ -43,7 +44,28 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientViewHolder holder, int position) {
 //        holder.ingredientImg.setText(ingredients.get(position).img);
-        holder.ingredientName.setText(ingredients.get(position).name);
+        RecipeIngredient recipeIngredient = ingredients.get(position);
+        holder.ingredientName.setText(" "+recipeIngredient.name+" ");
+
+        switch (recipeIngredient.sufficient) {
+            case 0:
+
+                holder.ingredientName.setBackgroundResource(R.drawable.warn_gray_rectangle);
+                holder.ingredientName.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                break;
+            case 1:
+                holder.ingredientName.setBackgroundResource(R.drawable.warn_red_rectangle);
+                holder.ingredientName.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+                break;
+            case 2:
+                holder.ingredientName.setBackgroundResource(R.drawable.warn_yellow_rectangle);
+                holder.ingredientName.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+                break;
+            case 3:
+                holder.ingredientName.setBackgroundResource(R.drawable.warn_green_rectangle);
+                holder.ingredientName.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+                break;
+        }
     }
 
     @Override

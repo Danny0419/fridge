@@ -43,14 +43,16 @@ public class RecipeViewModel extends AndroidViewModel {
         this.preparedRecipeRepository = PreparedRecipeRepository.getInstance(application);
     }
 
-    public void loadRecommendRecipes() {
-        Maybe.fromCallable(recipeRepository::recommendRecipes)
-                .subscribeOn(Schedulers.io())
+    public void loadRecommendRecipes(List<Recipe> recipes) {
+        Maybe.fromCallable(() -> {
+                    recipeRepository.loadRecipesPic(recipes);
+                    return recipeRepository.checkIfRecommendIngredientsSufficient(recipes);
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<Optional<List<Recipe>>>() {
+                .subscribe(new DisposableMaybeObserver<List<Recipe>>() {
                     @Override
-                    public void onSuccess(Optional<List<Recipe>> recipes) {
-                        recipes.ifPresent(RecipeViewModel.this.recipes::setValue);
+                    public void onSuccess(List<Recipe> t) {
+                        RecipeViewModel.this.recipes.setValue(t);
                     }
 
                     @Override
@@ -63,6 +65,7 @@ public class RecipeViewModel extends AndroidViewModel {
 
                     }
                 });
+
     }
 
     public void addInterestingRecipe(Recipe recipe) {

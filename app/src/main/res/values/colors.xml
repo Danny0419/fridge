@@ -12,6 +12,7 @@
     <color name="hintBoxGray">#DEC2C2</color>
     <color name="warnRed">#F15D5D</color>
     <color name="warnYellow">#FFC734</color>
+    <color name="warnGreen">#5DB461</color>
     <color name="underLineGray">#F0EBEB</color>
     <color name="selectRed">#FF5C5C</color>
     <color name="tabBackgroundPink">#80FFDBDB</color>

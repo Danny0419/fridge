@@ -147,6 +147,7 @@ public class RecipeFragment extends Fragment {
                                 , recipe.getServings()
                         );
                         List<RecipeIngredient> ingredients = new ArrayList<>();
+
                         recipe.getIngredients()
                                 .forEach(o1 -> {
                                     try {
@@ -161,7 +162,7 @@ public class RecipeFragment extends Fragment {
                         return r;
                     })
                     .collect(Collectors.toList());
-            mViewModel.loadRecipesPic(recipes);
+            mViewModel.loadRecommendRecipes(recipes);
             mViewModel.getRecipes()
                     .observe(this, r -> {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
