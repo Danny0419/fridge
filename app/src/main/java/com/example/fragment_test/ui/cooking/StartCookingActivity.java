@@ -3,6 +3,7 @@ package com.example.fragment_test.ui.cooking;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -71,11 +72,13 @@ public class StartCookingActivity extends AppCompatActivity {
         recipeIntroduction.recipeName.setText(scheduleRecipe.recipe.name);
 //        recipeIntroduction.recipeImg.setText(scheduleRecipe.recipe.img);
         recipeIntroduction.recipeServing.setText("份量\n"+scheduleRecipe.recipe.serving+"人份");
+        recipeIntroduction.collectBnt.setVisibility(View.GONE);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recipeIntroduction.recipeIngredients.setLayoutManager(gridLayoutManager);
         recipeIntroduction.recipeIngredients.setAdapter(new RecipeDetailIngredientAdapter(scheduleRecipe.recipe.ingredients));
+
 
 
         RecipeStepsBinding recipeStepsBinding = activityStartCookingBinding.recipeSteps;
