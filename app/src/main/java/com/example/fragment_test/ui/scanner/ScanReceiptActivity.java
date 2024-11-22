@@ -163,15 +163,15 @@ public class ScanReceiptActivity extends AppCompatActivity {
             confirm_button.setOnClickListener(cancelView -> {
                 String name = nameSpinner.getSelectedItem().toString();
                 String sort = sortSpinner.getSelectedItem().toString();
-                String quantity = ((EditText)addManuallyLayout.findViewById(R.id.quantity)).getText().toString();
+                String quantity = ((EditText) addManuallyLayout.findViewById(R.id.quantity)).getText().toString();
                 shoppingListViewModel.loadIngredientSavingDays(name);
                 shoppingListViewModel.getSavingDays()
                         .observe(this, savingDays -> {
                             int today = Integer.parseInt(DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now()));
                             RefrigeratorIngredient refrigeratorIngredient = new RefrigeratorIngredient(0, name, Integer.parseInt(quantity), null, sort, today, today + savingDays);
                             viewModelProvider.get(FoodManagementViewModel.class).addRefrigeratorIngredients(List.of(refrigeratorIngredient));
+                            finish();
                         });
-                finish();
             });
 
         });
